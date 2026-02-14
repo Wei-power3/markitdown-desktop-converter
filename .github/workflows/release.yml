@@ -1,0 +1,62 @@
+name: Create Release with Executable
+
+on:
+  push:
+    tags:
+      - 'v*'  # Triggers on version tags like v1.0.0
+
+jobs:
+  release:
+    runs-on: windows-latest
+    
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Build executable
+      run: |
+        python build_exe.py
+    
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist/MarkItDownConverter.exe
+        body: |
+          ## MarkItDown Desktop Converter
+          
+          ### Features
+          - Batch processing queue with visual progress tracking
+          - PDF and PowerPoint to Markdown conversion
+          - Dual PowerPoint conversion pathways (Direct + PDF)
+          - Automatic timestamped file naming
+          - Standalone Windows executable - no installation required
+          
+          ### Installation
+          1. Download `MarkItDownConverter.exe` below
+          2. Double-click to run
+          3. Start converting files!
+          
+          ### System Requirements
+          - Windows 10 or 11
+          - 4 GB RAM minimum
+          - 500 MB disk space
+          
+          ### Usage
+          See [README.md](https://github.com/Wei-power3/markitdown-desktop-converter/blob/main/README.md) for full documentation.
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
