@@ -1,7 +1,19 @@
+# Core conversion
 markitdown[pdf,pptx]>=0.1.0
+
+# GUI
 customtkinter>=5.2.0
 Pillow>=10.0.0
 CTkMessagebox>=2.5
-pyinstaller>=6.0.0
+
+# PDF/PPTX processing
 reportlab>=4.0.0
 python-pptx>=0.6.21
+
+# Enhanced table extraction (optional but recommended)
+camelot-py[cv]>=0.11.0
+tabula-py>=2.9.0
+pandas>=2.0.0
+
+# Build tools
+pyinstaller>=6.0.0
