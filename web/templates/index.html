@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarkItDown Web Converter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>📄 MarkItDown Web Converter</h1>
+            <p class="subtitle">Convert PDF and PowerPoint files to Markdown in your browser</p>
+        </header>
+
+        <!-- Drop Zone -->
+        <div id="dropZone" class="drop-zone">
+            <div class="drop-zone-content">
+                <div class="drop-icon">📁</div>
+                <h2>Drag & Drop Files Here</h2>
+                <p>or</p>
+                <label for="fileInput" class="browse-btn">Browse Files</label>
+                <input type="file" id="fileInput" multiple accept=".pdf,.pptx,.ppt" hidden>
+                <p class="file-types">Supported: PDF, PPTX, PPT</p>
+            </div>
+        </div>
+
+        <!-- Processing Queue -->
+        <div class="queue-section">
+            <div class="queue-header">
+                <h2>Processing Queue</h2>
+                <span id="queueCount" class="queue-count">0 files</span>
+            </div>
+            
+            <div id="queueContainer" class="queue-container">
+                <div id="emptyQueue" class="empty-queue">
+                    <p>📦 No files in queue. Drop files to begin.</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button id="processBtn" class="btn btn-primary" disabled>
+                    <span class="btn-icon">▶</span> Start Processing
+                </button>
+                <button id="clearBtn" class="btn btn-danger" disabled>
+                    <span class="btn-icon">🗑</span> Clear Completed
+                </button>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>MarkItDown Web Converter | Running on <span class="status-indicator">⬤</span> Local Server</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
