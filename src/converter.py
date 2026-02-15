@@ -1,5 +1,5 @@
 """
-Document conversion logic using MarkItDown
+Document conversion logic using MarkItDown with enhanced quality
 """
 from pathlib import Path
 from typing import Tuple, Optional
@@ -10,18 +10,32 @@ from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.units import inch
 from pptx import Presentation
 import io
+import logging
 from config import CONVERT_PPTX_TO_PDF, CONVERT_PPTX_DIRECT
+from text_cleaner import MarkdownCleaner
+from table_extractor import TableExtractor
+
+# Setup logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 class DocumentConverter:
-    """Handles document conversion operations"""
+    """
+    Enhanced document conversion with:
+    - Text cleaning (fixes ligatures, spacing, encoding)
+    - Structured table extraction
+    - Dual PowerPoint conversion
+    """
     
     def __init__(self):
         self.md = MarkItDown()
+        self.text_cleaner = MarkdownCleaner()
+        self.table_extractor = TableExtractor(min_accuracy=0.5)
     
     def convert_file(self, file_path: Path) -> Tuple[str, Optional[str]]:
         """
-        Convert file to Markdown
+        Convert file to Markdown with enhanced quality.
         
         Args:
             file_path: Path to file to convert
@@ -41,27 +55,70 @@ class DocumentConverter:
                 return "", f"Unsupported file type: {extension}"
         
         except Exception as e:
+            logger.error(f"Conversion error: {str(e)}", exc_info=True)
             return "", f"Conversion error: {str(e)}"
     
     def _convert_pdf(self, file_path: Path) -> Tuple[str, None]:
-        """Convert PDF to Markdown"""
+        """
+        Convert PDF to Markdown with enhanced quality.
+        
+        Process:
+        1. Extract base text using MarkItDown
+        2. Clean text artifacts (ligatures, spacing, etc.)
+        3. Extract structured tables
+        4. Combine all content
+        """
+        logger.info(f"Converting PDF: {file_path.name}")
+        
+        # Step 1: Base conversion
         result = self.md.convert(str(file_path))
-        return result.text_content, None
+        base_content = result.text_content
+        
+        # Step 2: Clean text
+        cleaned_content = self.text_cleaner.clean(base_content)
+        
+        # Log cleaning statistics
+        report = self.text_cleaner.get_cleaning_report(base_content, cleaned_content)
+        logger.info(f"Text cleaning: {report['encoding_fixes']} encoding fixes, "
+                   f"{report['hyphen_fixes']} hyphen fixes, "
+                   f"{report['medical_term_fixes']} medical term fixes")
+        
+        # Step 3: Extract structured tables
+        try:
+            tables = self.table_extractor.extract_tables(file_path)
+            if tables:
+                logger.info(f"Extracted {len(tables)} structured table(s)")
+                table_section = self.table_extractor.format_tables_for_markdown(tables)
+                cleaned_content += table_section
+        except Exception as e:
+            logger.warning(f"Table extraction failed: {e}")
+            # Continue without tables - not critical
+        
+        return cleaned_content, None
     
     def _convert_powerpoint(self, file_path: Path) -> Tuple[str, None]:
         """
-        Convert PowerPoint to Markdown
-        Implements both direct conversion and PDF pathway
+        Convert PowerPoint to Markdown.
+        Implements both direct conversion and PDF pathway.
+        Text cleaning is applied to all outputs.
         """
+        logger.info(f"Converting PowerPoint: {file_path.name}")
         results = []
         
         # Method 1: Direct PPTX → Markdown
         if CONVERT_PPTX_DIRECT:
             try:
                 result = self.md.convert(str(file_path))
+                direct_content = result.text_content
+                
+                # Clean the content
+                direct_content = self.text_cleaner.clean(direct_content)
+                
                 results.append("# Direct PPTX Conversion\n\n")
-                results.append(result.text_content)
+                results.append(direct_content)
+                logger.info("Direct PPTX conversion completed")
             except Exception as e:
+                logger.warning(f"Direct conversion failed: {str(e)}")
                 results.append(f"Direct conversion failed: {str(e)}\n\n")
         
         # Method 2: PPTX → PDF → Markdown
@@ -72,20 +129,28 @@ class DocumentConverter:
                 pdf_path.write_bytes(pdf_content)
                 
                 result = self.md.convert(str(pdf_path))
+                pdf_pathway_content = result.text_content
+                
+                # Clean the content
+                pdf_pathway_content = self.text_cleaner.clean(pdf_pathway_content)
+                
                 results.append("\n\n---\n\n# PDF Pathway Conversion\n\n")
-                results.append(result.text_content)
+                results.append(pdf_pathway_content)
                 
                 # Clean up temporary PDF
                 pdf_path.unlink()
+                logger.info("PDF pathway conversion completed")
             except Exception as e:
+                logger.warning(f"PDF pathway failed: {str(e)}")
                 results.append(f"\n\nPDF pathway failed: {str(e)}")
         
-        return "".join(results), None
+        final_content = "".join(results)
+        return final_content, None
     
     def _pptx_to_pdf(self, pptx_path: Path) -> bytes:
         """
-        Convert PPTX to PDF using reportlab
-        Returns PDF as bytes
+        Convert PPTX to PDF using reportlab.
+        Returns PDF as bytes.
         """
         prs = Presentation(str(pptx_path))
         
