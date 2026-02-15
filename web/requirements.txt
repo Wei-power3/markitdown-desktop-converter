@@ -1,0 +1,5 @@
+flask>=3.0.0
+markitdown[pdf,pptx]>=0.1.0
+reportlab>=4.0.0
+python-pptx>=0.6.21
+Werkzeug>=3.0.0
