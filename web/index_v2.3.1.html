@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MarkItDown v2.3.1 - Phase 3 Complete (Task 1/7)</title>
+    <title>MarkItDown v2.3.1 - Phase 3 Complete (Task 2/7)</title>
     <style>
         :root {
             --bg-primary: #0f172a;
@@ -201,7 +201,7 @@
 
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             gap: 15px;
             margin-bottom: 30px;
         }
@@ -309,7 +309,7 @@
 
         .quality-metrics {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 10px;
             margin-top: 10px;
             padding: 15px;
@@ -463,7 +463,7 @@
         <header>
             <h1>
                 📄 MarkItDown Converter
-                <span class="version-badge">v2.3.1 (Task 1/7)</span>
+                <span class="version-badge">v2.3.1 (Task 2/7)</span>
             </h1>
             <p class="subtitle">PDF & PowerPoint to Markdown • Phase 3 in progress</p>
             <div class="features">
@@ -472,18 +472,25 @@
                 <span class="feature">✓ Batch Processing</span>
                 <span class="feature">✓ Multi-Column Detection</span>
                 <span class="feature">✓ Header/Footer Removal</span>
-                <span class="feature">✓ Footnote Detection <span class="new-badge">TESTING</span></span>
+                <span class="feature">✓ Footnote Extraction <span class="new-badge">TESTING</span></span>
             </div>
         </header>
 
         <div class="quality-banner">
-            <h3>🚧 v2.3.1 Development: Phase 3 Complete (Task 1/7)</h3>
+            <h3>🚧 v2.3.1 Development: Phase 3 Complete (Task 2/7)</h3>
             <div class="quality-features">
                 <div class="quality-item">
                     <span class="quality-icon">📝</span>
                     <div>
-                        <strong>Footnote Marker Detection <span class="new-badge">TESTING</span></strong>
-                        <div style="font-size: 0.85rem; color: var(--text-muted);">Detects [1], 1), superscript numbers, and Unicode superscripts</div>
+                        <strong>Footnote Content Extraction <span class="new-badge">TESTING</span></strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Extracts footnote text from page bottoms (last 15-20% of page)</div>
+                    </div>
+                </div>
+                <div class="quality-item">
+                    <span class="quality-icon">🔍</span>
+                    <div>
+                        <strong>Footnote Marker Detection</strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Detects [1], 1), superscript, and Unicode markers</div>
                     </div>
                 </div>
                 <div class="quality-item">
@@ -498,13 +505,6 @@
                     <div>
                         <strong>Header/Footer Removal</strong>
                         <div style="font-size: 0.85rem; color: var(--text-muted);">Removes page numbers, DOIs, and repetitive content</div>
-                    </div>
-                </div>
-                <div class="quality-item">
-                    <span class="quality-icon">✨</span>
-                    <div>
-                        <strong>Enhanced Text Cleaning</strong>
-                        <div style="font-size: 0.85rem; color: var(--text-muted);">Fixes spaced ligatures and merged words</div>
                     </div>
                 </div>
             </div>
@@ -550,11 +550,15 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-value" id="totalHeadersRemoved">0</div>
-                    <div class="stat-label">Headers/Footers Removed</div>
+                    <div class="stat-label">H/F Removed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalMarkers">0</div>
+                    <div class="stat-label">Markers Detected</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value" id="totalFootnotes">0</div>
-                    <div class="stat-label">Footnote Markers Detected</div>
+                    <div class="stat-label">Footnotes Extracted</div>
                 </div>
             </div>
 
@@ -633,7 +637,8 @@
                 advancedMetadata: {
                     headersFootersRemoved: 0,
                     columnsDetected: 0,
-                    footnotesDetected: 0  // NEW: Track footnote markers
+                    footnotesDetected: 0,
+                    footnoteMarkersDetected: 0  // NEW: Separate count for markers vs extracted footnotes
                 }
             };
 
@@ -642,27 +647,18 @@
             processFile(job);
         }
 
-        // v2.3.1 NEW: Task 1 - Detect footnote markers in text
+        // v2.3.1 Task 1: Detect footnote markers in text
         function detectFootnoteMarkers(textItems) {
             const markers = [];
-            
-            // Pattern 1: Bracketed numbers [1], [2], [123]
             const bracketPattern = /\[(\d+)\]/g;
-            
-            // Pattern 2: Numbers with parenthesis 1), 2), 123)
             const parenPattern = /(\d+)\)/g;
-            
-            // Pattern 3: Standalone numbers (potential superscripts) - be conservative
             const standalonePattern = /(?<=\s)(\d+)(?=\s|$|[,.])/g;
-            
-            // Pattern 4: Unicode superscript numbers
             const superscriptPattern = /[¹²³⁴⁵⁶⁷⁸⁹⁰]+/g;
             
             textItems.forEach(item => {
                 const text = item.text;
-                
-                // Check bracket pattern [1]
                 let match;
+                
                 while ((match = bracketPattern.exec(text)) !== null) {
                     markers.push({
                         marker: match[0],
@@ -676,7 +672,6 @@
                     });
                 }
                 
-                // Check parenthesis pattern 1)
                 bracketPattern.lastIndex = 0;
                 while ((match = parenPattern.exec(text)) !== null) {
                     markers.push({
@@ -691,9 +686,8 @@
                     });
                 }
                 
-                // Check standalone numbers (only if small font = likely superscript)
                 parenPattern.lastIndex = 0;
-                if (item.fontSize && item.fontSize < 8) {  // Small font = potential superscript
+                if (item.fontSize && item.fontSize < 8) {
                     while ((match = standalonePattern.exec(text)) !== null) {
                         markers.push({
                             marker: match[0],
@@ -708,10 +702,8 @@
                     }
                 }
                 
-                // Check Unicode superscripts
                 standalonePattern.lastIndex = 0;
                 while ((match = superscriptPattern.exec(text)) !== null) {
-                    // Convert Unicode superscripts to regular numbers
                     const superscriptMap = '⁰¹²³⁴⁵⁶⁷⁸⁹';
                     const number = match[0].split('').map(c => superscriptMap.indexOf(c).toString()).join('');
                     
@@ -729,6 +721,100 @@
             });
             
             return markers;
+        }
+
+        // v2.3.1 Task 2: Extract footnote content from page bottoms
+        function extractFootnoteContent(allPageItems, numPages, avgFontSize) {
+            const footnotes = [];
+            
+            // Process each page separately
+            for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+                const pageItems = allPageItems.filter(item => item.pageNum === pageNum);
+                if (pageItems.length === 0) continue;
+                
+                // Find Y-position range for this page
+                const yPositions = pageItems.map(item => item.y);
+                const minY = Math.min(...yPositions);
+                const maxY = Math.max(...yPositions);
+                const pageHeight = maxY - minY;
+                
+                // Define footnote region (last 15-20% of page)
+                const footnoteThreshold = minY + (pageHeight * 0.80);  // Bottom 20%
+                
+                // Get items in footnote region with small font
+                const footnoteRegionItems = pageItems.filter(item => {
+                    const isInFootnoteRegion = item.y <= footnoteThreshold;
+                    const hasSmallFont = item.fontSize < avgFontSize * 0.85;  // 85% of average
+                    return isInFootnoteRegion && hasSmallFont;
+                });
+                
+                if (footnoteRegionItems.length === 0) continue;
+                
+                // Sort by Y position (top to bottom)
+                footnoteRegionItems.sort((a, b) => b.y - a.y);
+                
+                // Patterns to detect footnote starts
+                const footnoteStartPatterns = [
+                    /^\[(\d+)\]\s*(.+)/,      // [1] content
+                    /^(\d+)\)\s*(.+)/,        // 1) content
+                    /^(\d+)\s+(.+)/           // 1 content (superscript style)
+                ];
+                
+                // Group items into footnotes
+                let currentFootnote = null;
+                let lastY = null;
+                
+                footnoteRegionItems.forEach(item => {
+                    const text = item.text.trim();
+                    if (!text) return;
+                    
+                    // Check if this starts a new footnote
+                    let isNewFootnote = false;
+                    let footnoteNumber = null;
+                    let footnoteContent = null;
+                    
+                    for (const pattern of footnoteStartPatterns) {
+                        const match = text.match(pattern);
+                        if (match) {
+                            isNewFootnote = true;
+                            footnoteNumber = match[1];
+                            footnoteContent = match[2] || match[1];
+                            break;
+                        }
+                    }
+                    
+                    if (isNewFootnote) {
+                        // Save previous footnote if exists
+                        if (currentFootnote) {
+                            footnotes.push(currentFootnote);
+                        }
+                        
+                        // Start new footnote
+                        currentFootnote = {
+                            number: footnoteNumber,
+                            content: footnoteContent,
+                            pageNum: pageNum,
+                            y: item.y,
+                            fontSize: item.fontSize
+                        };
+                        lastY = item.y;
+                    } else if (currentFootnote) {
+                        // Continue current footnote if Y position is close (multi-line footnote)
+                        const yDifference = Math.abs(item.y - lastY);
+                        if (yDifference < item.fontSize * 2) {  // Within 2 line heights
+                            currentFootnote.content += ' ' + text;
+                            lastY = item.y;
+                        }
+                    }
+                });
+                
+                // Save last footnote
+                if (currentFootnote) {
+                    footnotes.push(currentFootnote);
+                }
+            }
+            
+            return footnotes;
         }
 
         function cleanText(text) {
@@ -792,7 +878,8 @@
                 linkPreservationRate: linkMetadata.linksFound > 0 ? Math.round((linkMetadata.linksPreserved / linkMetadata.linksFound) * 100) : 0,
                 headersFootersRemoved: advancedMetadata.headersFootersRemoved,
                 columnsDetected: advancedMetadata.columnsDetected,
-                footnotesDetected: advancedMetadata.footnotesDetected  // NEW
+                footnotesDetected: advancedMetadata.footnotesDetected,
+                footnoteMarkersDetected: advancedMetadata.footnoteMarkersDetected
             };
         }
 
@@ -803,7 +890,7 @@
                 const extension = job.filename.split('.').pop().toLowerCase();
                 let markdown;
                 let linkMetadata = { linksFound: 0, linksPreserved: 0, linkTypes: { external: 0, internal: 0 } };
-                let advancedMetadata = { headersFootersRemoved: 0, columnsDetected: 0, footnotesDetected: 0 };
+                let advancedMetadata = { headersFootersRemoved: 0, columnsDetected: 0, footnotesDetected: 0, footnoteMarkersDetected: 0 };
                 if (extension === 'pdf') {
                     const result = await convertPDF(job);
                     markdown = result.markdown;
@@ -936,11 +1023,10 @@
             const arrayBuffer = await job.file.arrayBuffer();
             const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
             let markdown = `# ${job.filename}\n\n`;
-            markdown += `Converted from PDF • ${pdf.numPages} pages • v2.3.1 (Task 1: Footnote Detection)\n\n---\n\n`;
+            markdown += `Converted from PDF • ${pdf.numPages} pages • v2.3.1 (Tasks 1-2: Footnote Detection & Extraction)\n\n---\n\n`;
             let allLinks = [];
             const allItems = [];
             
-            // Collect all items from all pages
             for (let i = 1; i <= pdf.numPages; i++) {
                 const page = await pdf.getPage(i);
                 const textContent = await page.getTextContent();
@@ -956,20 +1042,22 @@
                 });
             }
             
-            // v2.3.1 NEW: Task 1 - Detect footnote markers
+            // Task 1: Detect footnote markers
             const footnoteMarkers = detectFootnoteMarkers(allItems);
             console.log(`[Task 1] Detected ${footnoteMarkers.length} footnote markers:`, footnoteMarkers);
-            
-            // Group by type for analysis
             const byType = footnoteMarkers.reduce((acc, m) => {
                 acc[m.type] = (acc[m.type] || 0) + 1;
                 return acc;
             }, {});
             console.log('[Task 1] Markers by type:', byType);
             
-            const headersFooters = detectHeadersFooters(allItems, pdf.numPages);
+            // Task 2: Extract footnote content
             const fontSizes = allItems.map(item => item.fontSize).filter(size => size > 0);
             const avgFontSize = fontSizes.reduce((a, b) => a + b, 0) / fontSizes.length;
+            const extractedFootnotes = extractFootnoteContent(allItems, pdf.numPages, avgFontSize);
+            console.log(`[Task 2] Extracted ${extractedFootnotes.length} footnotes:`, extractedFootnotes);
+            
+            const headersFooters = detectHeadersFooters(allItems, pdf.numPages);
             const ACADEMIC_KEYWORDS = ['Abstract', 'Introduction', 'Background', 'Literature Review', 'Methods', 'Methodology', 'Materials and Methods', 'Results', 'Findings', 'Discussion', 'Analysis', 'Conclusion', 'Conclusions', 'References', 'Bibliography', 'Acknowledgments', 'Appendix'];
             let totalColumnsDetected = 0;
             
@@ -1037,7 +1125,8 @@
             const advancedMetadata = {
                 headersFootersRemoved: headersFooters.size,
                 columnsDetected: totalColumnsDetected,
-                footnotesDetected: footnoteMarkers.length  // NEW: Track detected markers
+                footnotesDetected: extractedFootnotes.length,
+                footnoteMarkersDetected: footnoteMarkers.length
             };
             
             return { markdown, linkMetadata, advancedMetadata };
@@ -1172,7 +1261,8 @@
             document.getElementById('totalLinks').textContent = totalLinksPreserved;
             const totalHeadersRemoved = jobs.reduce((sum, job) => sum + (job.advancedMetadata?.headersFootersRemoved || 0), 0);
             document.getElementById('totalHeadersRemoved').textContent = totalHeadersRemoved;
-            // NEW: Update footnotes count
+            const totalMarkers = jobs.reduce((sum, job) => sum + (job.advancedMetadata?.footnoteMarkersDetected || 0), 0);
+            document.getElementById('totalMarkers').textContent = totalMarkers;
             const totalFootnotes = jobs.reduce((sum, job) => sum + (job.advancedMetadata?.footnotesDetected || 0), 0);
             document.getElementById('totalFootnotes').textContent = totalFootnotes;
             
@@ -1221,7 +1311,11 @@
                             <div class="metric-value advanced-indicator">${m.headersFootersRemoved || 0}</div>
                         </div>
                         <div class="metric">
-                            <div class="metric-label">Footnotes</div>
+                            <div class="metric-label">FN Markers</div>
+                            <div class="metric-value advanced-indicator">${m.footnoteMarkersDetected || 0}</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">FN Extracted</div>
                             <div class="metric-value advanced-indicator">${m.footnotesDetected || 0}</div>
                         </div>
                         <div class="metric">
@@ -1250,10 +1344,10 @@
                     ${job.error ? `<div class="error-message"><strong>Error:</strong> ${job.error}</div>` : ''}
                     <div class="job-actions">
                         ${job.status === 'completed' ? `
-                            <button class="btn btn-success" onclick="downloadMarkdown('${job.id}')">⬇ Download Markdown</button>
-                            <button class="btn btn-primary" onclick="viewMarkdown('${job.id}')">👁 Preview</button>
+                            <button class="btn btn-success" onclick="downloadMarkdown('${job.id}')"⏩ Download Markdown</button>
+                            <button class="btn btn-primary" onclick="viewMarkdown('${job.id}')"👁 Preview</button>
                         ` : ''}
-                        ${job.status !== 'processing' ? `<button class="btn btn-danger" onclick="deleteJob('${job.id}')">🗑 Delete</button>` : ''}
+                        ${job.status !== 'processing' ? `<button class="btn btn-danger" onclick="deleteJob('${job.id}')"🗑 Delete</button>` : ''}
                     </div>
                 </div>
             `;
@@ -1266,7 +1360,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = job.filename.replace(/\.[^.]+$/, '') + '_v2.3.1_task1.md';
+            a.download = job.filename.replace(/\.[^.]+$/, '') + '_v2.3.1_task2.md';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -1279,26 +1373,28 @@
             const previewWindow = window.open('', '_blank');
             const metricsHTML = job.qualityMetrics ? `
                 <div style="background: #1e293b; border: 1px solid #fb923c; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-                    <h2 style="color: #fb923c; margin-bottom: 10px;">Quality Metrics (v2.3.1 - Task 1)</h2>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                    <h2 style="color: #fb923c; margin-bottom: 10px;">Quality Metrics (v2.3.1 - Tasks 1-2)</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px;">
                         <div><div style="font-size: 0.9rem; color: #94a3b8;">Text Quality</div><div style="font-size: 1.8rem; font-weight: bold; color: #22c55e;">${job.qualityMetrics.cleanScore}%</div></div>
                         <div><div style="font-size: 0.9rem; color: #94a3b8;">Structure</div><div style="font-size: 1.8rem; font-weight: bold; color: #38bdf8;">${job.qualityMetrics.structureScore}%</div></div>
                         <div><div style="font-size: 0.9rem; color: #94a3b8;">External Links</div><div style="font-size: 1.8rem; font-weight: bold; color: #a855f7;">${job.qualityMetrics.linksPreserved}</div></div>
                         <div><div style="font-size: 0.9rem; color: #94a3b8;">H/F Removed</div><div style="font-size: 1.8rem; font-weight: bold; color: #fb923c;">${job.qualityMetrics.headersFootersRemoved || 0}</div></div>
-                        <div><div style="font-size: 0.9rem; color: #94a3b8;">Footnotes Detected</div><div style="font-size: 1.8rem; font-weight: bold; color: #fb923c;">${job.qualityMetrics.footnotesDetected || 0}</div></div>
+                        <div><div style="font-size: 0.9rem; color: #94a3b8;">FN Markers</div><div style="font-size: 1.8rem; font-weight: bold; color: #fb923c;">${job.qualityMetrics.footnoteMarkersDetected || 0}</div></div>
+                        <div><div style="font-size: 0.9rem; color: #94a3b8;">FN Extracted</div><div style="font-size: 1.8rem; font-weight: bold; color: #fb923c;">${job.qualityMetrics.footnotesDetected || 0}</div></div>
                         <div><div style="font-size: 0.9rem; color: #94a3b8;">Overall</div><div style="font-size: 1.8rem; font-weight: bold; color: #22c55e;">${job.qualityMetrics.overallScore}%</div></div>
                     </div>
                     <div style="margin-top: 15px; font-size: 0.9rem; color: #cbd5e1;">
                         ✓ Fixed ${job.qualityMetrics.issuesFixed} text artifacts
                         ${job.linkMetadata ? ` • 🌐 ${job.linkMetadata.linksPreserved} external links preserved` : ''}
                         ${job.advancedMetadata?.headersFootersRemoved ? ` • 🧹 ${job.advancedMetadata.headersFootersRemoved} headers/footers removed` : ''}
-                        ${job.advancedMetadata?.footnotesDetected ? ` • 📝 ${job.advancedMetadata.footnotesDetected} footnote markers detected (Task 1)` : ''}
+                        ${job.advancedMetadata?.footnoteMarkersDetected ? ` • 🔍 ${job.advancedMetadata.footnoteMarkersDetected} markers detected` : ''}
+                        ${job.advancedMetadata?.footnotesDetected ? ` • 📝 ${job.advancedMetadata.footnotesDetected} footnotes extracted (Task 2)` : ''}
                     </div>
                 </div>
             ` : '';
             previewWindow.document.write(`
                 <!DOCTYPE html>
-                <html><head><title>${job.filename} - v2.3.1 Task 1 Preview</title>
+                <html><head><title>${job.filename} - v2.3.1 Task 2 Preview</title>
                 <style>body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:900px;margin:40px auto;padding:20px;background:#0f172a;color:#f1f5f9;line-height:1.6}pre{background:#1e293b;padding:20px;border-radius:8px;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word;border:1px solid #475569}h1{color:#38bdf8;margin-bottom:20px}h2{color:#38bdf8;margin-top:2em}a{color:#a855f7;text-decoration:none;border-bottom:1px dashed #a855f7}a:hover{color:#c084fc;border-bottom-style:solid}</style>
                 </head><body><h1>📄 ${job.filename}</h1>${metricsHTML}<pre>${job.result.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre></body></html>
             `);
