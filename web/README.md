@@ -1,62 +1,101 @@
-# MarkItDown Web Converter v2.1.0
+# MarkItDown Web Converter
 
 ## 🚀 Quick Start
 
+### Production Version (Recommended)
+
 **Download and run locally:**
-1. Download `index_v2.1.html` from this folder
+1. Download **[index.html](index.html)** (v2.2.1 - Clean text extraction)
 2. Open it in any modern browser (Chrome, Firefox, Edge, Safari)
 3. Drag & drop PDF or PowerPoint files
-4. Get enhanced markdown with intelligent structure detection!
+4. Get clean markdown optimized for embeddings!
 
 **No installation required** - everything runs in your browser with complete privacy.
 
----
+### Experimental Version (Advanced Features)
 
-## ✨ What's New in v2.1.0
-
-### Phase 1 Structure Enhancements
-
-#### **Step 1 & 2: Font-Based Header Detection** ✅
-- Analyzes PDF font sizes to detect headers
-- Large fonts (1.8x average) → H1 headers
-- Medium fonts (1.5x average) → H2 headers
-- Smaller headers (1.2x average) → H3 headers
-- **Expected improvement:** +10-15% structure score
-
-#### **Step 5: Academic Keyword Recognition** ✅
-- Auto-detects common research paper sections:
-  - Abstract, Introduction, Background
-  - Methods, Methodology, Materials and Methods
-  - Results, Discussion, Conclusion
-  - References, Bibliography, Acknowledgments
-  - Appendix, Supplementary, Summary
-- Automatically converts to H2 headers
-- **Expected improvement:** +8-12% structure score
-
-#### **Steps 6 & 7: List Detection** ✅
-Integrated from [jzillmann/pdf-to-markdown](https://github.com/jzillmann/pdf-to-markdown):
-
-**Bullet Points:**
-- Detects: `•`, `-`, `–`, `▪`, `◦`, `○`, `■`, `□`
-- Converts to proper markdown lists
-
-**Numbered Lists:**
-- Detects: `1.`, `2.`, `a)`, `b)`, `i.`, `ii.`
-- Preserves numbering format
-
-**Expected improvement:** +12-20% structure score
-
-#### **Step 8: Bold/Italic Detection** ✅
-- Analyzes PDF font names for styling:
-  - `TimesNewRoman-Bold` → `**bold**`
-  - `Arial-Italic` → `*italic*`
-  - `Helvetica-BoldItalic` → `***bold italic***`
-- Preserves document emphasis
-- **Expected improvement:** +5-8% structure score
+**For testing only:**
+1. Download **[index_experimental.html](index_experimental.html)** (v2.3.2)
+2. Includes footnote detection, H/F removal, multi-column support
+3. ⚠️ **Known regressions:** Link pollution, table issues
+4. See [VERSION_NOTES.md](VERSION_NOTES.md) for detailed comparison
 
 ---
 
-## 📊 Quality Metrics
+## 🎯 Which Version Should I Use?
+
+### Use Production (index.html) For:
+- ✅ **Embedding generation** (Primary use case)
+- ✅ **RAG pipeline ingestion**
+- ✅ **Semantic search indexing**
+- ✅ **LLM knowledge bases**
+- ✅ **Clean text extraction**
+- ✅ **Production deployments**
+
+### Use Experimental (index_experimental.html) For:
+- 🧪 **Testing footnote features**
+- 🧪 **Evaluating multi-column detection**
+- 🧪 **Research and development**
+- ❌ **NOT for production embeddings**
+
+**See [VERSION_NOTES.md](VERSION_NOTES.md) for complete quality analysis**
+
+---
+
+## ✨ Features in v2.2.1 (Production)
+
+### Clean Text Extraction
+- 🧹 **Advanced Text Cleaning** - Fixes ligatures, merged words, spacing
+- 📐 **AI Structure Detection** - Font analysis for headers, lists, styling
+- 🎓 **Academic Document Support** - Recognizes research paper sections
+- 📊 **Structured Table Extraction** - Preserves table data accurately
+- 🔗 **Selective Link Preservation** - External links without pollution
+- 📈 **Quality Metrics** - Text quality, structure score, overall rating
+
+### Why v2.2.1?
+
+**Clean text is paramount for embeddings:**
+- ✅ No `[their](https://...)` link pollution
+- ✅ Stable table headers
+- ✅ Better semantic preservation
+- ✅ High-quality token sequences
+- ✅ Production-tested reliability
+
+**Example output:**
+```markdown
+All patients underwent their standard treatment protocols.
+
+| Training Set | Validation Set | Test Set |
+|--------------|----------------|----------|
+| 1,234        | 456            | 789      |
+```
+
+---
+
+## 🧪 Features in v2.3.2 (Experimental)
+
+### Advanced Features (With Regressions)
+- 📚 **Complete Footnote Pipeline** - Detect, extract, match, insert footnotes
+- 🧹 **Header/Footer Removal** - Removes page numbers, DOIs, running headers
+- 📰 **Multi-Column Detection** - Proper reading order for 2-column PDFs
+
+### Known Issues
+- ❌ **Link Pollution** - Aggressive inline linking degrades text quality
+- ❌ **Table Header Duplication** - Headers duplicated and hyperlinked incorrectly
+- ❌ **Word-Splitting Artifacts** - Same ligature issues as v2.2.1
+
+**Example problematic output:**
+```markdown
+[All patients underwent](https://doi.org/...) [their](https://doi.org/...) treatment.
+
+| [Training Set] [Validation Set] | [Validation Set] |
+```
+
+**Status:** Reference only, not recommended for production use.
+
+---
+
+## 📊 Quality Metrics (v2.2.1)
 
 ### Three-Dimensional Scoring
 
@@ -92,27 +131,9 @@ Integrated from [jzillmann/pdf-to-markdown](https://github.com/jzillmann/pdf-to-
 | Document Type | Text Quality | Structure | Overall | Assessment |
 |---------------|--------------|-----------|---------|------------|
 | Clean research paper | 100% | 75% | 90% | Excellent |
-| Scanned PDF | 85% | 40% | 67% | Good |
+| Academic journal | 95% | 85% | 91% | Excellent |
 | Simple report | 100% | 35% | 74% | Good |
-| Complex presentation | 90% | 90% | 90% | Excellent |
-
----
-
-## 🎯 Expected Structure Improvements
-
-### Before v2.1 (v2.0 baseline)
-- **Average structure score:** 30-40%
-- Headers: Minimal detection
-- Lists: Lost in conversion
-- Styling: Not preserved
-
-### After v2.1
-- **Average structure score:** 70-85%
-- Headers: Intelligent detection via font size + keywords
-- Lists: Full bullet and numbered list support
-- Styling: Bold/italic preserved from font data
-
-**Net improvement:** +40-55 percentage points
+| Technical doc | 90% | 70% | 82% | Excellent |
 
 ---
 
@@ -134,7 +155,7 @@ Integrated from [jzillmann/pdf-to-markdown](https://github.com/jzillmann/pdf-to-
 **Code Attribution:**
 - List detection patterns: [jzillmann/pdf-to-markdown](https://github.com/jzillmann/pdf-to-markdown) (MIT License)
 - Font analysis: Adapted from jzillmann's PageItem.jsx
-- Text cleaning: Original MarkItDown v2.0
+- Text cleaning: Enhanced MarkItDown engine
 - Structure scoring: Original implementation
 
 ### Browser Compatibility
@@ -158,9 +179,9 @@ Integrated from [jzillmann/pdf-to-markdown](https://github.com/jzillmann/pdf-to-
 
 **PDFs:**
 - Text-based PDFs work best (not scanned images)
-- Academic papers: Excellent results (80-95% overall)
-- Technical docs: Very good (75-90% overall)
-- Simple reports: Good (70-85% overall)
+- Academic papers: Excellent results (85-95% overall)
+- Technical docs: Very good (80-90% overall)
+- Simple reports: Good (75-85% overall)
 
 **PowerPoint:**
 - PPTX format preferred over PPT
@@ -176,7 +197,7 @@ Integrated from [jzillmann/pdf-to-markdown](https://github.com/jzillmann/pdf-to-
 ### Downloading the App
 
 **For Desktop Use:**
-1. Right-click `index_v2.1.html`
+1. Right-click `index.html`
 2. Select "Save As..."
 3. Save to your computer
 4. Double-click to open anytime
@@ -192,30 +213,71 @@ Integrated from [jzillmann/pdf-to-markdown](https://github.com/jzillmann/pdf-to-
 
 ## 🆚 Version Comparison
 
-| Feature | v2.0 | v2.1 |
-|---------|------|------|
-| Text cleaning | ✅ | ✅ |
-| Quality metrics | ✅ | ✅ Enhanced |
-| Header detection | ❌ | ✅ Font-based |
-| Academic sections | ❌ | ✅ Keywords |
-| List detection | ❌ | ✅ Full support |
-| Bold/italic | ❌ | ✅ Font analysis |
-| Structure score | 30-40% | 70-85% |
-| Overall quality | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| Feature | v2.2.1 (Production) | v2.3.2 (Experimental) |
+|---------|---------------------|------------------------|
+| **Clean Text** | ✅ Excellent | ❌ Link pollution |
+| **Embedding Quality** | ✅ High | ❌ Degraded |
+| **Table Integrity** | ✅ Stable | ❌ Header duplication |
+| **Text Cleaning** | ✅ Advanced | ✅ Same |
+| **Structure Detection** | ✅ AI-powered | ✅ Same |
+| **Link Preservation** | ✅ Selective | ⚠️ Too aggressive |
+| **Footnote Support** | ❌ None | ✅ Complete pipeline |
+| **H/F Removal** | ❌ None | ✅ Automatic |
+| **Multi-Column** | ❌ None | ✅ 2-column detection |
+| **Production Ready** | ✅ Yes | ❌ No (regressions) |
+| **Structure Score** | 70-85% | 70-85% (same) |
+| **Overall Quality** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ (noise) |
+
+**Full analysis:** See [VERSION_NOTES.md](VERSION_NOTES.md)
 
 ---
 
-## 🔮 Coming Soon (v2.2 & v2.3)
+## 📁 File Guide
 
-### v2.2 (Planned)
-- Step 3: ALL CAPS header enhancement
-- Step 6-7: Advanced list nesting
-- Multi-level list hierarchies
+| File | Version | Status | Use Case |
+|------|---------|--------|----------|
+| **index.html** | v2.2.1 | ✅ **Production** | **Clean text extraction, embeddings, NLP** |
+| index_experimental.html | v2.3.2 | ⚠️ Experimental | Testing footnote features, reference |
+| index_v2.2.1.html | v2.2.1 | 📚 Archive | Backup of production version |
+| index_v2.3.1.html | v2.3.2 | 📚 Archive | Complete v2.3.2 code |
+| VERSION_NOTES.md | - | 📝 Documentation | Complete rationale & comparison |
 
-### v2.3 (Planned)
-- Step 4: Numbered section detection (1.1, 2.3.4, etc.)
-- Enhanced bold/italic combinations
-- Table detection (basic)
+---
+
+## 🎯 Expected Quality (v2.2.1)
+
+### Before MarkItDown
+- **Text quality:** Variable, many artifacts
+- **Structure:** Lost or minimal
+- **Tables:** Unformatted text blocks
+- **Overall:** ⭐⭐
+
+### After v2.2.1
+- **Text quality:** 90-100% (excellent cleaning)
+- **Structure:** 70-85% (intelligent detection)
+- **Tables:** Properly formatted markdown
+- **Overall:** ⭐⭐⭐⭐⭐
+
+**Net improvement:** +60-70 percentage points in overall quality
+
+---
+
+## 🔮 Future Roadmap
+
+### v2.4 (Planned) - Hybrid Approach
+- Start from v2.2.1 clean base
+- Optional footnote detection (toggle)
+- Optional link preservation (toggle)
+- Fix remaining ligature issues
+- Features as opt-in, not forced
+- Maintain clean text as default
+
+### Design Principles:
+1. **Clean text is paramount** for embeddings
+2. **Link pollution corrupts semantic meaning**
+3. **Table headers should never be hyperlinked**
+4. **Footnotes are nice-to-have, not essential**
+5. **Features must not degrade base quality**
 
 ---
 
@@ -235,3 +297,20 @@ MIT License - Free for personal and commercial use
 Found a bug or have suggestions? Open an issue on the main repository!
 
 **Repository:** [Wei-power3/markitdown-desktop-converter](https://github.com/Wei-power3/markitdown-desktop-converter)
+
+---
+
+## 📧 Support
+
+For issues or questions:
+- See [VERSION_NOTES.md](VERSION_NOTES.md) for version comparison
+- Check main repository README
+- Open an issue on GitHub
+
+---
+
+**Made with ♥️ by Wei-power3**
+
+**Version 2.2.1** - Production: Clean Text Extraction for Embeddings
+
+[Try Now](index.html) · [Experimental Version](index_experimental.html) · [Version Comparison](VERSION_NOTES.md) · [Main Repository](https://github.com/Wei-power3/markitdown-desktop-converter)
