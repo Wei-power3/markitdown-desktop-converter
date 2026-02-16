@@ -3,82 +3,51 @@
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Windows-lightgrey)](https://www.microsoft.com/windows)
-[![Version](https://img.shields.io/badge/version-2.3.0-orange)](https://github.com/Wei-power3/markitdown-desktop-converter/releases)
+[![Version](https://img.shields.io/badge/version-2.2.1-brightgreen)](https://github.com/Wei-power3/markitdown-desktop-converter/releases)
 
-A Windows desktop application for converting PDF and PowerPoint files to **high-quality** Markdown with drag-and-drop simplicity and batch processing queue.
+A Windows desktop application for converting PDF and PowerPoint files to **clean, high-quality** Markdown optimized for embeddings, RAG pipelines, and NLP tasks.
 
-## 🆕 What's New in v2.3.0
+## 🎯 Current Version: v2.2.1 (Production)
 
-### 🚀 Phase 3: Advanced PDF Features
+**Focus:** Clean text extraction for embeddings and semantic search
 
-Version 2.3.0 introduces **intelligent layout analysis** for academic papers and journal PDFs:
+### Why v2.2.1?
 
-🧹 **Header/Footer Removal** (NEW)
-- Automatically detects and removes repetitive content
-- Eliminates page numbers, DOIs, journal names, and running headers
-- Analyzes text frequency across all pages (50%+ threshold)
-- **Impact:** Removes 15-25 noise items per page in journal PDFs
+After extensive testing, **v2.2.1 provides the cleanest text output** for embedding generation and NLP use cases:
 
-📰 **Multi-Column Layout Detection** (NEW)
-- Intelligently detects 2-column academic papers
-- Analyzes X-coordinate distribution to find column boundaries
-- Sorts text in proper reading order: left-to-right, top-to-bottom
-- **Impact:** +40-60% readability improvement for 2-column PDFs
+✅ **Clean inline text** - No link pollution or noise  
+✅ **Stable table structure** - Headers preserved correctly  
+✅ **Better semantic quality** - Word integrity maintained  
+✅ **Optimal for embeddings** - High-quality token sequences  
+✅ **Production-tested** - Reliable and consistent  
 
-✨ **Enhanced Structure Scoring**
-- +5 points for header/footer removal
-- +10 points for multi-column detection
-- Total possible bonus: +15 points to structure score
-
-### 📊 Quality Improvements (v2.3.0)
-
-**Structure Score with Multi-Column Detection:**
-
-| Document Type | v2.2.2 | v2.3.0 | Improvement |
-|---------------|--------|--------|-------------|
-| 2-Column Research Paper | 70-75% | 85-95% | **+15-20% 🚀** |
-| Journal Articles (Frontiers, Nature) | 65-70% | 80-90% | **+15-20% 🚀** |
-| Conference Proceedings (IEEE, ACM) | 70-75% | 85-95% | **+15-20% 🚀** |
-| Single-Column PDF | 75-80% | 80-90% | **+5-10% 🚀** |
-
-**Before/After Example (Multi-Column):**
-
-❌ **Before v2.3.0** (scrambled):
-```markdown
-Introduction [Col 1]
-Results [Col 1]
-[Continue intro - Col 2]
-[Continue results - Col 2]
-```
-
-✅ **After v2.3.0** (correct reading order):
-```markdown
-Introduction [Col 1]
-[Continue intro - Col 2]
-Results [Col 1]
-[Continue results - Col 2]
-```
-
-[See full CHANGELOG](CHANGELOG.md)
+**See [web/VERSION_NOTES.md](web/VERSION_NOTES.md) for detailed comparison between v2.2.1 and experimental v2.3.2**
 
 ---
 
-## 🌐 Web Version Available!
+## 🌐 Web Version (Recommended)
 
-**LATEST:** Try the browser-based converter with v2.3.0 features:
-- 📂 [Download web/index_v2.3.0.html](web/index_v2.3.0.html)
+**PRODUCTION:** Browser-based converter with v2.2.1 quality:
+- 📂 **[Download web/index.html](web/index.html)** - Production version (v2.2.1)
 - 🔒 100% client-side processing (no uploads)
-- 🧹 Header/footer removal for journal PDFs
-- 📰 Multi-column layout detection
-- ✨ AI structure detection + text cleaning
+- ✨ AI structure detection + advanced text cleaning
 - 🚀 Run offline after download
 - 📱 Works on any OS with modern browser
+- 📊 Quality metrics with scoring
+
+**EXPERIMENTAL:** Advanced features (use with caution):
+- 📂 [Download web/index_experimental.html](web/index_experimental.html) - v2.3.2 with footnotes
+- ⚠️ Known regressions: link pollution, table issues
+- 🧪 For testing advanced features only
+- 📝 See [VERSION_NOTES.md](web/VERSION_NOTES.md) for details
 
 **Perfect for:**
-- Academic papers and journal articles
-- Quick conversions without installation
+- Clean text extraction for embeddings
+- RAG pipeline document ingestion
+- Semantic search indexing
+- LLM knowledge base creation
+- Academic paper processing
 - Sensitive documents (zero data uploads)
-- Cross-platform usage
 
 [See web/README.md for details](web/README.md)
 
@@ -86,28 +55,36 @@ Results [Col 1]
 
 ## ✨ Core Features
 
+### Production (v2.2.1)
 - 📂 **Drag & Drop Interface** - Simply drop files to convert
 - 📦 **Batch Processing Queue** - Convert multiple files with visual progress tracking
-- 🧹 **Header/Footer Removal** - Eliminates page numbers, DOIs, running headers (NEW v2.3)
-- 📰 **Multi-Column Detection** - Proper reading order for 2-column PDFs (NEW v2.3)
-- 🔗 **Link Preservation** - Maintains external hyperlinks from PDFs and PPTX (v2.2)
-- ✨ **Advanced Text Cleaning** - Fixes ligatures, merged words, spacing (v2.2.2)
-- 📐 **AI Structure Detection** - Font analysis for headers, lists, styling (v2.1)
-- 🎓 **Academic Document Support** - Recognizes research paper sections (v2.1)
-- 📊 **Structured Table Extraction** - Preserve table data accurately (v2.0)
+- ✨ **Advanced Text Cleaning** - Fixes ligatures, merged words, spacing
+- 📐 **AI Structure Detection** - Font analysis for headers, lists, styling
+- 🎓 **Academic Document Support** - Recognizes research paper sections
+- 📊 **Structured Table Extraction** - Preserve table data accurately
+- 🔗 **Selective Link Preservation** - External links without pollution
 - 📄 **Dual PowerPoint Conversion** - Both direct PPTX→MD and PPTX→PDF→MD pathways
 - 🕒 **Automatic Timestamped Naming** - Files organized with date stamps
 - 📁 **Organized Folder Structure** - Separate folders for originals and processed files
 - 🎨 **Modern Dark Theme UI** - Clean, professional interface
 - ⚡ **Standalone Executable** - No installation required, just double-click to run
 
+### Experimental (v2.3.2)
+- 📚 **Complete Footnote Pipeline** - Detect, extract, match, insert footnotes
+- 🧹 **Header/Footer Removal** - Removes page numbers, DOIs, running headers
+- 📰 **Multi-Column Detection** - Proper reading order for 2-column PDFs
+- ⚠️ **Known Issues** - Link pollution, table duplication, word-splitting artifacts
+- 📝 **Status** - Reference only, not recommended for production
+
+---
+
 ## 🖼️ Preview
 
 ### Main Interface with Batch Queue
 ```
 ┌──────────────────────────────────────────────────────┐
-│    MarkItDown Desktop Converter v2.3                  │
-│    Drag & Drop PDF or PowerPoint files                │
+│    MarkItDown Desktop Converter v2.2.1                │
+│    Clean Text Extraction for Embeddings               │
 ├──────────────────────────────────────────────────────┤
 │              📁                                       │
 │         Drop files here                              │
@@ -116,7 +93,7 @@ Results [Col 1]
 │  Processing Queue (3 files)                         │
 ├──────────────────────────────────────────────────────┤
 │  ✔ research-paper.pdf     [========] Complete      │
-│     → Structure: 88% • 2-column detected • H/F: 18  │
+│     → Text: 95% • Structure: 85% • Overall: 91%     │
 │     → Links: 12 • Fixed 15 artifacts                │
 │  ⏳ journal-article.pdf   [====----] Processing   │
 │  ⏸ presentation.pptx      [--------] Queued       │
@@ -125,21 +102,23 @@ Results [Col 1]
 └──────────────────────────────────────────────────────┘
 ```
 
+---
+
 ## 🚀 Quick Start
 
-### Option 1: Download Standalone Executable (Recommended)
+### Option 1: Web Version (Recommended)
 
-1. Go to [Releases](https://github.com/Wei-power3/markitdown-desktop-converter/releases)
-2. Download `MarkItDownConverter.exe` (v2.3.0)
-3. Download and install [Ghostscript](https://ghostscript.com/releases/gsdnld.html) (required for table extraction)
-4. Double-click to run - that's it!
-
-### Option 2: Web Version (No Installation)
-
-1. Download [web/index_v2.3.0.html](web/index_v2.3.0.html)
+1. Download [web/index.html](web/index.html) (Production v2.2.1)
 2. Double-click to open in browser
 3. Drag & drop PDFs - all processing happens locally!
-4. Perfect for 2-column academic papers!
+4. **Best for:** Clean embeddings and NLP tasks
+
+### Option 2: Download Standalone Executable
+
+1. Go to [Releases](https://github.com/Wei-power3/markitdown-desktop-converter/releases)
+2. Download `MarkItDownConverter.exe` (v2.2.1)
+3. Download and install [Ghostscript](https://ghostscript.com/releases/gsdnld.html) (required for table extraction)
+4. Double-click to run - that's it!
 
 ### Option 3: Run from Source
 
@@ -164,13 +143,15 @@ python src/main.py
 - **macOS**: `brew install ghostscript tcl-tk`
 - **Linux**: `sudo apt-get install ghostscript python3-tk`
 
+---
+
 ## 📚 Usage Guide
 
 ### Basic Workflow
 
 1. **Launch Application**
    - Double-click `MarkItDownConverter.exe` or run `python src/main.py`
-   - Or use web version: open `web/index_v2.3.0.html` in browser
+   - Or use web version: open `web/index.html` in browser
 
 2. **Add Files to Queue**
    - **Method A**: Drag and drop files onto the drop zone
@@ -179,11 +160,11 @@ python src/main.py
 3. **Start Processing**
    - Click "▶ Start Processing" button
    - Watch real-time progress in the queue
-   - See advanced metrics: columns detected, H/F removed, links preserved
+   - See quality metrics: text quality, structure score, overall
 
 4. **Access Converted Files**
    - Click "📂 Originals Folder" to see source files
-   - Click "📄 Processed Folder" to see enhanced Markdown outputs
+   - Click "📄 Processed Folder" to see clean Markdown outputs
    - Web version: Download directly from browser
 
 ### File Naming Convention
@@ -196,125 +177,40 @@ python src/main.py
 
 **Markdown Files:**
 ```
-16-02-2026_research-paper_v2.3.0_advanced.md
-16-02-2026_presentation_v2.3.0_advanced.md
+16-02-2026_research-paper_v2.2.1_clean.md
+16-02-2026_presentation_v2.2.1_clean.md
 ```
 
-Format: `{day}-{month}-{year}_{filename}_v2.3.0_advanced.md`
+Format: `{day}-{month}-{year}_{filename}_v2.2.1_clean.md`
 
 ### Folder Structure
 
 ```
 markitdown-desktop-converter/
 ├── web/
-│   ├── index_v2.3.0.html   # LATEST: Advanced layout detection
-│   ├── index_v2.2.2.html   # Text cleaning version
-│   ├── index_v2.1.html     # Structure detection version
-│   └── README.md           # Web version documentation
+│   ├── index.html              # Production v2.2.1 (Clean text)
+│   ├── index_experimental.html # Experimental v2.3.2 (Advanced features)
+│   ├── VERSION_NOTES.md        # Detailed version comparison
+│   └── README.md               # Web version documentation
 ├── data/
 │   ├── originals/       # Your source files with timestamps
-│   └── processed/       # Enhanced Markdown with advanced features
+│   └── processed/       # Clean Markdown optimized for embeddings
 ├── src/                 # Application source code
-│   ├── text_cleaner.py  # Text cleaning engine (v2.0/v2.2)
-│   ├── structure_detector.py  # AI structure analysis (v2.1)
-│   ├── link_extractor.py  # Link preservation (v2.2)
-│   ├── layout_analyzer.py  # NEW: Multi-column detection (v2.3)
-│   ├── table_extractor.py  # Table extraction engine (v2.0)
+│   ├── text_cleaner.py  # Text cleaning engine
+│   ├── structure_detector.py  # AI structure analysis
+│   ├── link_extractor.py  # Link preservation
+│   ├── table_extractor.py  # Table extraction engine
 │   └── converter.py     # Enhanced converter logic
 └── MarkItDownConverter.exe  # Standalone executable
 ```
 
+---
+
 ## ⚙️ Features in Detail
 
-### 🧹 Header/Footer Removal (v2.3.0)
+### ✨ Advanced Text Cleaning (v2.2.1)
 
-Automatically cleans up repetitive content from journal PDFs:
-
-**What Gets Removed:**
-- Page numbers: `1`, `2`, `Page 123`
-- DOIs: `doi:10.1038/s41586-023-12345`
-- Journal names: `Frontiers in Oncology | www.frontiersin.org`
-- Running headers: Author names, section titles
-- Copyright notices: Publisher information
-
-**Before v2.3.0:**
-```markdown
-## Page 1
-
-Frontiers in Oncology | www.frontiersin.org
-DOI: 10.3389/fonc.2023.12345
-
-Abstract
-This study examines...
-
-1
-```
-
-**After v2.3.0:**
-```markdown
-## Page 1
-
-Abstract
-This study examines...
-```
-
-**Algorithm:**
-1. Scans entire document (all pages)
-2. Counts text frequency across pages
-3. Identifies items appearing on ≥50% of pages
-4. Applies heuristics for page numbers, DOIs, journals
-5. Removes matching items from output
-
-**Result**: Cleaner markdown, better for LLM/RAG pipelines! 🎯
-
-### 📰 Multi-Column Layout Detection (v2.3.0)
-
-Intelligent column detection for academic papers:
-
-**How It Works:**
-1. **X-Coordinate Analysis**: Maps horizontal text distribution
-2. **Middle Gap Detection**: Finds empty vertical space (35-65% of width)
-3. **Column Classification**: If <10% text in middle → 2 columns
-4. **Smart Sorting**: Assigns column (0=left, 1=right), then sorts by Y
-
-**Supported Layouts:**
-- ✅ Single-column PDFs (standard sorting)
-- ✅ 2-column academic papers (intelligent column sorting)
-- ⚠️ 3+ columns (falls back to Y-position sorting)
-
-**Perfect For:**
-- Nature, Science, Cell journals
-- Frontiers research articles
-- IEEE/ACM conference papers
-- Medical journals (NEJM, Lancet, JAMA)
-
-**Impact:** Prevents text scrambling, maintains proper reading flow!
-
-### 🔗 Link Preservation (v2.2.0)
-
-Maintains clickable hyperlinks in markdown output:
-
-**PDF Links:**
-```markdown
-Visit our [website](https://example.com) for more information.
-See [supplementary materials](https://doi.org/10.1234/suppl).
-```
-
-**PPTX Hyperlinks:**
-```markdown
-- [Learn more](https://docs.example.com)
-- [Contact us](mailto:info@example.com)
-```
-
-**Link Types:**
-- ✅ External URLs (HTTP/HTTPS)
-- ✅ Email links (mailto:)
-- ✅ DOI links
-- ❌ Internal page references (removed in v2.2.1 for cleaner output)
-
-### ✨ Advanced Text Cleaning (v2.2.2)
-
-Fixes common PDF extraction artifacts:
+Fixes common PDF extraction artifacts for clean embeddings:
 
 **Spaced Ligatures:**
 - Before: `arti fi cial intelligence for identi fi cation`
@@ -324,7 +220,7 @@ Fixes common PDF extraction artifacts:
 - Before: `transmitted onascale representamajor improvement`
 - After: `transmitted on a scale represent a major improvement`
 
-**Legacy Artifacts (v2.0):**
+**Legacy Artifacts:**
 - Hyphenation breaks: `non- invasive` → `non-invasive`
 - Medical terms: NT-proBNP, β-blockers, HbA1c preserved
 - Special characters: ±, μ, ≥, ≤, → handled correctly
@@ -333,13 +229,13 @@ Fixes common PDF extraction artifacts:
 
 Automatically analyzes document structure using font size intelligence:
 
-**Before v2.1.0:**
+**Before structure detection:**
 ```markdown
 Introduction
 Artificial intelligence has transformed healthcare.
 ```
 
-**After v2.1.0:**
+**After structure detection:**
 ```markdown
 ## Introduction
 
@@ -358,7 +254,29 @@ Artificial intelligence has transformed healthcare.
 
 **Result**: Structure score jumps from 33% to 75% for research papers! 🚀
 
-### 📊 Structured Table Extraction (v2.0)
+### 🔗 Link Preservation (v2.2.0)
+
+Maintains clickable hyperlinks without pollution:
+
+**PDF Links:**
+```markdown
+Visit our [website](https://example.com) for more information.
+See [supplementary materials](https://doi.org/10.1234/suppl).
+```
+
+**PPTX Hyperlinks:**
+```markdown
+- [Learn more](https://docs.example.com)
+- [Contact us](mailto:info@example.com)
+```
+
+**Link Types:**
+- ✅ External URLs (HTTP/HTTPS) when explicitly linked
+- ✅ Email links (mailto:)
+- ✅ DOI links in reference sections
+- ❌ Aggressive inline linking (removed for clean text)
+
+### 📊 Structured Table Extraction
 
 Extracts tables as properly formatted markdown:
 
@@ -384,21 +302,6 @@ Extracts tables as properly formatted markdown:
 - Clean cell formatting
 - Page number tracking
 
-### Dual PowerPoint Conversion
-
-The application uses TWO conversion methods for PowerPoint files:
-
-1. **Direct PPTX → Markdown**
-   - Preserves slide structure and formatting
-   - Best for text-heavy presentations
-   - Maintains hyperlinks
-
-2. **PPTX → PDF → Markdown**
-   - Better text extraction for complex layouts
-   - Handles embedded objects more reliably
-
-Both outputs are combined in a single `.md` file with section headers, structure detection, and text cleaning applied.
-
 ### Batch Processing Queue
 
 - **Visual Status Indicators**
@@ -410,8 +313,9 @@ Both outputs are combined in a single `.md` file with section headers, structure
 - **Progress Tracking**
   - Individual progress bars per file
   - Real-time status updates
-  - Advanced metrics: columns detected, H/F removed, links preserved
   - Quality scores: text quality, structure, overall
+  - Link preservation count
+  - Artifact fix count
   - Error messages with details
 
 - **Queue Management**
@@ -420,33 +324,54 @@ Both outputs are combined in a single `.md` file with section headers, structure
   - Clear completed items
   - Process all queued items with one click
 
+---
+
 ## 🎯 Use Cases
 
 ### Ideal For:
-- ✅ 2-column academic papers (NEW: Perfect with v2.3!)
-- ✅ Journal articles (Frontiers, Nature, Science)
-- ✅ Conference proceedings (IEEE, ACM, Springer)
-- ✅ Scientific literature review
-- ✅ Medical documentation (NEJM, Lancet, JAMA)
-- ✅ Research data extraction
-- ✅ LLM/RAG pipelines (clean, structured input)
-- ✅ Knowledge base creation
-- ✅ Semantic search indexing
-- ✅ Patent document processing
-- ✅ Technical documentation
+- ✅ **Embedding generation** (Primary use case)
+- ✅ **RAG pipeline ingestion**
+- ✅ **Semantic search indexing**
+- ✅ **LLM knowledge bases**
+- ✅ **Academic paper processing**
+- ✅ **Scientific literature review**
+- ✅ **Medical documentation**
+- ✅ **Research data extraction**
+- ✅ **Technical documentation**
+- ✅ **Patent document processing**
 
 ### Quality by Use Case:
 
-| Use Case | Quality Score |
-|----------|---------------|
-| 2-Column Academic Papers | ⭐⭐⭐⭐⭐ (NEW: v2.3 breakthrough!) |
-| Journal Article Processing | ⭐⭐⭐⭐⭐ (NEW: H/F removal + columns) |
-| LLM Knowledge Ingestion | ⭐⭐⭐⭐⭐ |
-| Scientific Literature Review | ⭐⭐⭐⭐⭐ |
-| Single-Column PDFs | ⭐⭐⭐⭐⭐ |
-| Clinical Decision Support | ⭐⭐⭐⭐ |
-| General Document Conversion | ⭐⭐⭐⭐ |
-| Regulatory Documentation | ⭐⭐⭐ (manual review recommended) |
+| Use Case | v2.2.1 Quality | Notes |
+|----------|----------------|-------|
+| Embedding Generation | ⭐⭐⭐⭐⭐ | Clean text, no noise |
+| RAG Pipeline Ingestion | ⭐⭐⭐⭐⭐ | Optimal semantic preservation |
+| Semantic Search Indexing | ⭐⭐⭐⭐⭐ | High token quality |
+| LLM Knowledge Base | ⭐⭐⭐⭐⭐ | Clean, structured input |
+| Academic Papers | ⭐⭐⭐⭐⭐ | Excellent structure detection |
+| Scientific Literature | ⭐⭐⭐⭐⭐ | Clean references, tables |
+| Medical Documentation | ⭐⭐⭐⭐ | Preserves medical terminology |
+| General Document Conversion | ⭐⭐⭐⭐ | Reliable and consistent |
+
+---
+
+## 📊 Version Comparison
+
+| Feature | v2.2.1 (Production) | v2.3.2 (Experimental) |
+|---------|---------------------|------------------------|
+| **Clean Text** | ✅ Excellent | ❌ Link pollution |
+| **Embedding Quality** | ✅ High | ❌ Degraded |
+| **Table Integrity** | ✅ Stable | ❌ Header duplication |
+| **Link Preservation** | ✅ Selective | ⚠️ Too aggressive |
+| **Footnote Support** | ❌ None | ✅ Complete pipeline |
+| **H/F Removal** | ❌ None | ✅ Automatic |
+| **Multi-Column** | ❌ None | ✅ 2-column detection |
+| **Production Ready** | ✅ Yes | ❌ No (regressions) |
+| **Best For** | Embeddings, NLP | Testing, reference |
+
+**Full comparison:** See [web/VERSION_NOTES.md](web/VERSION_NOTES.md)
+
+---
 
 ## 🛠️ Building Standalone Executable
 
@@ -465,6 +390,8 @@ python build_exe.py
 dist/MarkItDownConverter.exe
 ```
 
+---
+
 ## 💻 System Requirements
 
 ### Desktop Application
@@ -480,23 +407,26 @@ dist/MarkItDownConverter.exe
 - **JavaScript**: Must be enabled
 - **Works**: Windows, macOS, Linux, ChromeOS
 
+---
+
 ## 📄 Supported File Formats
 
-| Format | Extension | Quality | Advanced Features |
-|--------|-----------|---------|------------------|
-| PDF | `.pdf` | ⭐⭐⭐⭐⭐ | ✅ Full support (v2.3: H/F removal, columns) |
-| PowerPoint | `.pptx` | ⭐⭐⭐⭐ | ✅ Link preservation, structure detection |
-| PowerPoint Legacy | `.ppt` | ⭐⭐⭐⭐ | ✅ Link preservation, structure detection |
+| Format | Extension | Quality | Notes |
+|--------|-----------|---------|-------|
+| PDF | `.pdf` | ⭐⭐⭐⭐⭐ | Full support, clean text extraction |
+| PowerPoint | `.pptx` | ⭐⭐⭐⭐ | Link preservation, structure detection |
+| PowerPoint Legacy | `.ppt` | ⭐⭐⭐⭐ | Link preservation, structure detection |
+
+---
 
 ## 🧩 Technology Stack
 
 ### Desktop Application
 - **Core Conversion**: [MarkItDown](https://github.com/microsoft/markitdown) by Microsoft
-- **Layout Analysis**: Custom multi-column detection (NEW v2.3)
-- **Structure Detection**: Custom font analysis + patterns from [jzillmann/pdf-to-markdown](https://github.com/jzillmann/pdf-to-markdown) (v2.1)
-- **Text Cleaning**: Custom regex-based engine (v2.0/v2.2)
-- **Link Extraction**: Custom PDF.js-based extraction (v2.2)
-- **Table Extraction**: [Camelot](https://camelot-py.readthedocs.io/) + [Tabula](https://tabula-py.readthedocs.io/) (v2.0)
+- **Structure Detection**: Custom font analysis + patterns from [jzillmann/pdf-to-markdown](https://github.com/jzillmann/pdf-to-markdown)
+- **Text Cleaning**: Custom regex-based engine
+- **Link Extraction**: Custom PDF.js-based extraction
+- **Table Extraction**: [Camelot](https://camelot-py.readthedocs.io/) + [Tabula](https://tabula-py.readthedocs.io/)
 - **Data Processing**: [Pandas](https://pandas.pydata.org/)
 - **GUI Framework**: CustomTkinter
 - **Drag-and-Drop**: TkinterDnD2
@@ -507,9 +437,11 @@ dist/MarkItDownConverter.exe
 ### Web Version
 - **PDF Processing**: [PDF.js](https://mozilla.github.io/pdf.js/) by Mozilla
 - **PowerPoint Processing**: [JSZip](https://stuk.github.io/jszip/)
-- **Layout Detection**: JavaScript port of v2.3 algorithms (NEW)
 - **Structure Detection**: JavaScript port of v2.1 algorithms
+- **Text Cleaning**: JavaScript port of v2.2 algorithms
 - **Client-Side Only**: Zero server uploads
+
+---
 
 ## 🐛 Troubleshooting
 
@@ -522,33 +454,12 @@ dist/MarkItDownConverter.exe
 2. Check Windows Defender didn't block it
 3. Ensure no antivirus blocking execution
 
-### Multi-Column Detection Not Working
-
-**Issue**: 2-column PDF still shows scrambled text
-
-**Solution**:
-1. Ensure using v2.3.0 or later (check version badge)
-2. PDF must have clear vertical gap between columns
-3. Very dense layouts may not detect (try manual column inspection)
-4. 3+ column layouts not supported yet (falls back to Y-sort)
-5. Check console for "columnsDetected" count
-
-### Headers/Footers Still Appearing
-
-**Issue**: Page numbers or journal names in output
-
-**Solution**:
-1. H/F must appear on ≥50% of pages to be detected
-2. Very short documents (<5 pages) may not trigger removal
-3. Unique headers per page won't be removed (by design)
-4. Check "H/F Removed" metric in output
-
 ### Structure Detection Not Working
 
 **Issue**: Headers not detected, structure score still low
 
 **Solution**:
-1. Ensure using v2.1.0 or later (check version badge)
+1. Ensure using v2.2.1 (check version badge)
 2. PDF must have actual text (not scanned images)
 3. Font information must be embedded in PDF
 4. Some PDFs with custom fonts may not work perfectly
@@ -575,76 +486,43 @@ dist/MarkItDownConverter.exe
 4. Try different browser
 5. Clear browser cache
 
-### Drag-and-Drop Not Working
-
-**Issue**: Files don't trigger when dropped
-
-**Solution**:
-1. Use "Browse Files" button instead
-2. Ensure files are supported formats (PDF, PPTX, PPT)
-3. Try running as administrator
-
-### Conversion Fails
-
-**Issue**: File shows error status
-
-**Solution**:
-1. Check file isn't password-protected
-2. Ensure file isn't corrupted (can you open it?)
-3. Check error message in status text and console
-4. Try converting file individually
-5. Check if file contains scanned images (OCR needed)
-
 ### Large Files Slow Processing
 
 **Issue**: Processing takes very long
 
 **Solution**:
-- PDF: Expected for 100+ page documents (especially with layout analysis)
-- Multi-column detection adds 1-2 seconds per document
-- H/F removal requires scanning all pages first
+- PDF: Expected for 100+ page documents
 - PPTX: Large presentations (50+ slides) may take 1-2 minutes
 - Table extraction adds 2-5 seconds per PDF
 - Consider splitting large files before conversion
 
+---
+
 ## 🛣️ Roadmap
 
-### v2.3 (Current) - Advanced PDF Features ✅
-- [x] Header/footer removal (page numbers, DOIs, journals)
-- [x] Multi-column layout detection (2-column support)
-- [x] Advanced metadata tracking
-- [x] Enhanced structure scoring (+15 points)
-- [x] Web version with layout analysis
+### v2.2.1 (Current) - Production ✅
+- [x] Clean text extraction for embeddings
+- [x] Advanced text cleaning
+- [x] AI structure detection
+- [x] Selective link preservation
+- [x] Quality metrics
+- [x] Production-tested stability
 
-### v2.4 (Next) - Phase 3 Complete
-- [ ] Footnote extraction
-- [ ] Enhanced figure/table references
-- [ ] Bibliography section detection
-- [ ] Citation format preservation
-- [ ] 3+ column layout support
-
-### v2.5 (Planned) - Export Format Options
-- [ ] HTML export with Showdown.js
-- [ ] Plain text export
-- [ ] JSON export with full metadata
-- [ ] Format selector in UI
-- [ ] Custom templates
+### v2.4 (Future) - Hybrid Approach
+- [ ] Start from v2.2.1 clean base
+- [ ] Optional footnote detection (toggle)
+- [ ] Optional link preservation (toggle)
+- [ ] Fix remaining ligature issues
+- [ ] Features as opt-in, not forced
+- [ ] Maintain clean text as default
 
 ### v3.0 (Future) - Visual Intelligence
 - [ ] Figure/image extraction
-- [ ] AI-powered figure descriptions (GPT-4 Vision/Claude)
+- [ ] AI-powered figure descriptions
 - [ ] OCR for scanned documents
 - [ ] Chart data extraction
-- [ ] Diagram understanding
 
-### v4.0 (Future) - Advanced Features
-- [ ] Support Word documents (.docx)
-- [ ] Add Excel spreadsheet conversion (.xlsx)
-- [ ] Preview pane for Markdown output
-- [ ] LLM integration for auto-summaries
-- [ ] Custom output folder selection
-- [ ] Conversion settings panel
-- [ ] macOS and Linux native apps
+---
 
 ## 🤝 Contributing
 
@@ -658,9 +536,13 @@ Contributions welcome! Please:
 
 See [CHANGELOG.md](CHANGELOG.md) for version history.
 
+---
+
 ## 📜 License
 
 This project is licensed under the MIT License - see [LICENSE](LICENSE) file.
+
+---
 
 ## 🙏 Acknowledgments
 
@@ -671,7 +553,9 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file.
 - **Mozilla** - PDF.js for web version
 - **CustomTkinter** - Modern UI framework
 - **PyInstaller** - Executable packaging
-- The medical/research community for quality testing and feedback
+- The research/NLP community for quality testing and feedback
+
+---
 
 ## 📧 Support
 
@@ -680,11 +564,12 @@ For issues, questions, or feature requests:
 - Check documentation: [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md)
 - View changelog: [CHANGELOG.md](CHANGELOG.md)
 - Web version docs: [web/README.md](web/README.md)
+- Version comparison: [web/VERSION_NOTES.md](web/VERSION_NOTES.md)
 
 ---
 
 **Made with ♥️ by Wei-power3**
 
-**Version 2.3.0** - Advanced PDF Features: Multi-Column Detection + Header/Footer Removal
+**Version 2.2.1** - Production: Clean Text Extraction for Embeddings
 
-[Report Bug](https://github.com/Wei-power3/markitdown-desktop-converter/issues) · [Request Feature](https://github.com/Wei-power3/markitdown-desktop-converter/issues) · [View Changelog](CHANGELOG.md) · [Try Web Version](web/index_v2.3.0.html)
+[Report Bug](https://github.com/Wei-power3/markitdown-desktop-converter/issues) · [Request Feature](https://github.com/Wei-power3/markitdown-desktop-converter/issues) · [View Changelog](CHANGELOG.md) · [Try Web Version](web/index.html) · [Version Comparison](web/VERSION_NOTES.md)
