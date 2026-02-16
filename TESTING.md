@@ -1,286 +1,403 @@
 # Testing Guide
 
-## Pre-Build Testing
+Comprehensive guide for running and writing tests for MarkItDown Desktop Converter.
 
-### 1. Test Core Conversion
+## Table of Contents
 
-```bash
-# Activate virtual environment
-venv\Scripts\activate
+- [Quick Start](#quick-start)
+- [Test Categories](#test-categories)
+- [Running Tests Locally](#running-tests-locally)
+- [Writing New Tests](#writing-new-tests)
+- [Regression Testing](#regression-testing)
+- [CI/CD Pipeline](#cicd-pipeline)
+- [Troubleshooting](#troubleshooting)
 
-# Test PDF conversion
-python -c "from markitdown import MarkItDown; md = MarkItDown(); result = md.convert('sample.pdf'); print('PDF OK')"
-
-# Test PPTX conversion
-python -c "from markitdown import MarkItDown; md = MarkItDown(); result = md.convert('sample.pptx'); print('PPTX OK')"
-```
-
-### 2. Test GUI Launch
+## Quick Start
 
 ```bash
-python src/main.py
+# Install test dependencies
+pip install -r requirements-test.txt
+
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=src --cov-report=html
+
+# Open coverage report
+open htmlcov/index.html  # macOS
+# or
+start htmlcov/index.html  # Windows
 ```
 
-**Checklist:**
-- [ ] Window opens without errors
-- [ ] Drop zone visible
-- [ ] All buttons render correctly
-- [ ] No console errors
+## Test Categories
 
-### 3. Test File Operations
+### Unit Tests (`tests/unit/`)
+**Individual module testing without external dependencies**
 
-**Test drag-and-drop:**
-1. Drag a PDF onto drop zone
-2. Verify file appears in queue
-3. Click "Start Processing"
-4. Wait for completion
-5. Verify files in `data/` folders
+- `test_text_cleaner.py` - 40+ tests for text cleaning
+  - Ligature fixing
+  - Hyphenation artifacts
+  - Medical term preservation
+  - Special character handling
 
-**Test browse:**
-1. Click "Browse Files"
-2. Select multiple files
-3. Verify all added to queue
-4. Process and verify outputs
+Run: `pytest tests/unit/ -v`
 
-### 4. Test Edge Cases
+### Integration Tests (`tests/integration/`)
+**End-to-end conversion workflows with real documents**
 
-**Large files:**
-- Test 100+ page PDF
-- Test 50+ slide PowerPoint
-- Verify progress updates correctly
+- `test_converter.py` - 20+ tests for full conversion pipeline
+  - PDF to Markdown conversion
+  - PowerPoint conversion
+  - Error handling
+  - Output quality validation
 
-**Unsupported files:**
-- Try dropping .txt file
-- Should show warning message
+Run: `pytest tests/integration/ -v`
 
-**Empty queue:**
-- Click "Start Processing" with no files
-- Should show info message
+### Regression Tests (`tests/regression/`)
+**CRITICAL: Prevents quality degradation (v2.3.2 incident prevention)**
 
-**Duplicate files:**
-- Add same file twice
-- Process both
-- Verify unique filenames (counter added)
+- `test_quality_regression.py` - 15+ tests preventing regressions
+  - Known artifact prevention
+  - Internal link pollution detection
+  - Quality baseline enforcement
+  - Output determinism
 
-## Post-Build Testing
+Run: `pytest tests/regression/ -v -m regression`
 
-### 1. Executable Integrity
+## Running Tests Locally
+
+### Prerequisites
 
 ```bash
-# Check file exists
-dir dist\MarkItDownConverter.exe
+# System dependencies
+# Ubuntu/Debian:
+sudo apt-get install ghostscript python3-tk poppler-utils
 
-# Check size (should be 80-150 MB)
+# macOS:
+brew install ghostscript tcl-tk poppler
+
+# Windows:
+choco install ghostscript
+
+# Python dependencies
+pip install -r requirements.txt
+pip install -r requirements-test.txt
 ```
 
-### 2. Fresh Machine Test (CRITICAL)
+### Basic Commands
 
-**Test on a computer that:**
-- Never had Python installed
-- Never ran this application
-- Clean Windows 10/11
+```bash
+# Run all tests
+pytest
 
-**Test procedure:**
-1. Copy only the `.exe` to test machine
-2. Double-click to run
-3. Test full conversion workflow
-4. Verify no dependency errors
+# Run specific test file
+pytest tests/unit/test_text_cleaner.py
 
-### 3. Antivirus Compatibility
+# Run specific test
+pytest tests/unit/test_text_cleaner.py::TestLigatureFixing::test_fix_artificial_lowercase
 
-**Test with:**
-- Windows Defender (default)
-- Popular third-party antivirus
+# Run tests matching pattern
+pytest -k "ligature"
 
-**Check:**
-- [ ] Executable not flagged as malware
-- [ ] Can run without admin rights
-- [ ] Can access file system
+# Run with verbose output
+pytest -v
 
-### 4. Performance Benchmarks
+# Run only regression tests
+pytest -m regression
 
-**Record conversion times:**
+# Run only quality tests
+pytest -m quality
 
-| File Type | Size | Pages/Slides | Time |
-|-----------|------|--------------|------|
-| PDF | 1 MB | 10 | ___ sec |
-| PDF | 10 MB | 100 | ___ sec |
-| PPTX | 5 MB | 20 | ___ sec |
-| PPTX | 20 MB | 50 | ___ sec |
+# Skip slow tests
+pytest -m "not slow"
+```
 
-**Acceptance criteria:**
-- Small files (< 5 MB): Under 30 seconds
-- Medium files (5-20 MB): Under 2 minutes
-- Large files (> 20 MB): Under 5 minutes
+### Coverage Reports
 
-## Automated Testing (Optional)
+```bash
+# Generate coverage report
+pytest --cov=src --cov-report=html --cov-report=term-missing
 
-### Unit Tests
+# Check coverage threshold (70%)
+pytest --cov=src --cov-fail-under=70
+
+# Coverage for specific module
+pytest tests/unit/test_text_cleaner.py --cov=src/text_cleaner
+```
+
+### Performance Testing
+
+```bash
+# Run benchmark tests
+pytest tests/unit/test_text_cleaner.py::TestPerformance -v
+
+# With benchmark plugin
+pip install pytest-benchmark
+pytest --benchmark-only
+```
+
+## Writing New Tests
+
+### Test Structure
 
 ```python
-# test_file_manager.py
 import pytest
 from pathlib import Path
-from src.file_manager import FileManager
+import sys
 
-def test_filename_generation():
-    fm = FileManager()
-    test_path = Path("test.pdf")
-    filename = fm.generate_filename(test_path, "_original")
-    assert "_original.pdf" in filename
-    assert len(filename.split("-")) == 3  # Date format
+# Add src to path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
-def test_save_original():
-    fm = FileManager()
-    # Create temp file
-    temp = Path("temp_test.pdf")
-    temp.write_text("test")
+from your_module import YourClass
+
+class TestYourFeature:
+    """Test suite for your feature"""
     
-    saved = fm.save_original(temp)
-    assert saved.exists()
-    assert "_original" in saved.name
+    @pytest.fixture
+    def setup(self):
+        """Setup for each test"""
+        return YourClass()
     
-    # Cleanup
-    saved.unlink()
-    temp.unlink()
+    def test_basic_functionality(self, setup):
+        """Test basic functionality"""
+        result = setup.your_method()
+        assert result is not None
 ```
 
-### Integration Tests
+### Using Fixtures
 
 ```python
-# test_converter.py
-import pytest
-from src.converter import DocumentConverter
-from pathlib import Path
+# Use built-in fixtures from conftest.py
+def test_with_pdf(medical_paper_pdf):
+    """Test using medical paper PDF fixture"""
+    assert medical_paper_pdf.exists()
 
-def test_pdf_conversion():
-    converter = DocumentConverter()
-    test_pdf = Path("samples/test.pdf")
-    
-    if test_pdf.exists():
-        content, error = converter.convert_file(test_pdf)
-        assert error is None
-        assert len(content) > 0
-        assert "#" in content  # Should have markdown headers
+def test_with_temp_dir(temp_output_dir):
+    """Test using temporary directory"""
+    output_file = temp_output_dir / "output.md"
+    output_file.write_text("test")
+    assert output_file.exists()
+```
 
-def test_pptx_conversion():
-    converter = DocumentConverter()
-    test_pptx = Path("samples/test.pptx")
-    
-    if test_pptx.exists():
-        content, error = converter.convert_file(test_pptx)
-        assert error is None
-        assert "Direct PPTX Conversion" in content
-        assert "PDF Pathway Conversion" in content
+### Test Markers
+
+```python
+@pytest.mark.slow
+def test_large_file():
+    """Slow test - skipped in quick runs"""
+    pass
+
+@pytest.mark.quality
+@pytest.mark.regression
+def test_quality_baseline():
+    """Critical quality test"""
+    pass
+
+@pytest.mark.requires_ghostscript
+def test_table_extraction():
+    """Test requiring Ghostscript"""
+    pass
+```
+
+### Parametrized Tests
+
+```python
+@pytest.mark.parametrize("input_text,expected", [
+    ("arti fi cial", "artificial"),
+    ("de fi ned", "defined"),
+    ("speci fi c", "specific"),
+])
+def test_ligature_patterns(cleaner, input_text, expected):
+    result = cleaner.clean(input_text)
+    assert expected in result.lower()
 ```
 
 ## Regression Testing
 
-**After each code change, retest:**
+### Creating Baseline
 
-1. [ ] GUI launches correctly
-2. [ ] File drag-and-drop works
-3. [ ] Browse button works
-4. [ ] Queue displays correctly
-5. [ ] Processing completes without errors
-6. [ ] Files saved to correct folders
-7. [ ] Folder buttons open Explorer
-8. [ ] Clear queue works
-9. [ ] Remove individual items works
-10. [ ] Executable still builds
+**IMPORTANT: Only run this on v2.2.1 (current stable version)**
 
-## Sample Test Files
+```bash
+# Generate baseline scores
+python tests/regression/generate_baseline.py
 
-**Create these test files:**
-
-### Small PDF (test_small.pdf)
-- 1-2 pages
-- Text content
-- No images
-- Quick conversion test
-
-### Large PDF (test_large.pdf)
-- 50+ pages
-- Mixed content (text, images, tables)
-- Performance test
-
-### Simple PowerPoint (test_simple.pptx)
-- 5-10 slides
-- Text-only content
-- Basic conversion test
-
-### Complex PowerPoint (test_complex.pptx)
-- 30+ slides
-- Images, charts, tables
-- Advanced layout test
-
-## Bug Reporting Template
-
-When reporting issues:
-
-```markdown
-**Bug Description:**
-Clear description of what went wrong
-
-**Steps to Reproduce:**
-1. Step one
-2. Step two
-3. Step three
-
-**Expected Behavior:**
-What should have happened
-
-**Actual Behavior:**
-What actually happened
-
-**Environment:**
-- Windows Version: Windows 10/11
-- Python Version (if from source): 3.x.x
-- Executable or Source: Executable/Source
-- File Type: PDF/PPTX
-- File Size: X MB
-
-**Error Message:**
-```
-Paste any error messages here
+# This creates: tests/regression/baseline_scores_v2.2.1.json
 ```
 
-**Screenshots:**
-Attach if helpful
+### Baseline Format
+
+```json
+{
+  "version": "v2.2.1",
+  "generated_at": "2026-02-16T19:00:00",
+  "documents": {
+    "TIM-HF3 fcvm-11-1457995.pdf": {
+      "success": true,
+      "scores": {
+        "length": 45230,
+        "line_count": 892,
+        "ligature_artifacts": 0,
+        "internal_link_pollution": 0
+      }
+    }
+  }
+}
 ```
 
-## Continuous Improvement
+### Regression Test Workflow
 
-**Track these metrics:**
+1. **Baseline exists** → Tests compare against baseline
+2. **No baseline** → Tests check for known issues only
+3. **Degradation detected** → Test fails with detailed message
 
-1. **Conversion Success Rate**
-   - Target: > 95%
-   - Measure: Successful conversions / Total attempts
+### Critical Regression Checks
 
-2. **Average Conversion Time**
-   - Target: < 30 seconds for typical files
-   - Measure: Sum of times / Number of conversions
+✅ **PASS Criteria:**
+- No ligature artifacts ("arti fi cial")
+- No internal link pollution ([the](#page-7))
+- No hyphenation artifacts ("non- invasive")
+- Medical terms properly formatted
+- Deterministic output (same input = same output)
 
-3. **User-Reported Bugs**
-   - Target: < 5 per month
-   - Track via GitHub Issues
+❌ **FAIL Criteria:**
+- Any known artifact reappears
+- Quality scores degrade >2%
+- Non-deterministic output
+- Output length changes significantly (±10%)
 
-4. **Crash Rate**
-   - Target: 0%
-   - Monitor application crashes
+## CI/CD Pipeline
 
-## Final Release Checklist
+### GitHub Actions Workflow
 
-Before releasing new version:
+Automatically runs on:
+- Every push to `main` or `develop`
+- All pull requests
+- Manual trigger
 
-- [ ] All unit tests pass
-- [ ] Integration tests pass
-- [ ] Manual testing complete
-- [ ] Fresh machine test successful
-- [ ] Performance benchmarks met
-- [ ] No known critical bugs
-- [ ] Documentation updated
-- [ ] Version number incremented
-- [ ] Git tag created
-- [ ] Release notes written
-- [ ] Executable uploaded to Releases
+### Test Matrix (9 environments)
+
+| OS | Python 3.10 | Python 3.11 | Python 3.12 |
+|----|-------------|-------------|-------------|
+| Ubuntu | ✅ | ✅ | ✅ |
+| Windows | ✅ | ✅ | ✅ |
+| macOS | ✅ | ✅ | ✅ |
+
+### Workflow Steps
+
+1. **Setup**: Install system dependencies
+2. **Unit Tests**: Fast feedback (2-5 min)
+3. **Integration Tests**: Real document conversion (5-10 min)
+4. **Regression Tests**: Quality validation (2-5 min)
+5. **Coverage**: Report generation and upload
+6. **Quality**: Code formatting and linting
+
+### CI Status
+
+Check CI status:
+- View badge in README
+- Check Actions tab: https://github.com/Wei-power3/markitdown-desktop-converter/actions
+
+### Coverage Reporting
+
+- Uploaded to Codecov after each run
+- 70% minimum coverage required
+- View detailed coverage: Click badge in README
+
+## Troubleshooting
+
+### Common Issues
+
+**Import errors:**
+```bash
+# Ensure src is in Python path
+export PYTHONPATH="${PYTHONPATH}:$(pwd)/src"
+# Or add to pytest.ini
+```
+
+**Missing test files:**
+```bash
+# Ensure test PDFs are downloaded
+git lfs pull
+# Or check tests/fixtures/sample_pdfs/
+```
+
+**Ghostscript not found:**
+```bash
+# Ubuntu:
+sudo apt-get install ghostscript
+# macOS:
+brew install ghostscript
+# Windows:
+choco install ghostscript
+```
+
+**Tests pass locally but fail in CI:**
+- Check Python version (CI uses 3.10, 3.11, 3.12)
+- Check system dependencies
+- Check file paths (use Path objects, not strings)
+- Check for OS-specific issues
+
+### Getting Help
+
+1. Check test output: `pytest -v --tb=long`
+2. Check coverage: `pytest --cov=src --cov-report=html`
+3. Run specific failing test: `pytest -k test_name -v`
+4. Check GitHub Issues
+
+## Test Quality Standards
+
+### Code Coverage Targets
+
+| Module | Target Coverage |
+|--------|----------------|
+| text_cleaner.py | 90%+ |
+| converter.py | 80%+ |
+| table_extractor.py | 75%+ |
+| Overall | 70%+ |
+
+### Test Requirements for PRs
+
+✅ **Required:**
+- All existing tests pass
+- Coverage ≥70%
+- New features have tests
+- Bug fixes have regression tests
+
+✅ **Recommended:**
+- Add integration test for major features
+- Add regression test if fixing quality issue
+- Update baseline if intentionally changing output
+
+## Best Practices
+
+1. **Test names should be descriptive**
+   - ✅ `test_ligature_artifacts_are_fixed`
+   - ❌ `test_cleaning`
+
+2. **One assertion per test (when possible)**
+   - Makes failures easier to diagnose
+
+3. **Use fixtures for setup**
+   - Reduces code duplication
+   - Makes tests more maintainable
+
+4. **Mark slow tests**
+   - `@pytest.mark.slow` for tests >5 seconds
+   - Allows quick test runs: `pytest -m "not slow"`
+
+5. **Write regression tests for bugs**
+   - Every bug fix should have a test
+   - Prevents regression
+
+6. **Keep tests independent**
+   - Tests should not depend on each other
+   - Use fixtures for shared setup
+
+## Contributing Tests
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for:
+- Testing requirements for pull requests
+- Code quality standards
+- Review process
