@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MarkItDown v2.3.1 - Phase 3 Complete</title>
+    <title>MarkItDown v2.3.1 - Phase 3 Complete (Task 1/7)</title>
     <style>
         :root {
             --bg-primary: #0f172a;
@@ -18,7 +18,6 @@
             --accent-yellow: #fbbf24;
             --accent-purple: #a855f7;
             --accent-orange: #fb923c;
-            --accent-teal: #14b8a6;
             --border: #475569;
         }
 
@@ -51,8 +50,8 @@
 
         .version-badge {
             display: inline-block;
-            background: linear-gradient(135deg, var(--accent-teal) 0%, var(--accent-orange) 100%);
-            color: white;
+            background: var(--accent-orange);
+            color: var(--bg-primary);
             padding: 4px 12px;
             border-radius: 6px;
             font-size: 0.75rem;
@@ -89,7 +88,7 @@
         }
 
         .new-badge {
-            background: var(--accent-teal);
+            background: var(--accent-orange);
             color: white;
             padding: 2px 6px;
             border-radius: 4px;
@@ -99,22 +98,22 @@
         }
 
         .quality-banner {
-            background: linear-gradient(135deg, rgba(20, 184, 166, 0.1), rgba(168, 85, 247, 0.1));
-            border: 1px solid var(--accent-teal);
+            background: linear-gradient(135deg, rgba(251, 146, 60, 0.1), rgba(168, 85, 247, 0.1));
+            border: 1px solid var(--accent-orange);
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 30px;
         }
 
         .quality-banner h3 {
-            color: var(--accent-teal);
+            color: var(--accent-orange);
             margin-bottom: 10px;
             font-size: 1.2rem;
         }
 
         .quality-features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 15px;
             margin-top: 15px;
         }
@@ -202,7 +201,7 @@
 
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 15px;
             margin-bottom: 30px;
         }
@@ -310,7 +309,7 @@
 
         .quality-metrics {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 10px;
             margin-top: 10px;
             padding: 15px;
@@ -351,10 +350,6 @@
 
         .metric-value.advanced-indicator {
             color: var(--accent-orange);
-        }
-
-        .metric-value.teal-indicator {
-            color: var(--accent-teal);
         }
 
         .job-actions {
@@ -468,61 +463,48 @@
         <header>
             <h1>
                 📄 MarkItDown Converter
-                <span class="version-badge">v2.3.1</span>
+                <span class="version-badge">v2.3.1 (Task 1/7)</span>
             </h1>
-            <p class="subtitle">PDF & PowerPoint to Markdown - Phase 3 Complete</p>
+            <p class="subtitle">PDF & PowerPoint to Markdown • Phase 3 in progress</p>
             <div class="features">
                 <span class="feature">✓ No Upload Required</span>
                 <span class="feature">✓ Complete Privacy</span>
                 <span class="feature">✓ Batch Processing</span>
-                <span class="feature">✓ Footnote Extraction <span class="new-badge">NEW</span></span>
-                <span class="feature">✓ Figure/Table References <span class="new-badge">NEW</span></span>
+                <span class="feature">✓ Multi-Column Detection</span>
+                <span class="feature">✓ Header/Footer Removal</span>
+                <span class="feature">✓ Footnote Detection <span class="new-badge">TESTING</span></span>
             </div>
         </header>
 
         <div class="quality-banner">
-            <h3>🎉 NEW in v2.3.1: Phase 3 Complete - Academic Document Excellence</h3>
+            <h3>🚧 v2.3.1 Development: Phase 3 Complete (Task 1/7)</h3>
             <div class="quality-features">
                 <div class="quality-item">
                     <span class="quality-icon">📝</span>
                     <div>
-                        <strong>Footnote Extraction <span class="new-badge">NEW</span></strong>
-                        <div style="font-size: 0.85rem; color: var(--text-muted);">Detects footnotes (¹, ², [1]) and formats as markdown references</div>
-                    </div>
-                </div>
-                <div class="quality-item">
-                    <span class="quality-icon">🖼️</span>
-                    <div>
-                        <strong>Figure/Table References <span class="new-badge">NEW</span></strong>
-                        <div style="font-size: 0.85rem; color: var(--text-muted);">Identifies and preserves Figure/Table captions and references</div>
+                        <strong>Footnote Marker Detection <span class="new-badge">TESTING</span></strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Detects [1], 1), superscript numbers, and Unicode superscripts</div>
                     </div>
                 </div>
                 <div class="quality-item">
                     <span class="quality-icon">📰</span>
                     <div>
-                        <strong>Multi-Column Detection</strong>
-                        <div style="font-size: 0.85rem; color: var(--text-muted);">Perfect reading order for 2-column papers</div>
+                        <strong>Multi-Column Layout Detection</strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Correctly reads 2-column academic papers</div>
                     </div>
                 </div>
                 <div class="quality-item">
                     <span class="quality-icon">🧹</span>
                     <div>
                         <strong>Header/Footer Removal</strong>
-                        <div style="font-size: 0.85rem; color: var(--text-muted);">Removes page numbers, DOIs, journal names</div>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Removes page numbers, DOIs, and repetitive content</div>
                     </div>
                 </div>
                 <div class="quality-item">
                     <span class="quality-icon">✨</span>
                     <div>
-                        <strong>Advanced Text Cleaning</strong>
-                        <div style="font-size: 0.85rem; color: var(--text-muted);">Fixes ligatures and merged words</div>
-                    </div>
-                </div>
-                <div class="quality-item">
-                    <span class="quality-icon">🌐</span>
-                    <div>
-                        <strong>Link Preservation</strong>
-                        <div style="font-size: 0.85rem; color: var(--text-muted);">Maintains external hyperlinks</div>
+                        <strong>Enhanced Text Cleaning</strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Fixes spaced ligatures and merged words</div>
                     </div>
                 </div>
             </div>
@@ -567,12 +549,12 @@
                     <div class="stat-label">Links Preserved</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="totalFootnotes">0</div>
-                    <div class="stat-label">Footnotes Detected</div>
+                    <div class="stat-value" id="totalHeadersRemoved">0</div>
+                    <div class="stat-label">Headers/Footers Removed</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="totalFigures">0</div>
-                    <div class="stat-label">Fig/Table Refs</div>
+                    <div class="stat-value" id="totalFootnotes">0</div>
+                    <div class="stat-label">Footnote Markers Detected</div>
                 </div>
             </div>
 
@@ -643,13 +625,110 @@
                 error: null,
                 createdAt: new Date(),
                 qualityMetrics: null,
-                linkMetadata: { linksFound: 0, linksPreserved: 0, linkTypes: { external: 0, internal: 0 } },
-                advancedMetadata: { headersFootersRemoved: 0, columnsDetected: 0, footnotesDetected: 0, figureRefsDetected: 0 }
+                linkMetadata: {
+                    linksFound: 0,
+                    linksPreserved: 0,
+                    linkTypes: { external: 0, internal: 0 }
+                },
+                advancedMetadata: {
+                    headersFootersRemoved: 0,
+                    columnsDetected: 0,
+                    footnotesDetected: 0  // NEW: Track footnote markers
+                }
             };
 
             jobs.unshift(job);
             updateUI();
             processFile(job);
+        }
+
+        // v2.3.1 NEW: Task 1 - Detect footnote markers in text
+        function detectFootnoteMarkers(textItems) {
+            const markers = [];
+            
+            // Pattern 1: Bracketed numbers [1], [2], [123]
+            const bracketPattern = /\[(\d+)\]/g;
+            
+            // Pattern 2: Numbers with parenthesis 1), 2), 123)
+            const parenPattern = /(\d+)\)/g;
+            
+            // Pattern 3: Standalone numbers (potential superscripts) - be conservative
+            const standalonePattern = /(?<=\s)(\d+)(?=\s|$|[,.])/g;
+            
+            // Pattern 4: Unicode superscript numbers
+            const superscriptPattern = /[¹²³⁴⁵⁶⁷⁸⁹⁰]+/g;
+            
+            textItems.forEach(item => {
+                const text = item.text;
+                
+                // Check bracket pattern [1]
+                let match;
+                while ((match = bracketPattern.exec(text)) !== null) {
+                    markers.push({
+                        marker: match[0],
+                        number: match[1],
+                        type: 'bracket',
+                        text: item.text,
+                        x: item.x,
+                        y: item.y,
+                        pageNum: item.pageNum,
+                        fontSize: item.fontSize
+                    });
+                }
+                
+                // Check parenthesis pattern 1)
+                bracketPattern.lastIndex = 0;
+                while ((match = parenPattern.exec(text)) !== null) {
+                    markers.push({
+                        marker: match[0],
+                        number: match[1],
+                        type: 'paren',
+                        text: item.text,
+                        x: item.x,
+                        y: item.y,
+                        pageNum: item.pageNum,
+                        fontSize: item.fontSize
+                    });
+                }
+                
+                // Check standalone numbers (only if small font = likely superscript)
+                parenPattern.lastIndex = 0;
+                if (item.fontSize && item.fontSize < 8) {  // Small font = potential superscript
+                    while ((match = standalonePattern.exec(text)) !== null) {
+                        markers.push({
+                            marker: match[0],
+                            number: match[1],
+                            type: 'superscript',
+                            text: item.text,
+                            x: item.x,
+                            y: item.y,
+                            pageNum: item.pageNum,
+                            fontSize: item.fontSize
+                        });
+                    }
+                }
+                
+                // Check Unicode superscripts
+                standalonePattern.lastIndex = 0;
+                while ((match = superscriptPattern.exec(text)) !== null) {
+                    // Convert Unicode superscripts to regular numbers
+                    const superscriptMap = '⁰¹²³⁴⁵⁶⁷⁸⁹';
+                    const number = match[0].split('').map(c => superscriptMap.indexOf(c).toString()).join('');
+                    
+                    markers.push({
+                        marker: match[0],
+                        number: number,
+                        type: 'unicode',
+                        text: item.text,
+                        x: item.x,
+                        y: item.y,
+                        pageNum: item.pageNum,
+                        fontSize: item.fontSize
+                    });
+                }
+            });
+            
+            return markers;
         }
 
         function cleanText(text) {
@@ -685,22 +764,23 @@
             const encodingIssues = (text.match(/â€|Â(?!\w)/g) || []).length;
             const totalIssues = ligatureArtifacts + spacedLigatures + hyphenationIssues + spacingIssues + encodingIssues;
             const cleanScore = Math.max(0, 100 - (totalIssues / totalChars * 1000));
+            const hasHeaders = /^#+ /m.test(text);
+            const hasTables = /\|.*\|/m.test(text);
+            const hasLists = /^[-*+] /m.test(text);
+            const hasBoldItalic = /\*\*.*\*\*|\*.*\*/m.test(text);
             const headerCount = (text.match(/^#+ /gm) || []).length;
             const listCount = (text.match(/^[-*+] /gm) || []).length;
             const linkCount = (text.match(/\[.*?\]\(http.*?\)/g) || []).length;
-            const footnoteMarkers = (text.match(/\[\^\d+\]/g) || []).length;
             let structureScore = 0;
-            if (headerCount > 0) structureScore += 20;
+            if (headerCount > 0) structureScore += 25;
             if (headerCount >= 3) structureScore += 10;
-            if ((text.match(/\|.*\|/m))) structureScore += 15;
+            if (hasTables) structureScore += 15;
             if (listCount > 0) structureScore += 15;
-            if (listCount >= 5) structureScore += 5;
-            if ((text.match(/\*\*.*\*\*|\*.*\*/m))) structureScore += 10;
-            if (linkCount > 0) structureScore += 10;
+            if (listCount >= 5) structureScore += 10;
+            if (hasBoldItalic) structureScore += 10;
+            if (linkCount > 0) structureScore += 15;
             if (advancedMetadata.headersFootersRemoved > 0) structureScore += 5;
-            if (advancedMetadata.columnsDetected > 0) structureScore += 5;
-            if (advancedMetadata.footnotesDetected > 0) structureScore += 5;
-            if (advancedMetadata.figureRefsDetected > 0) structureScore += 5;
+            if (advancedMetadata.columnsDetected > 0) structureScore += 10;
             structureScore = Math.min(100, structureScore);
             const overallScore = Math.round((cleanScore * 0.5) + (structureScore * 0.5));
             return {
@@ -712,8 +792,7 @@
                 linkPreservationRate: linkMetadata.linksFound > 0 ? Math.round((linkMetadata.linksPreserved / linkMetadata.linksFound) * 100) : 0,
                 headersFootersRemoved: advancedMetadata.headersFootersRemoved,
                 columnsDetected: advancedMetadata.columnsDetected,
-                footnotesDetected: advancedMetadata.footnotesDetected,
-                figureRefsDetected: advancedMetadata.figureRefsDetected
+                footnotesDetected: advancedMetadata.footnotesDetected  // NEW
             };
         }
 
@@ -724,7 +803,7 @@
                 const extension = job.filename.split('.').pop().toLowerCase();
                 let markdown;
                 let linkMetadata = { linksFound: 0, linksPreserved: 0, linkTypes: { external: 0, internal: 0 } };
-                let advancedMetadata = { headersFootersRemoved: 0, columnsDetected: 0, footnotesDetected: 0, figureRefsDetected: 0 };
+                let advancedMetadata = { headersFootersRemoved: 0, columnsDetected: 0, footnotesDetected: 0 };
                 if (extension === 'pdf') {
                     const result = await convertPDF(job);
                     markdown = result.markdown;
@@ -814,57 +893,6 @@
             });
         }
 
-        // v2.3.1 NEW: Detect footnotes
-        function detectFootnotes(allPageItems, numPages) {
-            const footnotes = [];
-            const footnoteMarkerPattern = /[¹²³⁴⁵⁶⁷⁸⁹⁰]|\[(\d+)\]|\((\d+)\)|\^(\d+)/g;
-            const footnoteMap = new Map();
-            
-            for (let pageNum = 1; pageNum <= numPages; pageNum++) {
-                const pageItems = allPageItems.filter(item => item.pageNum === pageNum);
-                if (pageItems.length === 0) continue;
-                
-                const yPositions = pageItems.map(item => item.y);
-                const minY = Math.min(...yPositions);
-                const maxY = Math.max(...yPositions);
-                const pageHeight = maxY - minY;
-                const footerThreshold = minY + (pageHeight * 0.15);
-                
-                const bottomItems = pageItems.filter(item => item.y < footerThreshold);
-                bottomItems.forEach(item => {
-                    const text = item.text.trim();
-                    const matches = text.matchAll(footnoteMarkerPattern);
-                    for (const match of matches) {
-                        const marker = match[0];
-                        const number = match[1] || match[2] || match[3] || marker;
-                        if (!footnoteMap.has(number)) {
-                            footnoteMap.set(number, { marker, text, pageNum });
-                            footnotes.push({ marker, number, text, pageNum });
-                        }
-                    }
-                });
-            }
-            return footnotes;
-        }
-
-        // v2.3.1 NEW: Detect figure and table references
-        function detectFigureTableRefs(text) {
-            const figurePattern = /(?:Figure|Fig\.|FIGURE)\s+(\d+[a-zA-Z]?)\s*[:\-]?\s*([^\n.]{0,100})/gi;
-            const tablePattern = /(?:Table|TABLE|Tbl\.)\s+(\d+[a-zA-Z]?)\s*[:\-]?\s*([^\n.]{0,100})/gi;
-            const refs = [];
-            
-            let match;
-            while ((match = figurePattern.exec(text)) !== null) {
-                refs.push({ type: 'Figure', number: match[1], caption: match[2].trim() });
-            }
-            
-            while ((match = tablePattern.exec(text)) !== null) {
-                refs.push({ type: 'Table', number: match[1], caption: match[2].trim() });
-            }
-            
-            return refs;
-        }
-
         async function extractPDFLinks(page, pageNum) {
             const annotations = await page.getAnnotations();
             const links = [];
@@ -908,9 +936,11 @@
             const arrayBuffer = await job.file.arrayBuffer();
             const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
             let markdown = `# ${job.filename}\n\n`;
-            markdown += `Converted from PDF • ${pdf.numPages} pages • v2.3.1 Phase 3 Complete\n\n---\n\n`;
+            markdown += `Converted from PDF • ${pdf.numPages} pages • v2.3.1 (Task 1: Footnote Detection)\n\n---\n\n`;
             let allLinks = [];
             const allItems = [];
+            
+            // Collect all items from all pages
             for (let i = 1; i <= pdf.numPages; i++) {
                 const page = await pdf.getPage(i);
                 const textContent = await page.getTextContent();
@@ -925,12 +955,24 @@
                     });
                 });
             }
+            
+            // v2.3.1 NEW: Task 1 - Detect footnote markers
+            const footnoteMarkers = detectFootnoteMarkers(allItems);
+            console.log(`[Task 1] Detected ${footnoteMarkers.length} footnote markers:`, footnoteMarkers);
+            
+            // Group by type for analysis
+            const byType = footnoteMarkers.reduce((acc, m) => {
+                acc[m.type] = (acc[m.type] || 0) + 1;
+                return acc;
+            }, {});
+            console.log('[Task 1] Markers by type:', byType);
+            
             const headersFooters = detectHeadersFooters(allItems, pdf.numPages);
-            const footnotes = detectFootnotes(allItems, pdf.numPages);
             const fontSizes = allItems.map(item => item.fontSize).filter(size => size > 0);
             const avgFontSize = fontSizes.reduce((a, b) => a + b, 0) / fontSizes.length;
             const ACADEMIC_KEYWORDS = ['Abstract', 'Introduction', 'Background', 'Literature Review', 'Methods', 'Methodology', 'Materials and Methods', 'Results', 'Findings', 'Discussion', 'Analysis', 'Conclusion', 'Conclusions', 'References', 'Bibliography', 'Acknowledgments', 'Appendix'];
             let totalColumnsDetected = 0;
+            
             for (let i = 1; i <= pdf.numPages; i++) {
                 job.progress = 20 + (60 * (i / pdf.numPages));
                 updateUI();
@@ -976,21 +1018,7 @@
                 }
                 markdown += '\n';
             }
-            const figureTableRefs = detectFigureTableRefs(markdown);
-            if (figureTableRefs.length > 0) {
-                markdown += '\n## Figures & Tables\n\n';
-                figureTableRefs.forEach(ref => {
-                    markdown += `- **${ref.type} ${ref.number}**: ${ref.caption || '(No caption)'}\n`;
-                });
-                markdown += '\n';
-            }
-            if (footnotes.length > 0) {
-                markdown += '\n## Footnotes\n\n';
-                footnotes.forEach((fn, idx) => {
-                    markdown += `[^${idx + 1}]: ${fn.text} (Page ${fn.pageNum})\n`;
-                });
-                markdown += '\n';
-            }
+            
             const matchedLinks = matchLinksToText(allLinks, allItems);
             matchedLinks.forEach(link => {
                 if (link.text && link.text.length > 2) {
@@ -999,17 +1027,19 @@
                     markdown = markdown.replace(regex, `[${link.text}](${link.url})`);
                 }
             });
+            
             const linkMetadata = {
                 linksFound: allLinks.filter(l => l.type === 'external').length,
                 linksPreserved: matchedLinks.length,
                 linkTypes: { external: matchedLinks.length, internal: 0 }
             };
+            
             const advancedMetadata = {
                 headersFootersRemoved: headersFooters.size,
                 columnsDetected: totalColumnsDetected,
-                footnotesDetected: footnotes.length,
-                figureRefsDetected: figureTableRefs.length
+                footnotesDetected: footnoteMarkers.length  // NEW: Track detected markers
             };
+            
             return { markdown, linkMetadata, advancedMetadata };
         }
 
@@ -1140,10 +1170,12 @@
             document.getElementById('failed').textContent = jobs.filter(j => j.status === 'error').length;
             const totalLinksPreserved = jobs.reduce((sum, job) => sum + (job.linkMetadata?.linksPreserved || 0), 0);
             document.getElementById('totalLinks').textContent = totalLinksPreserved;
+            const totalHeadersRemoved = jobs.reduce((sum, job) => sum + (job.advancedMetadata?.headersFootersRemoved || 0), 0);
+            document.getElementById('totalHeadersRemoved').textContent = totalHeadersRemoved;
+            // NEW: Update footnotes count
             const totalFootnotes = jobs.reduce((sum, job) => sum + (job.advancedMetadata?.footnotesDetected || 0), 0);
             document.getElementById('totalFootnotes').textContent = totalFootnotes;
-            const totalFigures = jobs.reduce((sum, job) => sum + (job.advancedMetadata?.figureRefsDetected || 0), 0);
-            document.getElementById('totalFigures').textContent = totalFigures;
+            
             if (jobs.length === 0) {
                 emptyState.style.display = 'block';
                 jobList.innerHTML = '';
@@ -1173,7 +1205,7 @@
                 qualityHTML = `
                     <div class="quality-metrics">
                         <div class="metric">
-                            <div class="metric-label">Text</div>
+                            <div class="metric-label">Text Quality</div>
                             <div class="metric-value ${getScoreClass(m.cleanScore)}">${m.cleanScore}%</div>
                         </div>
                         <div class="metric">
@@ -1185,16 +1217,12 @@
                             <div class="metric-value link-indicator">${m.linksPreserved}</div>
                         </div>
                         <div class="metric">
-                            <div class="metric-label">H/F</div>
+                            <div class="metric-label">H/F Removed</div>
                             <div class="metric-value advanced-indicator">${m.headersFootersRemoved || 0}</div>
                         </div>
                         <div class="metric">
                             <div class="metric-label">Footnotes</div>
-                            <div class="metric-value teal-indicator">${m.footnotesDetected || 0}</div>
-                        </div>
-                        <div class="metric">
-                            <div class="metric-label">Fig/Tbl</div>
-                            <div class="metric-value teal-indicator">${m.figureRefsDetected || 0}</div>
+                            <div class="metric-value advanced-indicator">${m.footnotesDetected || 0}</div>
                         </div>
                         <div class="metric">
                             <div class="metric-label">Overall</div>
@@ -1238,7 +1266,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = job.filename.replace(/\.[^.]+$/, '') + '_v2.3.1_complete.md';
+            a.download = job.filename.replace(/\.[^.]+$/, '') + '_v2.3.1_task1.md';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -1250,30 +1278,28 @@
             if (!job || !job.result) return;
             const previewWindow = window.open('', '_blank');
             const metricsHTML = job.qualityMetrics ? `
-                <div style="background: #1e293b; border: 1px solid #14b8a6; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-                    <h2 style="color: #14b8a6; margin-bottom: 10px;">Quality Metrics (v2.3.1 - Phase 3 Complete)</h2>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px;">
+                <div style="background: #1e293b; border: 1px solid #fb923c; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                    <h2 style="color: #fb923c; margin-bottom: 10px;">Quality Metrics (v2.3.1 - Task 1)</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
                         <div><div style="font-size: 0.9rem; color: #94a3b8;">Text Quality</div><div style="font-size: 1.8rem; font-weight: bold; color: #22c55e;">${job.qualityMetrics.cleanScore}%</div></div>
                         <div><div style="font-size: 0.9rem; color: #94a3b8;">Structure</div><div style="font-size: 1.8rem; font-weight: bold; color: #38bdf8;">${job.qualityMetrics.structureScore}%</div></div>
-                        <div><div style="font-size: 0.9rem; color: #94a3b8;">Links</div><div style="font-size: 1.8rem; font-weight: bold; color: #a855f7;">${job.qualityMetrics.linksPreserved}</div></div>
-                        <div><div style="font-size: 0.9rem; color: #94a3b8;">Footnotes</div><div style="font-size: 1.8rem; font-weight: bold; color: #14b8a6;">${job.qualityMetrics.footnotesDetected || 0}</div></div>
-                        <div><div style="font-size: 0.9rem; color: #94a3b8;">Fig/Tables</div><div style="font-size: 1.8rem; font-weight: bold; color: #14b8a6;">${job.qualityMetrics.figureRefsDetected || 0}</div></div>
+                        <div><div style="font-size: 0.9rem; color: #94a3b8;">External Links</div><div style="font-size: 1.8rem; font-weight: bold; color: #a855f7;">${job.qualityMetrics.linksPreserved}</div></div>
+                        <div><div style="font-size: 0.9rem; color: #94a3b8;">H/F Removed</div><div style="font-size: 1.8rem; font-weight: bold; color: #fb923c;">${job.qualityMetrics.headersFootersRemoved || 0}</div></div>
+                        <div><div style="font-size: 0.9rem; color: #94a3b8;">Footnotes Detected</div><div style="font-size: 1.8rem; font-weight: bold; color: #fb923c;">${job.qualityMetrics.footnotesDetected || 0}</div></div>
                         <div><div style="font-size: 0.9rem; color: #94a3b8;">Overall</div><div style="font-size: 1.8rem; font-weight: bold; color: #22c55e;">${job.qualityMetrics.overallScore}%</div></div>
                     </div>
                     <div style="margin-top: 15px; font-size: 0.9rem; color: #cbd5e1;">
-                        ✓ Fixed ${job.qualityMetrics.issuesFixed} artifacts
-                        ${job.linkMetadata ? ` • 🌐 ${job.linkMetadata.linksPreserved} links` : ''}
-                        ${job.advancedMetadata?.headersFootersRemoved ? ` • 🧹 ${job.advancedMetadata.headersFootersRemoved} H/F removed` : ''}
-                        ${job.advancedMetadata?.columnsDetected ? ` • 📰 ${job.advancedMetadata.columnsDetected} pages 2-col` : ''}
-                        ${job.advancedMetadata?.footnotesDetected ? ` • 📝 ${job.advancedMetadata.footnotesDetected} footnotes` : ''}
-                        ${job.advancedMetadata?.figureRefsDetected ? ` • 🖼️ ${job.advancedMetadata.figureRefsDetected} fig/tbl refs` : ''}
+                        ✓ Fixed ${job.qualityMetrics.issuesFixed} text artifacts
+                        ${job.linkMetadata ? ` • 🌐 ${job.linkMetadata.linksPreserved} external links preserved` : ''}
+                        ${job.advancedMetadata?.headersFootersRemoved ? ` • 🧹 ${job.advancedMetadata.headersFootersRemoved} headers/footers removed` : ''}
+                        ${job.advancedMetadata?.footnotesDetected ? ` • 📝 ${job.advancedMetadata.footnotesDetected} footnote markers detected (Task 1)` : ''}
                     </div>
                 </div>
             ` : '';
             previewWindow.document.write(`
                 <!DOCTYPE html>
-                <html><head><title>${job.filename} - v2.3.1 Preview</title>
-                <style>body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:900px;margin:40px auto;padding:20px;background:#0f172a;color:#f1f5f9;line-height:1.6}pre{background:#1e293b;padding:20px;border-radius:8px;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word;border:1px solid #475569}h1{color:#14b8a6;margin-bottom:20px}h2{color:#38bdf8;margin-top:2em}a{color:#a855f7;text-decoration:none;border-bottom:1px dashed #a855f7}a:hover{color:#c084fc;border-bottom-style:solid}</style>
+                <html><head><title>${job.filename} - v2.3.1 Task 1 Preview</title>
+                <style>body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:900px;margin:40px auto;padding:20px;background:#0f172a;color:#f1f5f9;line-height:1.6}pre{background:#1e293b;padding:20px;border-radius:8px;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word;border:1px solid #475569}h1{color:#38bdf8;margin-bottom:20px}h2{color:#38bdf8;margin-top:2em}a{color:#a855f7;text-decoration:none;border-bottom:1px dashed #a855f7}a:hover{color:#c084fc;border-bottom-style:solid}</style>
                 </head><body><h1>📄 ${job.filename}</h1>${metricsHTML}<pre>${job.result.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre></body></html>
             `);
         }
