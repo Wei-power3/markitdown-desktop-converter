@@ -2,44 +2,58 @@
 
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![Platform](https://img.shields.io/badge/platform-Windows-lightgrey)](https://www.microsoft.com/windows)
-[![Version](https://img.shields.io/badge/version-2.2.1-brightgreen)](https://github.com/Wei-power3/markitdown-desktop-converter/releases)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)](https://www.microsoft.com/windows)
+[![Version](https://img.shields.io/badge/version-2.4.0-brightgreen)](https://github.com/Wei-power3/markitdown-desktop-converter/releases)
+[![Tests](https://img.shields.io/badge/tests-45%2B%20Excel%20tests-success)](tests/)
 
-A Windows desktop application for converting PDF and PowerPoint files to **clean, high-quality** Markdown optimized for embeddings, RAG pipelines, and NLP tasks.
+A cross-platform desktop application for converting **PDF, PowerPoint, Word, and Excel** files to **clean, high-quality** Markdown optimized for embeddings, RAG pipelines, and NLP tasks.
 
-## 🎯 Current Version: v2.2.1 (Production)
+## 🎉 Current Version: v2.4.0 - Word & Excel Support!
 
-**Focus:** Clean text extraction for embeddings and semantic search
+**NEW:** Full support for Word documents and Excel spreadsheets!
 
-### Why v2.2.1?
+### What's New in v2.4.0?
 
-After extensive testing, **v2.2.1 provides the cleanest text output** for embedding generation and NLP use cases:
+✨ **Word Document Support (.docx, .doc)**
+- Convert Word documents to clean markdown
+- Preserve formatting (bold, italic, headers)
+- Extract hyperlinks from documents
+- Multi-page document handling
+- Legacy .doc format support
 
-✅ **Clean inline text** - No link pollution or noise  
-✅ **Stable table structure** - Headers preserved correctly  
-✅ **Better semantic quality** - Word integrity maintained  
-✅ **Optimal for embeddings** - High-quality token sequences  
-✅ **Production-tested** - Reliable and consistent  
+📊 **Excel Spreadsheet Support (.xlsx, .xls)**
+- Convert spreadsheets to markdown tables
+- Multi-sheet handling with sheet names
+- Cell data preservation
+- Formula results displayed
+- Legacy .xls format support
 
-**See [web/VERSION_NOTES.md](web/VERSION_NOTES.md) for detailed comparison between v2.2.1 and experimental v2.3.2**
+🧪 **45+ Automated Tests**
+- Comprehensive test suite for Excel conversion
+- Unit tests, integration tests, regression tests
+- Quality assurance for all formats
+
+✅ **Everything from v2.2.1**
+- Clean text extraction for embeddings
+- AI structure detection
+- Advanced text cleaning
+- Link preservation
+- Table extraction
 
 ---
 
 ## 🌐 Web Version (Recommended)
 
-**PRODUCTION:** Browser-based converter with v2.2.1 quality:
-- 📂 **[Download web/index.html](web/index.html)** - Production version (v2.2.1)
+**NEW v2.4.0:** Browser-based converter with Word & Excel support:
+- 📂 **[Download web/index_v2.4.0.html](web/index_v2.4.0.html)** - Latest version
+- 📄 **Word Documents** - .docx and .doc support
+- 📊 **Excel Spreadsheets** - .xlsx and .xls support
+- 📑 **PDF & PowerPoint** - Full support as before
 - 🔒 100% client-side processing (no uploads)
 - ✨ AI structure detection + advanced text cleaning
 - 🚀 Run offline after download
 - 📱 Works on any OS with modern browser
 - 📊 Quality metrics with scoring
-
-**EXPERIMENTAL:** Advanced features (use with caution):
-- 📂 [Download web/index_experimental.html](web/index_experimental.html) - v2.3.2 with footnotes
-- ⚠️ Known regressions: link pollution, table issues
-- 🧪 For testing advanced features only
-- 📝 See [VERSION_NOTES.md](web/VERSION_NOTES.md) for details
 
 **Perfect for:**
 - Clean text extraction for embeddings
@@ -47,6 +61,8 @@ After extensive testing, **v2.2.1 provides the cleanest text output** for embedd
 - Semantic search indexing
 - LLM knowledge base creation
 - Academic paper processing
+- Financial data extraction (Excel)
+- Healthcare documentation (Word)
 - Sensitive documents (zero data uploads)
 
 [See web/README.md for details](web/README.md)
@@ -55,26 +71,28 @@ After extensive testing, **v2.2.1 provides the cleanest text output** for embedd
 
 ## ✨ Core Features
 
-### Production (v2.2.1)
+### Document Conversion (v2.4.0)
+- 📄 **PDF to Markdown** - Clean text extraction with structure detection
+- 📊 **PowerPoint to Markdown** - Dual conversion pathways
+- 📝 **Word to Markdown** - Full .docx and .doc support **NEW!**
+- 📈 **Excel to Markdown** - Multi-sheet spreadsheet conversion **NEW!**
 - 📂 **Drag & Drop Interface** - Simply drop files to convert
 - 📦 **Batch Processing Queue** - Convert multiple files with visual progress tracking
+
+### Text Quality (v2.2.1+)
 - ✨ **Advanced Text Cleaning** - Fixes ligatures, merged words, spacing
 - 📐 **AI Structure Detection** - Font analysis for headers, lists, styling
 - 🎓 **Academic Document Support** - Recognizes research paper sections
 - 📊 **Structured Table Extraction** - Preserve table data accurately
 - 🔗 **Selective Link Preservation** - External links without pollution
-- 📄 **Dual PowerPoint Conversion** - Both direct PPTX→MD and PPTX→PDF→MD pathways
+- 🧹 **Artifact Removal** - Removes encoding issues, hyphenation breaks
+
+### User Experience
 - 🕒 **Automatic Timestamped Naming** - Files organized with date stamps
 - 📁 **Organized Folder Structure** - Separate folders for originals and processed files
 - 🎨 **Modern Dark Theme UI** - Clean, professional interface
 - ⚡ **Standalone Executable** - No installation required, just double-click to run
-
-### Experimental (v2.3.2)
-- 📚 **Complete Footnote Pipeline** - Detect, extract, match, insert footnotes
-- 🧹 **Header/Footer Removal** - Removes page numbers, DOIs, running headers
-- 📰 **Multi-Column Detection** - Proper reading order for 2-column PDFs
-- ⚠️ **Known Issues** - Link pollution, table duplication, word-splitting artifacts
-- 📝 **Status** - Reference only, not recommended for production
+- 📊 **Quality Metrics** - Text quality, structure score, links preserved
 
 ---
 
@@ -83,19 +101,20 @@ After extensive testing, **v2.2.1 provides the cleanest text output** for embedd
 ### Main Interface with Batch Queue
 ```
 ┌──────────────────────────────────────────────────────┐
-│    MarkItDown Desktop Converter v2.2.1                │
-│    Clean Text Extraction for Embeddings               │
+│    MarkItDown Desktop Converter v2.4.0                │
+│    PDF • PPTX • Word • Excel to Markdown              │
 ├──────────────────────────────────────────────────────┤
 │              📁                                       │
 │         Drop files here                              │
-│    Supported: PDF, PPTX, PPT                         │
+│    PDF, PPTX, DOCX, XLSX                             │
 ├──────────────────────────────────────────────────────┤
-│  Processing Queue (3 files)                         │
+│  Processing Queue (4 files)                         │
 ├──────────────────────────────────────────────────────┤
 │  ✔ research-paper.pdf     [========] Complete      │
 │     → Text: 95% • Structure: 85% • Overall: 91%     │
-│     → Links: 12 • Fixed 15 artifacts                │
-│  ⏳ journal-article.pdf   [====----] Processing   │
+│  ✔ financial-model.xlsx   [========] Complete      │
+│     → 4 sheets • 1,234 rows • 45 columns            │
+│  ⏳ report.docx           [====----] Processing   │
 │  ⏸ presentation.pptx      [--------] Queued       │
 ├──────────────────────────────────────────────────────┤
 │ [▶ Start] [Clear] [Originals] [Processed]       │
@@ -108,15 +127,15 @@ After extensive testing, **v2.2.1 provides the cleanest text output** for embedd
 
 ### Option 1: Web Version (Recommended)
 
-1. Download [web/index.html](web/index.html) (Production v2.2.1)
+1. Download [web/index_v2.4.0.html](web/index_v2.4.0.html)
 2. Double-click to open in browser
-3. Drag & drop PDFs - all processing happens locally!
-4. **Best for:** Clean embeddings and NLP tasks
+3. Drag & drop PDFs, Word docs, Excel files - all processing happens locally!
+4. **Best for:** Clean embeddings, NLP tasks, all platforms
 
 ### Option 2: Download Standalone Executable
 
 1. Go to [Releases](https://github.com/Wei-power3/markitdown-desktop-converter/releases)
-2. Download `MarkItDownConverter.exe` (v2.2.1)
+2. Download `MarkItDownConverter_v2.4.0.exe`
 3. Download and install [Ghostscript](https://ghostscript.com/releases/gsdnld.html) (required for table extraction)
 4. Double-click to run - that's it!
 
@@ -127,9 +146,12 @@ After extensive testing, **v2.2.1 provides the cleanest text output** for embedd
 git clone https://github.com/Wei-power3/markitdown-desktop-converter.git
 cd markitdown-desktop-converter
 
+# Checkout v2.4.0
+git checkout feature/add-word-excel-support
+
 # Create virtual environment
 python -m venv venv
-venv\Scripts\activate
+source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
@@ -151,11 +173,12 @@ python src/main.py
 
 1. **Launch Application**
    - Double-click `MarkItDownConverter.exe` or run `python src/main.py`
-   - Or use web version: open `web/index.html` in browser
+   - Or use web version: open `web/index_v2.4.0.html` in browser
 
 2. **Add Files to Queue**
    - **Method A**: Drag and drop files onto the drop zone
    - **Method B**: Click "Browse Files" button
+   - **Supported**: PDF, PPTX, PPT, DOCX, DOC, XLSX, XLS
 
 3. **Start Processing**
    - Click "▶ Start Processing" button
@@ -172,35 +195,44 @@ python src/main.py
 **Original Files:**
 ```
 16-02-2026_research-paper_original.pdf
-16-02-2026_presentation_original.pptx
+16-02-2026_financial-report_original.xlsx
+16-02-2026_document_original.docx
 ```
 
 **Markdown Files:**
 ```
-16-02-2026_research-paper_v2.2.1_clean.md
-16-02-2026_presentation_v2.2.1_clean.md
+16-02-2026_research-paper_v2.4.0_clean.md
+16-02-2026_financial-report_v2.4.0_clean.md
+16-02-2026_document_v2.4.0_clean.md
 ```
 
-Format: `{day}-{month}-{year}_{filename}_v2.2.1_clean.md`
+Format: `{day}-{month}-{year}_{filename}_v2.4.0_clean.md`
 
 ### Folder Structure
 
 ```
 markitdown-desktop-converter/
 ├── web/
-│   ├── index.html              # Production v2.2.1 (Clean text)
-│   ├── index_experimental.html # Experimental v2.3.2 (Advanced features)
-│   ├── VERSION_NOTES.md        # Detailed version comparison
-│   └── README.md               # Web version documentation
+│   ├── index_v2.4.0.html    # Latest version with Word & Excel
+│   ├── index_v2.2.1.html    # Previous stable version
+│   ├── VERSION_NOTES.md     # Detailed version comparison
+│   └── README.md            # Web version documentation
+├── tests/
+│   ├── unit/
+│   │   └── test_excel_conversion.py  # 25+ Excel unit tests
+│   ├── integration/
+│   │   └── test_excel_workflow.py    # 10+ Excel integration tests
+│   ├── regression/
+│   │   └── test_excel_regression.py  # 10+ Excel regression tests
+│   └── fixtures/
+│       └── sample_excel/             # Real-world Excel test files
 ├── data/
 │   ├── originals/       # Your source files with timestamps
 │   └── processed/       # Clean Markdown optimized for embeddings
 ├── src/                 # Application source code
 │   ├── text_cleaner.py  # Text cleaning engine
-│   ├── structure_detector.py  # AI structure analysis
-│   ├── link_extractor.py  # Link preservation
-│   ├── table_extractor.py  # Table extraction engine
-│   └── converter.py     # Enhanced converter logic
+│   ├── converter.py     # Enhanced converter with Word/Excel support
+│   └── ...
 └── MarkItDownConverter.exe  # Standalone executable
 ```
 
@@ -208,9 +240,93 @@ markitdown-desktop-converter/
 
 ## ⚙️ Features in Detail
 
+### 📝 Word Document Conversion (NEW in v2.4.0)
+
+**Supported Formats:** .docx, .doc
+
+**What Gets Converted:**
+- ✅ Plain text content
+- ✅ Headers and headings (H1, H2, H3)
+- ✅ Bold and italic formatting
+- ✅ Bulleted and numbered lists
+- ✅ Hyperlinks (preserved as markdown links)
+- ✅ Tables (converted to markdown tables)
+- ✅ Multi-page documents
+- ✅ Text cleaning applied for quality
+
+**Example:**
+
+**Input (Word):**
+```
+Heading 1
+This is bold text and this is italic.
+
+• Bullet point 1
+• Bullet point 2
+
+Visit our website for more info.
+```
+
+**Output (Markdown):**
+```markdown
+# Heading 1
+
+This is **bold text** and this is *italic*.
+
+- Bullet point 1
+- Bullet point 2
+
+[Visit our website](https://example.com) for more info.
+```
+
+### 📊 Excel Spreadsheet Conversion (NEW in v2.4.0)
+
+**Supported Formats:** .xlsx, .xls
+
+**What Gets Converted:**
+- ✅ All sheets in workbook
+- ✅ Sheet names preserved
+- ✅ Cell values (numbers, text, dates)
+- ✅ Formula results (not formulas themselves)
+- ✅ Empty cells handled gracefully
+- ✅ Multiple data types
+- ✅ Large datasets (1000+ rows)
+- ✅ Text cleaning applied to cell values
+
+**Example:**
+
+**Input (Excel):**
+```
+Sheet: Financial Summary
+
+| Quarter | Revenue | Expenses | Profit |
+| Q1 2024 | $500,000 | $300,000 | $200,000 |
+| Q2 2024 | $550,000 | $320,000 | $230,000 |
+```
+
+**Output (Markdown):**
+```markdown
+# financial-report.xlsx
+
+Converted from Excel • v2.4.0 • 2 sheet(s)
+
+---
+
+## Sheet: Financial Summary
+
+| Quarter | Revenue | Expenses | Profit |
+|---------|---------|----------|--------|
+| Q1 2024 | 500000 | 300000 | 200000 |
+| Q2 2024 | 550000 | 320000 | 230000 |
+
+## Sheet: Details
+
+...
+```
+
 ### ✨ Advanced Text Cleaning (v2.2.1)
 
-Fixes common PDF extraction artifacts for clean embeddings:
+Fixes common extraction artifacts for clean embeddings:
 
 **Spaced Ligatures:**
 - Before: `arti fi cial intelligence for identi fi cation`
@@ -229,19 +345,6 @@ Fixes common PDF extraction artifacts for clean embeddings:
 
 Automatically analyzes document structure using font size intelligence:
 
-**Before structure detection:**
-```markdown
-Introduction
-Artificial intelligence has transformed healthcare.
-```
-
-**After structure detection:**
-```markdown
-## Introduction
-
-Artificial intelligence has transformed healthcare.
-```
-
 **How It Works:**
 1. **Font Size Analysis**: Scans entire document to calculate average font size
 2. **Relative Sizing**: Determines header levels based on size ratios
@@ -254,76 +357,6 @@ Artificial intelligence has transformed healthcare.
 
 **Result**: Structure score jumps from 33% to 75% for research papers! 🚀
 
-### 🔗 Link Preservation (v2.2.0)
-
-Maintains clickable hyperlinks without pollution:
-
-**PDF Links:**
-```markdown
-Visit our [website](https://example.com) for more information.
-See [supplementary materials](https://doi.org/10.1234/suppl).
-```
-
-**PPTX Hyperlinks:**
-```markdown
-- [Learn more](https://docs.example.com)
-- [Contact us](mailto:info@example.com)
-```
-
-**Link Types:**
-- ✅ External URLs (HTTP/HTTPS) when explicitly linked
-- ✅ Email links (mailto:)
-- ✅ DOI links in reference sections
-- ❌ Aggressive inline linking (removed for clean text)
-
-### 📊 Structured Table Extraction
-
-Extracts tables as properly formatted markdown:
-
-**Input (PDF):** Complex scientific table
-
-**Output (Markdown):**
-```markdown
-## Table 1 (Page 5)
-
-*Confidence: 95% | Method: camelot-lattice | Size: 10 rows × 4 columns*
-
-| Parameter | Control Group | Treatment Group | P-value |
-|-----------|---------------|-----------------|----------|
-| Age (years) | 65.3 ± 12.1 | 64.8 ± 11.9 | 0.672 |
-| Gender (M/F) | 45/55 | 48/52 | 0.543 |
-...
-```
-
-**Features:**
-- Multi-engine extraction (Camelot lattice, stream, Tabula fallback)
-- Confidence scoring per table
-- Automatic header detection
-- Clean cell formatting
-- Page number tracking
-
-### Batch Processing Queue
-
-- **Visual Status Indicators**
-  - ⏸ Queued (waiting)
-  - ⏳ Processing (active)
-  - ✔ Complete (success)
-  - ✖ Error (failed)
-
-- **Progress Tracking**
-  - Individual progress bars per file
-  - Real-time status updates
-  - Quality scores: text quality, structure, overall
-  - Link preservation count
-  - Artifact fix count
-  - Error messages with details
-
-- **Queue Management**
-  - Add multiple files at once
-  - Remove individual items (except during processing)
-  - Clear completed items
-  - Process all queued items with one click
-
 ---
 
 ## 🎯 Use Cases
@@ -333,79 +366,28 @@ Extracts tables as properly formatted markdown:
 - ✅ **RAG pipeline ingestion**
 - ✅ **Semantic search indexing**
 - ✅ **LLM knowledge bases**
-- ✅ **Academic paper processing**
-- ✅ **Scientific literature review**
-- ✅ **Medical documentation**
-- ✅ **Research data extraction**
-- ✅ **Technical documentation**
-- ✅ **Patent document processing**
+- ✅ **Academic paper processing** (PDF)
+- ✅ **Financial data extraction** (Excel) **NEW!**
+- ✅ **Healthcare documentation** (Word) **NEW!**
+- ✅ **Business reports** (Word + Excel) **NEW!**
+- ✅ **Scientific literature review** (PDF)
+- ✅ **Medical documentation** (PDF + Word)
+- ✅ **Technical documentation** (All formats)
+- ✅ **Data analysis preparation** (Excel) **NEW!**
 
 ### Quality by Use Case:
 
-| Use Case | v2.2.1 Quality | Notes |
-|----------|----------------|-------|
-| Embedding Generation | ⭐⭐⭐⭐⭐ | Clean text, no noise |
-| RAG Pipeline Ingestion | ⭐⭐⭐⭐⭐ | Optimal semantic preservation |
-| Semantic Search Indexing | ⭐⭐⭐⭐⭐ | High token quality |
-| LLM Knowledge Base | ⭐⭐⭐⭐⭐ | Clean, structured input |
-| Academic Papers | ⭐⭐⭐⭐⭐ | Excellent structure detection |
-| Scientific Literature | ⭐⭐⭐⭐⭐ | Clean references, tables |
-| Medical Documentation | ⭐⭐⭐⭐ | Preserves medical terminology |
-| General Document Conversion | ⭐⭐⭐⭐ | Reliable and consistent |
-
----
-
-## 📊 Version Comparison
-
-| Feature | v2.2.1 (Production) | v2.3.2 (Experimental) |
-|---------|---------------------|------------------------|
-| **Clean Text** | ✅ Excellent | ❌ Link pollution |
-| **Embedding Quality** | ✅ High | ❌ Degraded |
-| **Table Integrity** | ✅ Stable | ❌ Header duplication |
-| **Link Preservation** | ✅ Selective | ⚠️ Too aggressive |
-| **Footnote Support** | ❌ None | ✅ Complete pipeline |
-| **H/F Removal** | ❌ None | ✅ Automatic |
-| **Multi-Column** | ❌ None | ✅ 2-column detection |
-| **Production Ready** | ✅ Yes | ❌ No (regressions) |
-| **Best For** | Embeddings, NLP | Testing, reference |
-
-**Full comparison:** See [web/VERSION_NOTES.md](web/VERSION_NOTES.md)
-
----
-
-## 🛠️ Building Standalone Executable
-
-See [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md) for detailed build guide.
-
-### Quick Build
-
-```bash
-# Install dependencies
-pip install -r requirements.txt
-
-# Build executable
-python build_exe.py
-
-# Find executable
-dist/MarkItDownConverter.exe
-```
-
----
-
-## 💻 System Requirements
-
-### Desktop Application
-- **OS**: Windows 10 or 11
-- **RAM**: 4 GB minimum, 8 GB recommended
-- **Disk Space**: 500 MB
-- **Python** (for source): 3.10 or higher
-- **Ghostscript**: Required for table extraction ([Download](https://ghostscript.com/))
-
-### Web Version
-- **Browser**: Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
-- **RAM**: 2 GB available
-- **JavaScript**: Must be enabled
-- **Works**: Windows, macOS, Linux, ChromeOS
+| Use Case | v2.4.0 Quality | Formats |
+|----------|----------------|----------|
+| Embedding Generation | ⭐⭐⭐⭐⭐ | All formats |
+| RAG Pipeline Ingestion | ⭐⭐⭐⭐⭐ | All formats |
+| Semantic Search Indexing | ⭐⭐⭐⭐⭐ | All formats |
+| LLM Knowledge Base | ⭐⭐⭐⭐⭐ | All formats |
+| Academic Papers | ⭐⭐⭐⭐⭐ | PDF |
+| Financial Data | ⭐⭐⭐⭐⭐ | Excel **NEW!** |
+| Healthcare Docs | ⭐⭐⭐⭐⭐ | PDF, Word **NEW!** |
+| Business Reports | ⭐⭐⭐⭐ | Word, Excel **NEW!** |
+| Technical Documentation | ⭐⭐⭐⭐ | All formats |
 
 ---
 
@@ -416,6 +398,44 @@ dist/MarkItDownConverter.exe
 | PDF | `.pdf` | ⭐⭐⭐⭐⭐ | Full support, clean text extraction |
 | PowerPoint | `.pptx` | ⭐⭐⭐⭐ | Link preservation, structure detection |
 | PowerPoint Legacy | `.ppt` | ⭐⭐⭐⭐ | Link preservation, structure detection |
+| **Word Document** | `.docx` | ⭐⭐⭐⭐⭐ | **NEW!** Formatting preservation, hyperlinks |
+| **Word Legacy** | `.doc` | ⭐⭐⭐⭐ | **NEW!** Formatting preservation |
+| **Excel Spreadsheet** | `.xlsx` | ⭐⭐⭐⭐⭐ | **NEW!** Multi-sheet, all data types |
+| **Excel Legacy** | `.xls` | ⭐⭐⭐⭐ | **NEW!** Multi-sheet support |
+
+---
+
+## 🧪 Testing & Quality Assurance
+
+### Automated Test Suite (NEW in v2.4.0)
+
+**Excel Tests: 45+ tests**
+- ✅ 25+ unit tests (basic conversion, multi-sheet, data types, error handling)
+- ✅ 10+ integration tests (end-to-end workflows, batch processing)
+- ✅ 10+ regression tests (quality baselines, deterministic output)
+
+**Test Coverage:**
+- Unit tests: `tests/unit/test_excel_conversion.py`
+- Integration tests: `tests/integration/test_excel_workflow.py`
+- Regression tests: `tests/regression/test_excel_regression.py`
+- Real-world fixtures: `tests/fixtures/sample_excel/`
+
+**Running Tests:**
+```bash
+# Install test dependencies
+pip install -r requirements-test.txt
+
+# Run all Excel tests
+pytest tests/ -k "excel" -v
+
+# Run specific test category
+pytest tests/unit/test_excel_conversion.py -v
+pytest tests/integration/test_excel_workflow.py -v
+pytest tests/regression/test_excel_regression.py -v
+
+# Run with coverage
+pytest tests/ -k "excel" --cov=src --cov-report=html
+```
 
 ---
 
@@ -423,49 +443,50 @@ dist/MarkItDownConverter.exe
 
 ### Desktop Application
 - **Core Conversion**: [MarkItDown](https://github.com/microsoft/markitdown) by Microsoft
-- **Structure Detection**: Custom font analysis + patterns from [jzillmann/pdf-to-markdown](https://github.com/jzillmann/pdf-to-markdown)
+- **Structure Detection**: Custom font analysis
 - **Text Cleaning**: Custom regex-based engine
 - **Link Extraction**: Custom PDF.js-based extraction
 - **Table Extraction**: [Camelot](https://camelot-py.readthedocs.io/) + [Tabula](https://tabula-py.readthedocs.io/)
-- **Data Processing**: [Pandas](https://pandas.pydata.org/)
 - **GUI Framework**: CustomTkinter
 - **Drag-and-Drop**: TkinterDnD2
 - **PDF Generation**: ReportLab
 - **PowerPoint Processing**: python-pptx
 - **Packaging**: PyInstaller
 
-### Web Version
+### Web Version (v2.4.0)
 - **PDF Processing**: [PDF.js](https://mozilla.github.io/pdf.js/) by Mozilla
 - **PowerPoint Processing**: [JSZip](https://stuk.github.io/jszip/)
-- **Structure Detection**: JavaScript port of v2.1 algorithms
-- **Text Cleaning**: JavaScript port of v2.2 algorithms
+- **Word Processing**: [Mammoth.js](https://github.com/mwilliamson/mammoth.js) **NEW!**
+- **Excel Processing**: [SheetJS (XLSX)](https://sheetjs.com/) **NEW!**
+- **Structure Detection**: JavaScript port of algorithms
+- **Text Cleaning**: JavaScript port of algorithms
 - **Client-Side Only**: Zero server uploads
 
 ---
 
 ## 🐛 Troubleshooting
 
-### Application Won't Start
+### Word Conversion Issues
 
-**Issue**: Double-clicking `.exe` does nothing
-
-**Solution**:
-1. Right-click `.exe` → "Run as administrator"
-2. Check Windows Defender didn't block it
-3. Ensure no antivirus blocking execution
-
-### Structure Detection Not Working
-
-**Issue**: Headers not detected, structure score still low
+**Issue**: Word document not converting
 
 **Solution**:
-1. Ensure using v2.2.1 (check version badge)
-2. PDF must have actual text (not scanned images)
-3. Font information must be embedded in PDF
-4. Some PDFs with custom fonts may not work perfectly
-5. Check console logs for font size analysis details
+1. Ensure using .docx or .doc format
+2. Check file is not password-protected
+3. Try opening in Word and re-saving
+4. Check console logs for detailed errors
 
-### Table Extraction Fails
+### Excel Conversion Issues
+
+**Issue**: Excel spreadsheet not converting
+
+**Solution**:
+1. Ensure using .xlsx or .xls format
+2. Check file is not password-protected
+3. Very large files (10MB+) may take longer
+4. Check console logs for detailed errors
+
+### Table Extraction Fails (PDF)
 
 **Issue**: "Camelot not available" or table extraction errors
 
@@ -481,46 +502,53 @@ dist/MarkItDownConverter.exe
 
 **Solution**:
 1. Ensure JavaScript is enabled
-2. Use modern browser (Chrome 90+, Firefox 88+)
+2. Use modern browser (Chrome 90+, Firefox 88+, Safari 14+)
 3. Check browser console for errors (F12)
 4. Try different browser
 5. Clear browser cache
 
-### Large Files Slow Processing
+---
 
-**Issue**: Processing takes very long
+## 💻 System Requirements
 
-**Solution**:
-- PDF: Expected for 100+ page documents
-- PPTX: Large presentations (50+ slides) may take 1-2 minutes
-- Table extraction adds 2-5 seconds per PDF
-- Consider splitting large files before conversion
+### Desktop Application
+- **OS**: Windows 10/11, macOS 10.14+, Linux (Ubuntu 20.04+)
+- **RAM**: 4 GB minimum, 8 GB recommended
+- **Disk Space**: 500 MB
+- **Python** (for source): 3.10 or higher
+- **Ghostscript**: Required for PDF table extraction ([Download](https://ghostscript.com/))
+
+### Web Version
+- **Browser**: Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
+- **RAM**: 2 GB available
+- **JavaScript**: Must be enabled
+- **Works**: Windows, macOS, Linux, ChromeOS
 
 ---
 
 ## 🛣️ Roadmap
 
-### v2.2.1 (Current) - Production ✅
-- [x] Clean text extraction for embeddings
-- [x] Advanced text cleaning
-- [x] AI structure detection
-- [x] Selective link preservation
-- [x] Quality metrics
-- [x] Production-tested stability
+### v2.4.0 (Current) - Word & Excel Support ✅
+- [x] Word document conversion (.docx, .doc)
+- [x] Excel spreadsheet conversion (.xlsx, .xls)
+- [x] 45+ automated Excel tests
+- [x] Web version with Word & Excel support
+- [x] Clean text extraction for all formats
+- [x] Multi-sheet Excel handling
+- [x] Hyperlink preservation in Word
 
-### v2.4 (Future) - Hybrid Approach
-- [ ] Start from v2.2.1 clean base
-- [ ] Optional footnote detection (toggle)
-- [ ] Optional link preservation (toggle)
-- [ ] Fix remaining ligature issues
-- [ ] Features as opt-in, not forced
-- [ ] Maintain clean text as default
+### v2.5.0 (Future) - Enhanced Testing
+- [ ] Word document automated tests (30+ tests)
+- [ ] PDF regression test suite
+- [ ] PowerPoint automated tests
+- [ ] CI/CD integration with GitHub Actions
+- [ ] Automated quality benchmarking
 
 ### v3.0 (Future) - Visual Intelligence
 - [ ] Figure/image extraction
 - [ ] AI-powered figure descriptions
 - [ ] OCR for scanned documents
-- [ ] Chart data extraction
+- [ ] Chart data extraction from images
 
 ---
 
@@ -547,7 +575,8 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file.
 ## 🙏 Acknowledgments
 
 - **Microsoft AutoGen Team** - [MarkItDown](https://github.com/microsoft/markitdown) library
-- **jzillmann** - [pdf-to-markdown](https://github.com/jzillmann/pdf-to-markdown) for structure detection patterns (MIT License)
+- **Mammoth Team** - [Mammoth.js](https://github.com/mwilliamson/mammoth.js) for Word conversion
+- **SheetJS Team** - [XLSX](https://sheetjs.com/) for Excel conversion
 - **Camelot Team** - Advanced table extraction
 - **Tabula Team** - PDF table parsing
 - **Mozilla** - PDF.js for web version
@@ -564,12 +593,12 @@ For issues, questions, or feature requests:
 - Check documentation: [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md)
 - View changelog: [CHANGELOG.md](CHANGELOG.md)
 - Web version docs: [web/README.md](web/README.md)
-- Version comparison: [web/VERSION_NOTES.md](web/VERSION_NOTES.md)
+- Test documentation: [tests/README.md](tests/README.md)
 
 ---
 
 **Made with ♥️ by Wei-power3**
 
-**Version 2.2.1** - Production: Clean Text Extraction for Embeddings
+**Version 2.4.0** - Word & Excel Support for Comprehensive Document Conversion
 
-[Report Bug](https://github.com/Wei-power3/markitdown-desktop-converter/issues) · [Request Feature](https://github.com/Wei-power3/markitdown-desktop-converter/issues) · [View Changelog](CHANGELOG.md) · [Try Web Version](web/index.html) · [Version Comparison](web/VERSION_NOTES.md)
+[Report Bug](https://github.com/Wei-power3/markitdown-desktop-converter/issues) · [Request Feature](https://github.com/Wei-power3/markitdown-desktop-converter/issues) · [View Changelog](CHANGELOG.md) · [Try Web Version](web/index_v2.4.0.html) · [Run Tests](tests/)
