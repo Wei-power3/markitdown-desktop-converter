@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MarkItDown v2.3.1 - Phase 3 Complete (Task 3/7)</title>
+    <title>MarkItDown v2.3.1 - Phase 3 Complete (Task 4/7)</title>
     <style>
         :root {
             --bg-primary: #0f172a;
@@ -201,7 +201,7 @@
 
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
             gap: 15px;
             margin-bottom: 30px;
         }
@@ -309,7 +309,7 @@
 
         .quality-metrics {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(95px, 1fr));
             gap: 10px;
             margin-top: 10px;
             padding: 15px;
@@ -322,7 +322,7 @@
         }
 
         .metric-label {
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             color: var(--text-muted);
             margin-bottom: 5px;
         }
@@ -463,7 +463,7 @@
         <header>
             <h1>
                 📄 MarkItDown Converter
-                <span class="version-badge">v2.3.1 (Task 3/7)</span>
+                <span class="version-badge">v2.3.1 (Task 4/7)</span>
             </h1>
             <p class="subtitle">PDF & PowerPoint to Markdown • Phase 3 in progress</p>
             <div class="features">
@@ -472,17 +472,24 @@
                 <span class="feature">✓ Batch Processing</span>
                 <span class="feature">✓ Multi-Column Detection</span>
                 <span class="feature">✓ Header/Footer Removal</span>
-                <span class="feature">✓ Footnote Matching <span class="new-badge">TESTING</span></span>
+                <span class="feature">✓ Footnote Cleanup <span class="new-badge">TESTING</span></span>
             </div>
         </header>
 
         <div class="quality-banner">
-            <h3>🚧 v2.3.1 Development: Phase 3 Complete (Task 3/7)</h3>
+            <h3>🚧 v2.3.1 Development: Phase 3 Complete (Task 4/7)</h3>
             <div class="quality-features">
+                <div class="quality-item">
+                    <span class="quality-icon">🧹</span>
+                    <div>
+                        <strong>Footnote Text Removal <span class="new-badge">TESTING</span></strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Removes footnote text from page bottoms (prevents duplication)</div>
+                    </div>
+                </div>
                 <div class="quality-item">
                     <span class="quality-icon">🔗</span>
                     <div>
-                        <strong>Marker-to-Footnote Matching <span class="new-badge">TESTING</span></strong>
+                        <strong>Marker-to-Footnote Matching</strong>
                         <div style="font-size: 0.85rem; color: var(--text-muted);">Smart number matching creates marker → footnote mapping</div>
                     </div>
                 </div>
@@ -491,13 +498,6 @@
                     <div>
                         <strong>Footnote Content Extraction</strong>
                         <div style="font-size: 0.85rem; color: var(--text-muted);">Extracts footnote text from page bottoms (last 15-20% of page)</div>
-                    </div>
-                </div>
-                <div class="quality-item">
-                    <span class="quality-icon">🔍</span>
-                    <div>
-                        <strong>Footnote Marker Detection</strong>
-                        <div style="font-size: 0.85rem; color: var(--text-muted);">Detects [1], 1), superscript, and Unicode markers</div>
                     </div>
                 </div>
                 <div class="quality-item">
@@ -563,6 +563,10 @@
                 <div class="stat-card">
                     <div class="stat-value" id="totalMatches">0</div>
                     <div class="stat-label">FN Matches</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalRemoved">0</div>
+                    <div class="stat-label">FN Removed</div>
                 </div>
             </div>
 
@@ -643,7 +647,8 @@
                     columnsDetected: 0,
                     footnotesDetected: 0,
                     footnoteMarkersDetected: 0,
-                    footnoteMatches: 0  // NEW: Track successful matches
+                    footnoteMatches: 0,
+                    footnoteTextItemsRemoved: 0  // NEW: Track removed text items
                 }
             };
 
@@ -815,7 +820,6 @@
             console.log('[Task 3] Starting marker-to-footnote matching...');
             console.log(`[Task 3] Input: ${markers.length} markers, ${footnotes.length} footnotes`);
             
-            // Create a map of footnote numbers to footnote objects
             const footnoteMap = new Map();
             footnotes.forEach(fn => {
                 const num = fn.number.toString();
@@ -827,7 +831,6 @@
             
             console.log('[Task 3] Footnote numbers available:', Array.from(footnoteMap.keys()));
             
-            // Match markers to footnotes
             const matches = [];
             const unmatchedMarkers = [];
             
@@ -836,7 +839,6 @@
                 
                 if (footnoteMap.has(num)) {
                     const footnoteOptions = footnoteMap.get(num);
-                    // If multiple footnotes with same number, pick the closest one by page
                     let bestFootnote = footnoteOptions[0];
                     let minPageDiff = Math.abs(marker.pageNum - footnoteOptions[0].pageNum);
                     
@@ -861,11 +863,9 @@
                 }
             });
             
-            // Find orphaned footnotes (footnotes without matching markers)
             const matchedFootnoteNumbers = new Set(matches.map(m => m.markerNumber));
             const orphanedFootnotes = footnotes.filter(fn => !matchedFootnoteNumbers.has(fn.number.toString()));
             
-            // Statistics
             const matchRate = markers.length > 0 ? (matches.length / markers.length * 100).toFixed(1) : 0;
             
             console.log(`[Task 3] ✓ Matched: ${matches.length}/${markers.length} markers (${matchRate}%)`);
@@ -895,6 +895,64 @@
                 totalMarkers: markers.length,
                 totalFootnotes: footnotes.length,
                 matchedCount: matches.length
+            };
+        }
+
+        // v2.3.1 Task 4: Remove footnote text from page bottoms
+        function removeFootnoteTextFromPages(allPageItems, extractedFootnotes, numPages, avgFontSize) {
+            console.log('[Task 4] Starting footnote text removal from page bottoms...');
+            console.log(`[Task 4] Input: ${allPageItems.length} text items, ${extractedFootnotes.length} footnotes to remove`);
+            
+            const itemsBeforeRemoval = allPageItems.length;
+            
+            // Create a set of y-coordinates and page numbers where footnotes were found
+            const footnotePositions = new Set();
+            extractedFootnotes.forEach(fn => {
+                footnotePositions.add(`${fn.pageNum}-${fn.y}`);
+            });
+            
+            // Filter out items in footnote regions
+            const cleanedItems = [];
+            let removedCount = 0;
+            
+            for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+                const pageItems = allPageItems.filter(item => item.pageNum === pageNum);
+                if (pageItems.length === 0) continue;
+                
+                // Calculate footnote threshold for this page
+                const yPositions = pageItems.map(item => item.y);
+                const minY = Math.min(...yPositions);
+                const maxY = Math.max(...yPositions);
+                const pageHeight = maxY - minY;
+                const footnoteThreshold = minY + (pageHeight * 0.80);
+                
+                // Filter items: keep body text, remove footnote region
+                pageItems.forEach(item => {
+                    const isInFootnoteRegion = item.y <= footnoteThreshold;
+                    const hasSmallFont = item.fontSize < avgFontSize * 0.85;
+                    const isFootnoteText = isInFootnoteRegion && hasSmallFont;
+                    
+                    if (isFootnoteText) {
+                        removedCount++;
+                    } else {
+                        cleanedItems.push(item);
+                    }
+                });
+            }
+            
+            const itemsAfterRemoval = cleanedItems.length;
+            const removalRate = itemsBeforeRemoval > 0 ? ((removedCount / itemsBeforeRemoval) * 100).toFixed(1) : 0;
+            
+            console.log(`[Task 4] ✓ Removed: ${removedCount} text items from footnote regions`);
+            console.log(`[Task 4] ✓ Kept: ${itemsAfterRemoval} body text items`);
+            console.log(`[Task 4] ✓ Removal rate: ${removalRate}% of total items`);
+            console.log(`[Task 4] Pages are now clean and ready for inline footnote insertion`);
+            
+            return {
+                cleanedItems: cleanedItems,
+                removedCount: removedCount,
+                keptCount: itemsAfterRemoval,
+                removalRate: parseFloat(removalRate)
             };
         }
 
@@ -962,7 +1020,8 @@
                 footnotesDetected: advancedMetadata.footnotesDetected,
                 footnoteMarkersDetected: advancedMetadata.footnoteMarkersDetected,
                 footnoteMatches: advancedMetadata.footnoteMatches,
-                footnoteMatchRate: advancedMetadata.footnoteMatchRate || 0
+                footnoteMatchRate: advancedMetadata.footnoteMatchRate || 0,
+                footnoteTextItemsRemoved: advancedMetadata.footnoteTextItemsRemoved || 0
             };
         }
 
@@ -973,7 +1032,7 @@
                 const extension = job.filename.split('.').pop().toLowerCase();
                 let markdown;
                 let linkMetadata = { linksFound: 0, linksPreserved: 0, linkTypes: { external: 0, internal: 0 } };
-                let advancedMetadata = { headersFootersRemoved: 0, columnsDetected: 0, footnotesDetected: 0, footnoteMarkersDetected: 0, footnoteMatches: 0, footnoteMatchRate: 0 };
+                let advancedMetadata = { headersFootersRemoved: 0, columnsDetected: 0, footnotesDetected: 0, footnoteMarkersDetected: 0, footnoteMatches: 0, footnoteMatchRate: 0, footnoteTextItemsRemoved: 0 };
                 if (extension === 'pdf') {
                     const result = await convertPDF(job);
                     markdown = result.markdown;
@@ -1106,7 +1165,7 @@
             const arrayBuffer = await job.file.arrayBuffer();
             const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
             let markdown = `# ${job.filename}\n\n`;
-            markdown += `Converted from PDF • ${pdf.numPages} pages • v2.3.1 (Tasks 1-3: Footnote Detection, Extraction & Matching)\n\n---\n\n`;
+            markdown += `Converted from PDF • ${pdf.numPages} pages • v2.3.1 (Tasks 1-4: Footnote Detection, Extraction, Matching & Removal)\n\n---\n\n`;
             let allLinks = [];
             const allItems = [];
             
@@ -1139,7 +1198,12 @@
             const matchResult = matchMarkersToFootnotes(footnoteMarkers, extractedFootnotes);
             console.log(`[Task 3] Match complete: ${matchResult.matchedCount} matches, ${matchResult.matchRate}% success rate`);
             
-            const headersFooters = detectHeadersFooters(allItems, pdf.numPages);
+            // Task 4: Remove footnote text from page bottoms
+            const removalResult = removeFootnoteTextFromPages(allItems, extractedFootnotes, pdf.numPages, avgFontSize);
+            const cleanedItems = removalResult.cleanedItems;
+            console.log(`[Task 4] Removal complete: ${removalResult.removedCount} items removed, ${removalResult.keptCount} items kept`);
+            
+            const headersFooters = detectHeadersFooters(cleanedItems, pdf.numPages);
             const ACADEMIC_KEYWORDS = ['Abstract', 'Introduction', 'Background', 'Literature Review', 'Methods', 'Methodology', 'Materials and Methods', 'Results', 'Findings', 'Discussion', 'Analysis', 'Conclusion', 'Conclusions', 'References', 'Bibliography', 'Acknowledgments', 'Appendix'];
             let totalColumnsDetected = 0;
             
@@ -1147,17 +1211,19 @@
                 job.progress = 20 + (60 * (i / pdf.numPages));
                 updateUI();
                 const page = await pdf.getPage(i);
-                const textContent = await page.getTextContent();
                 const pageLinks = await extractPDFLinks(page, i);
                 allLinks.push(...pageLinks);
                 markdown += `## Page ${i}\n\n`;
-                const pageItems = textContent.items.map(item => ({
-                    text: item.str,
-                    fontSize: item.height,
+                
+                // Use cleaned items (footnotes removed)
+                const pageItems = cleanedItems.filter(item => item.pageNum === i).map(item => ({
+                    text: item.text,
+                    fontSize: item.fontSize,
                     fontName: item.fontName || '',
-                    y: item.transform[5],
-                    x: item.transform[4]
+                    y: item.y,
+                    x: item.x
                 }));
+                
                 const filteredItems = pageItems.filter(item => {
                     const text = item.text.trim();
                     return !headersFooters.has(text);
@@ -1189,7 +1255,7 @@
                 markdown += '\n';
             }
             
-            const matchedLinks = matchLinksToText(allLinks, allItems);
+            const matchedLinks = matchLinksToText(allLinks, cleanedItems);
             matchedLinks.forEach(link => {
                 if (link.text && link.text.length > 2) {
                     const escapedText = link.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -1210,7 +1276,8 @@
                 footnotesDetected: extractedFootnotes.length,
                 footnoteMarkersDetected: footnoteMarkers.length,
                 footnoteMatches: matchResult.matchedCount,
-                footnoteMatchRate: matchResult.matchRate
+                footnoteMatchRate: matchResult.matchRate,
+                footnoteTextItemsRemoved: removalResult.removedCount
             };
             
             return { markdown, linkMetadata, advancedMetadata };
@@ -1351,6 +1418,8 @@
             document.getElementById('totalFootnotes').textContent = totalFootnotes;
             const totalMatches = jobs.reduce((sum, job) => sum + (job.advancedMetadata?.footnoteMatches || 0), 0);
             document.getElementById('totalMatches').textContent = totalMatches;
+            const totalRemoved = jobs.reduce((sum, job) => sum + (job.advancedMetadata?.footnoteTextItemsRemoved || 0), 0);
+            document.getElementById('totalRemoved').textContent = totalRemoved;
             
             if (jobs.length === 0) {
                 emptyState.style.display = 'block';
@@ -1413,6 +1482,10 @@
                             <div class="metric-value ${getScoreClass(m.footnoteMatchRate || 0)}">${m.footnoteMatchRate || 0}%</div>
                         </div>
                         <div class="metric">
+                            <div class="metric-label">Removed</div>
+                            <div class="metric-value advanced-indicator">${m.footnoteTextItemsRemoved || 0}</div>
+                        </div>
+                        <div class="metric">
                             <div class="metric-label">Overall</div>
                             <div class="metric-value ${getScoreClass(m.overallScore)}">${m.overallScore}%</div>
                         </div>
@@ -1454,7 +1527,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = job.filename.replace(/\.[^.]+$/, '') + '_v2.3.1_task3.md';
+            a.download = job.filename.replace(/\.[^.]+$/, '') + '_v2.3.1_task4.md';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -1467,8 +1540,8 @@
             const previewWindow = window.open('', '_blank');
             const metricsHTML = job.qualityMetrics ? `
                 <div style="background: #1e293b; border: 1px solid #fb923c; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-                    <h2 style="color: #fb923c; margin-bottom: 10px;">Quality Metrics (v2.3.1 - Tasks 1-3)</h2>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px;">
+                    <h2 style="color: #fb923c; margin-bottom: 10px;">Quality Metrics (v2.3.1 - Tasks 1-4)</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px;">
                         <div><div style="font-size: 0.9rem; color: #94a3b8;">Text Quality</div><div style="font-size: 1.8rem; font-weight: bold; color: #22c55e;">${job.qualityMetrics.cleanScore}%</div></div>
                         <div><div style="font-size: 0.9rem; color: #94a3b8;">Structure</div><div style="font-size: 1.8rem; font-weight: bold; color: #38bdf8;">${job.qualityMetrics.structureScore}%</div></div>
                         <div><div style="font-size: 0.9rem; color: #94a3b8;">External Links</div><div style="font-size: 1.8rem; font-weight: bold; color: #a855f7;">${job.qualityMetrics.linksPreserved}</div></div>
@@ -1477,6 +1550,7 @@
                         <div><div style="font-size: 0.9rem; color: #94a3b8;">FN Extracted</div><div style="font-size: 1.8rem; font-weight: bold; color: #fb923c;">${job.qualityMetrics.footnotesDetected || 0}</div></div>
                         <div><div style="font-size: 0.9rem; color: #94a3b8;">FN Matched</div><div style="font-size: 1.8rem; font-weight: bold; color: #fb923c;">${job.qualityMetrics.footnoteMatches || 0}</div></div>
                         <div><div style="font-size: 0.9rem; color: #94a3b8;">Match Rate</div><div style="font-size: 1.8rem; font-weight: bold; color: #22c55e;">${job.qualityMetrics.footnoteMatchRate || 0}%</div></div>
+                        <div><div style="font-size: 0.9rem; color: #94a3b8;">FN Removed</div><div style="font-size: 1.8rem; font-weight: bold; color: #fb923c;">${job.qualityMetrics.footnoteTextItemsRemoved || 0}</div></div>
                         <div><div style="font-size: 0.9rem; color: #94a3b8;">Overall</div><div style="font-size: 1.8rem; font-weight: bold; color: #22c55e;">${job.qualityMetrics.overallScore}%</div></div>
                     </div>
                     <div style="margin-top: 15px; font-size: 0.9rem; color: #cbd5e1;">
@@ -1486,12 +1560,13 @@
                         ${job.advancedMetadata?.footnoteMarkersDetected ? ` • 🔍 ${job.advancedMetadata.footnoteMarkersDetected} markers detected` : ''}
                         ${job.advancedMetadata?.footnotesDetected ? ` • 📝 ${job.advancedMetadata.footnotesDetected} footnotes extracted` : ''}
                         ${job.advancedMetadata?.footnoteMatches ? ` • 🔗 ${job.advancedMetadata.footnoteMatches} matched (Task 3)` : ''}
+                        ${job.advancedMetadata?.footnoteTextItemsRemoved ? ` • 🧹 ${job.advancedMetadata.footnoteTextItemsRemoved} items removed (Task 4)` : ''}
                     </div>
                 </div>
             ` : '';
             previewWindow.document.write(`
                 <!DOCTYPE html>
-                <html><head><title>${job.filename} - v2.3.1 Task 3 Preview</title>
+                <html><head><title>${job.filename} - v2.3.1 Task 4 Preview</title>
                 <style>body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:900px;margin:40px auto;padding:20px;background:#0f172a;color:#f1f5f9;line-height:1.6}pre{background:#1e293b;padding:20px;border-radius:8px;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word;border:1px solid #475569}h1{color:#38bdf8;margin-bottom:20px}h2{color:#38bdf8;margin-top:2em}a{color:#a855f7;text-decoration:none;border-bottom:1px dashed #a855f7}a:hover{color:#c084fc;border-bottom-style:solid}</style>
                 </head><body><h1>📄 ${job.filename}</h1>${metricsHTML}<pre>${job.result.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre></body></html>
             `);
