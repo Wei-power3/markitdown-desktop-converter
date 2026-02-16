@@ -201,7 +201,7 @@
 
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
             gap: 15px;
             margin-bottom: 30px;
         }
@@ -309,7 +309,7 @@
 
         .quality-metrics {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 10px;
             margin-top: 10px;
             padding: 15px;
@@ -496,7 +496,7 @@
                     <span class="quality-icon">✨</span>
                     <div>
                         <strong>Enhanced Text Cleaning (v2.2.2)</strong>
-                        <div style="font-size: 0.85rem; color: var(--text-muted);">Fixes spaced ligatures and merged words from journal PDFs</div>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Fixes spaced ligatures and merged words</div>
                     </div>
                 </div>
                 <div class="quality-item">
@@ -510,7 +510,7 @@
                     <span class="quality-icon">📐</span>
                     <div>
                         <strong>Font-Based Header Detection</strong>
-                        <div style="font-size: 0.85rem; color: var(--text-muted);">Auto-detects H1, H2, H3 headers by analyzing font sizes</div>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Auto-detects H1, H2, H3 headers by font size</div>
                     </div>
                 </div>
                 <div class="quality-item">
@@ -562,8 +562,8 @@
                     <div class="stat-label">Links Preserved</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="totalHeadersFooters">0</div>
-                    <div class="stat-label">H/F Removed</div>
+                    <div class="stat-value" id="totalHeadersRemoved">0</div>
+                    <div class="stat-label">Headers/Footers Removed</div>
                 </div>
             </div>
 
@@ -650,78 +650,46 @@
             processFile(job);
         }
 
-        // v2.2.2: Enhanced text cleaning
         function cleanText(text) {
             let cleaned = text;
-
-            // v2.2.2: Fix spaced ligature artifacts
             cleaned = cleaned.replace(/(\w+)\s+fi\s+(\w+)/g, '$1fi$2');
             cleaned = cleaned.replace(/(\w+)\s+fl\s+(\w+)/g, '$1fl$2');
-            
-            // v2.2.2: Fix merged words with missing spaces
             cleaned = cleaned.replace(/([a-z])(on|to|in|at|of|as|by|or|an|is|be|we)a([A-Z])/g, '$1 $2 a $3');
             cleaned = cleaned.replace(/([a-z])(on|to|in|at|of|as|by|or|an|is|be|we)the([A-Z])/g, '$1 $2 the $3');
-            
             cleaned = cleaned.replace(/(\w+)(ona|toa|ina|ata|ofa|asa|bya)([a-z]{4,})/g, (match, before, middle, after) => {
                 const prep = middle.slice(0, -1);
                 return `${before} ${prep} a ${after}`;
             });
-            
-            // Fix standard ligature characters
-            const ligatureMap = {
-                'ﬁ': 'fi', 'ﬂ': 'fl', 'ﬀ': 'ff', 'ﬃ': 'ffi', 'ﬄ': 'ffl',
-                'ﬆ': 'st', 'ﬅ': 'ft'
-            };
+            const ligatureMap = {'ﬁ': 'fi', 'ﬂ': 'fl', 'ﬀ': 'ff', 'ﬃ': 'ffi', 'ﬄ': 'ffl', 'ﬆ': 'st', 'ﬅ': 'ft'};
             Object.entries(ligatureMap).forEach(([lig, rep]) => {
                 cleaned = cleaned.replace(new RegExp(lig, 'g'), rep);
             });
-
-            // Fix hyphenation breaks
             cleaned = cleaned.replace(/(\w+)-\s+(\w+)/g, '$1$2');
-            
-            // Fix spacing artifacts
             cleaned = cleaned.replace(/([a-z])\s+([a-z])\s+([a-z])/g, (match, a, b, c) => {
                 if (match.toLowerCase() !== match) return match;
                 return a + b + c;
             });
-
-            // Normalize whitespace
             cleaned = cleaned.replace(/\s+/g, ' ').trim();
-
-            // Fix encoding issues
-            cleaned = cleaned.replace(/â€™/g, "'")
-                           .replace(/â€œ/g, '"')
-                           .replace(/â€/g, '"')
-                           .replace(/â€"/g, '—')
-                           .replace(/Â/g, '');
-
+            cleaned = cleaned.replace(/â€™/g, "'").replace(/â€œ/g, '"').replace(/â€/g, '"').replace(/â€"/g, '—').replace(/Â/g, '');
             return cleaned;
         }
 
         function calculateQualityMetrics(text, linkMetadata, advancedMetadata) {
             const totalChars = text.length;
-            
-            // Count artifacts
             const ligatureArtifacts = (text.match(/ﬁ|ﬂ|ﬀ|ﬃ|ﬄ/g) || []).length;
             const spacedLigatures = (text.match(/(\w+)\s+fi\s+(\w+)|(\w+)\s+fl\s+(\w+)/g) || []).length;
             const hyphenationIssues = (text.match(/\w+-\s+\w+/g) || []).length;
             const spacingIssues = (text.match(/[a-z]\s[a-z]\s[a-z]/g) || []).length;
             const encodingIssues = (text.match(/â€|Â(?!\w)/g) || []).length;
-            
             const totalIssues = ligatureArtifacts + spacedLigatures + hyphenationIssues + spacingIssues + encodingIssues;
             const cleanScore = Math.max(0, 100 - (totalIssues / totalChars * 1000));
-
-            // Structure analysis
             const hasHeaders = /^#+ /m.test(text);
             const hasTables = /\|.*\|/m.test(text);
             const hasLists = /^[-*+] /m.test(text);
             const hasBoldItalic = /\*\*.*\*\*|\*.*\*/m.test(text);
-            
             const headerCount = (text.match(/^#+ /gm) || []).length;
             const listCount = (text.match(/^[-*+] /gm) || []).length;
             const linkCount = (text.match(/\[.*?\]\(http.*?\)/g) || []).length;
-            
-            // v2.3.0: Improved structure scoring
             let structureScore = 0;
             if (headerCount > 0) structureScore += 25;
             if (headerCount >= 3) structureScore += 10;
@@ -730,24 +698,17 @@
             if (listCount >= 5) structureScore += 10;
             if (hasBoldItalic) structureScore += 10;
             if (linkCount > 0) structureScore += 15;
-            
-            // v2.3.0: Bonus for advanced features
             if (advancedMetadata.headersFootersRemoved > 0) structureScore += 5;
-            if (advancedMetadata.columnsDetected > 1) structureScore += 10;
-            
+            if (advancedMetadata.columnsDetected > 0) structureScore += 10;
             structureScore = Math.min(100, structureScore);
-
             const overallScore = Math.round((cleanScore * 0.5) + (structureScore * 0.5));
-
             return {
                 cleanScore: Math.round(cleanScore),
                 structureScore: Math.round(structureScore),
                 overallScore: overallScore,
                 issuesFixed: totalIssues,
                 linksPreserved: linkMetadata.linksPreserved,
-                linkPreservationRate: linkMetadata.linksFound > 0 
-                    ? Math.round((linkMetadata.linksPreserved / linkMetadata.linksFound) * 100) 
-                    : 0,
+                linkPreservationRate: linkMetadata.linksFound > 0 ? Math.round((linkMetadata.linksPreserved / linkMetadata.linksFound) * 100) : 0,
                 headersFootersRemoved: advancedMetadata.headersFootersRemoved,
                 columnsDetected: advancedMetadata.columnsDetected
             };
@@ -757,12 +718,10 @@
             try {
                 job.progress = 10;
                 updateUI();
-
                 const extension = job.filename.split('.').pop().toLowerCase();
                 let markdown;
                 let linkMetadata = { linksFound: 0, linksPreserved: 0, linkTypes: { external: 0, internal: 0 } };
                 let advancedMetadata = { headersFootersRemoved: 0, columnsDetected: 0 };
-
                 if (extension === 'pdf') {
                     const result = await convertPDF(job);
                     markdown = result.markdown;
@@ -773,25 +732,18 @@
                     markdown = result.markdown;
                     linkMetadata = result.linkMetadata;
                 }
-
                 job.linkMetadata = linkMetadata;
                 job.advancedMetadata = advancedMetadata;
-
-                // Apply v2.2.2 text cleaning
                 job.progress = 85;
                 updateUI();
                 const cleanedMarkdown = cleanText(markdown);
-
-                // Calculate quality metrics
                 job.progress = 95;
                 updateUI();
                 job.qualityMetrics = calculateQualityMetrics(cleanedMarkdown, linkMetadata, advancedMetadata);
-
                 job.progress = 100;
                 job.status = 'completed';
                 job.result = cleanedMarkdown;
                 updateUI();
-
             } catch (error) {
                 console.error('Conversion error:', error);
                 job.status = 'error';
@@ -800,85 +752,62 @@
             }
         }
 
-        // v2.3.0 STEP 1: Detect headers/footers
+        // v2.3.0 NEW: Detect and remove headers/footers
         function detectHeadersFooters(allPageItems, numPages) {
             const textFrequency = new Map();
-            
             allPageItems.forEach(item => {
                 const text = item.text.trim();
                 if (text.length < 3) return;
-                
                 if (!textFrequency.has(text)) {
-                    textFrequency.set(text, {
-                        count: 0,
-                        pages: new Set(),
-                        positions: []
-                    });
+                    textFrequency.set(text, { count: 0, pages: new Set(), positions: [] });
                 }
-                
                 const entry = textFrequency.get(text);
                 entry.count++;
                 entry.pages.add(item.pageNum);
                 entry.positions.push({ y: item.y, pageNum: item.pageNum });
             });
-            
             const threshold = Math.max(2, Math.floor(numPages * 0.5));
             const headersFooters = new Set();
-            
             textFrequency.forEach((data, text) => {
                 if (data.pages.size >= threshold) {
                     const isPageNumber = /^\d+$/.test(text) || /^page\s+\d+$/i.test(text);
                     const isDOI = /doi:\s*10\.\d+/i.test(text);
+                    const isJournalName = text.length > 10 && text.split(' ').length > 2;
                     const isShortRepetitive = text.length < 50;
-                    
-                    if (isPageNumber || isDOI || isShortRepetitive) {
+                    if (isPageNumber || isDOI || (isJournalName && isShortRepetitive)) {
                         headersFooters.add(text);
                     }
                 }
             });
-            
             return headersFooters;
         }
 
-        // v2.3.0 STEP 2: Detect multi-column layout
+        // v2.3.0 NEW: Detect multi-column layout
         function detectColumnLayout(pageItems) {
             if (pageItems.length === 0) return { columns: 1, divider: null };
-            
-            const xPositions = pageItems.map(item => item.x);
+            const xPositions = pageItems.map(item => item.x).sort((a, b) => a - b);
             const minX = Math.min(...xPositions);
             const maxX = Math.max(...xPositions);
             const pageWidth = maxX - minX;
-            
-            const middleThird = {
-                start: minX + pageWidth * 0.35,
-                end: minX + pageWidth * 0.65
-            };
-            
-            const itemsInMiddle = pageItems.filter(item => 
-                item.x >= middleThird.start && item.x <= middleThird.end
-            );
-            
+            const middleThird = { start: minX + pageWidth * 0.35, end: minX + pageWidth * 0.65 };
+            const itemsInMiddle = pageItems.filter(item => item.x >= middleThird.start && item.x <= middleThird.end);
             const middleRatio = itemsInMiddle.length / pageItems.length;
-            
             if (middleRatio < 0.1 && pageItems.length > 20) {
                 const divider = minX + (pageWidth / 2);
                 return { columns: 2, divider: divider };
             }
-            
             return { columns: 1, divider: null };
         }
 
-        // v2.3.0 STEP 2: Sort by columns
+        // v2.3.0 NEW: Sort text items by column, then Y position
         function sortByColumns(pageItems, layout) {
             if (layout.columns === 1) {
                 return pageItems.sort((a, b) => b.y - a.y);
             }
-            
             const itemsWithColumn = pageItems.map(item => ({
                 ...item,
                 column: item.x < layout.divider ? 0 : 1
             }));
-            
             return itemsWithColumn.sort((a, b) => {
                 if (a.column !== b.column) return a.column - b.column;
                 return b.y - a.y;
@@ -888,7 +817,6 @@
         async function extractPDFLinks(page, pageNum) {
             const annotations = await page.getAnnotations();
             const links = [];
-            
             annotations.forEach(annotation => {
                 if (annotation.subtype === 'Link') {
                     const link = {
@@ -898,60 +826,40 @@
                         page: pageNum,
                         type: annotation.url ? 'external' : 'internal'
                     };
-                    
                     if (link.url || link.dest) {
                         links.push(link);
                     }
                 }
             });
-            
             return links;
         }
 
         function matchLinksToText(links, textItems) {
             const matchedLinks = [];
-            
             links.forEach(link => {
                 if (link.type === 'internal') return;
-                
                 const [x1, y1, x2, y2] = link.rect;
-                
                 const nearbyText = textItems.filter(item => {
                     const tolerance = 5;
-                    return item.x >= (x1 - tolerance) && 
-                           item.x <= (x2 + tolerance) && 
-                           item.y >= (y1 - tolerance) && 
-                           item.y <= (y2 + tolerance);
+                    return item.x >= (x1 - tolerance) && item.x <= (x2 + tolerance) && item.y >= (y1 - tolerance) && item.y <= (y2 + tolerance);
                 });
-                
                 const linkText = nearbyText.map(item => item.text).join(' ').trim();
-                
                 if (link.url) {
-                    matchedLinks.push({
-                        text: linkText || new URL(link.url).hostname,
-                        url: link.url,
-                        type: link.type
-                    });
+                    matchedLinks.push({ text: linkText || new URL(link.url).hostname, url: link.url, type: link.type });
                 }
             });
-            
             return matchedLinks;
         }
 
         async function convertPDF(job) {
             job.progress = 20;
             updateUI();
-
             const arrayBuffer = await job.file.arrayBuffer();
             const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-            
             let markdown = `# ${job.filename}\n\n`;
             markdown += `Converted from PDF • ${pdf.numPages} pages • v2.3.0 with advanced layout detection\n\n---\n\n`;
-
             let allLinks = [];
             const allItems = [];
-            
-            // First pass: collect all items
             for (let i = 1; i <= pdf.numPages; i++) {
                 const page = await pdf.getPage(i);
                 const textContent = await page.getTextContent();
@@ -966,36 +874,19 @@
                     });
                 });
             }
-
-            // v2.3.0: Detect headers/footers
             const headersFooters = detectHeadersFooters(allItems, pdf.numPages);
-            
             const fontSizes = allItems.map(item => item.fontSize).filter(size => size > 0);
             const avgFontSize = fontSizes.reduce((a, b) => a + b, 0) / fontSizes.length;
-
-            const ACADEMIC_KEYWORDS = [
-                'Abstract', 'Introduction', 'Background', 'Literature Review',
-                'Methods', 'Methodology', 'Materials and Methods',
-                'Results', 'Findings', 'Discussion', 'Analysis',
-                'Conclusion', 'Conclusions', 'References', 'Bibliography',
-                'Acknowledgments', 'Appendix'
-            ];
-
-            let totalColumns = 0;
-
-            // Second pass: process with advanced features
+            const ACADEMIC_KEYWORDS = ['Abstract', 'Introduction', 'Background', 'Literature Review', 'Methods', 'Methodology', 'Materials and Methods', 'Results', 'Findings', 'Discussion', 'Analysis', 'Conclusion', 'Conclusions', 'References', 'Bibliography', 'Acknowledgments', 'Appendix'];
+            let totalColumnsDetected = 0;
             for (let i = 1; i <= pdf.numPages; i++) {
                 job.progress = 20 + (60 * (i / pdf.numPages));
                 updateUI();
-
                 const page = await pdf.getPage(i);
                 const textContent = await page.getTextContent();
-                
                 const pageLinks = await extractPDFLinks(page, i);
                 allLinks.push(...pageLinks);
-                
                 markdown += `## Page ${i}\n\n`;
-                
                 const pageItems = textContent.items.map(item => ({
                     text: item.str,
                     fontSize: item.height,
@@ -1003,27 +894,20 @@
                     y: item.transform[5],
                     x: item.transform[4]
                 }));
-                
-                // v2.3.0: Filter headers/footers
                 const filteredItems = pageItems.filter(item => {
                     const text = item.text.trim();
                     return !headersFooters.has(text);
                 });
-                
-                // v2.3.0: Detect columns
                 const layout = detectColumnLayout(filteredItems);
-                totalColumns = Math.max(totalColumns, layout.columns);
-                
-                // v2.3.0: Sort by columns
+                if (layout.columns === 2) totalColumnsDetected++;
                 const sortedItems = sortByColumns(filteredItems, layout);
-                
                 let lastY = -1;
                 let currentLine = [];
-                
-                sortedItems.forEach((item) => {
+                sortedItems.forEach((item, idx) => {
+                    const fontSize = item.fontSize;
+                    const fontName = item.fontName || '';
                     const text = item.text.trim();
                     if (!text) return;
-                    
                     if (lastY !== -1 && Math.abs(item.y - lastY) > 5) {
                         if (currentLine.length > 0) {
                             const lineText = currentLine.map(i => i.text).join(' ');
@@ -1031,21 +915,16 @@
                         }
                         currentLine = [];
                     }
-                    
-                    currentLine.push({ text, fontSize: item.fontSize, fontName: item.fontName });
+                    currentLine.push({ text, fontSize, fontName });
                     lastY = item.y;
                 });
-                
                 if (currentLine.length > 0) {
                     const lineText = currentLine.map(i => i.text).join(' ');
                     markdown += processLine(lineText, currentLine[0].fontSize, currentLine[0].fontName, avgFontSize, ACADEMIC_KEYWORDS);
                 }
-                
                 markdown += '\n';
             }
-
             const matchedLinks = matchLinksToText(allLinks, allItems);
-            
             matchedLinks.forEach(link => {
                 if (link.text && link.text.length > 2) {
                     const escapedText = link.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -1053,49 +932,33 @@
                     markdown = markdown.replace(regex, `[${link.text}](${link.url})`);
                 }
             });
-
             const linkMetadata = {
                 linksFound: allLinks.filter(l => l.type === 'external').length,
                 linksPreserved: matchedLinks.length,
-                linkTypes: {
-                    external: matchedLinks.length,
-                    internal: 0
-                }
+                linkTypes: { external: matchedLinks.length, internal: 0 }
             };
-
             const advancedMetadata = {
                 headersFootersRemoved: headersFooters.size,
-                columnsDetected: totalColumns
+                columnsDetected: totalColumnsDetected
             };
-
             return { markdown, linkMetadata, advancedMetadata };
         }
 
         function processLine(text, fontSize, fontName, avgFontSize, keywords) {
             if (!text.trim()) return '';
-            
             let headerLevel = 0;
             if (fontSize >= avgFontSize * 1.8) headerLevel = 1;
             else if (fontSize >= avgFontSize * 1.5) headerLevel = 2;
             else if (fontSize >= avgFontSize * 1.2) headerLevel = 3;
-            
-            const isAcademicSection = keywords.some(keyword => 
-                text.trim().toLowerCase() === keyword.toLowerCase() ||
-                text.trim().toLowerCase().startsWith(keyword.toLowerCase() + ':')
-            );
-            
+            const isAcademicSection = keywords.some(keyword => text.trim().toLowerCase() === keyword.toLowerCase() || text.trim().toLowerCase().startsWith(keyword.toLowerCase() + ':'));
             if (isAcademicSection && headerLevel === 0) {
                 headerLevel = 2;
             }
-            
             const isBulletList = /^[\s]*[•\-–■□○●◾◽▪▫][\s]/.test(text);
             const isNumberedList = /^[\s]*[\d]+[.)][\s]/.test(text);
-            
             const isBold = fontName.toLowerCase().includes('bold') || fontName.includes('-B');
             const isItalic = fontName.toLowerCase().includes('italic') || fontName.includes('-I');
-            
             let output = '';
-            
             if (headerLevel > 0) {
                 output = '#'.repeat(headerLevel) + ' ' + text + '\n\n';
             } else if (isBulletList) {
@@ -1113,100 +976,70 @@
                 }
                 output = formattedText + ' ';
             }
-            
             return output;
         }
 
         async function extractPPTXHyperlinks(zip, slideFiles) {
             const allLinks = [];
-            
             const relsPath = 'ppt/_rels/presentation.xml.rels';
             let relationships = {};
-            
             if (zip.files[relsPath]) {
                 const relsXml = await zip.files[relsPath].async('text');
                 const parser = new DOMParser();
                 const relsDoc = parser.parseFromString(relsXml, 'text/xml');
                 const rels = relsDoc.getElementsByTagName('Relationship');
-                
                 Array.from(rels).forEach(rel => {
                     const id = rel.getAttribute('Id');
                     const target = rel.getAttribute('Target');
                     const type = rel.getAttribute('Type');
-                    
                     if (type && type.includes('hyperlink')) {
                         relationships[id] = target;
                     }
                 });
             }
-            
             for (let i = 0; i < slideFiles.length; i++) {
                 const slideXml = await zip.files[slideFiles[i]].async('text');
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(slideXml, 'text/xml');
-                
                 const hyperlinks = xmlDoc.getElementsByTagName('a:hlinkClick');
-                
                 Array.from(hyperlinks).forEach(link => {
                     const rId = link.getAttribute('r:id');
                     const tooltip = link.getAttribute('tooltip');
-                    
                     const parent = link.parentElement;
                     const textElements = parent.getElementsByTagName('a:t');
                     const linkText = Array.from(textElements).map(t => t.textContent).join(' ').trim();
-                    
                     if (rId && relationships[rId]) {
-                        allLinks.push({
-                            text: linkText || tooltip || 'link',
-                            url: relationships[rId],
-                            slide: i + 1,
-                            type: 'external'
-                        });
+                        allLinks.push({ text: linkText || tooltip || 'link', url: relationships[rId], slide: i + 1, type: 'external' });
                     }
                 });
             }
-            
             return allLinks;
         }
 
         async function convertPPTX(job) {
             job.progress = 20;
             updateUI();
-
             const arrayBuffer = await job.file.arrayBuffer();
             const zip = await JSZip.loadAsync(arrayBuffer);
-            
             let markdown = `# ${job.filename}\n\n`;
             markdown += `Converted from PowerPoint • v2.3.0\n\n---\n\n`;
-
-            const slideFiles = Object.keys(zip.files)
-                .filter(name => name.startsWith('ppt/slides/slide') && name.endsWith('.xml'))
-                .sort((a, b) => {
-                    const numA = parseInt(a.match(/slide(\d+)/)[1]);
-                    const numB = parseInt(b.match(/slide(\d+)/)[1]);
-                    return numA - numB;
-                });
-
+            const slideFiles = Object.keys(zip.files).filter(name => name.startsWith('ppt/slides/slide') && name.endsWith('.xml')).sort((a, b) => {
+                const numA = parseInt(a.match(/slide(\d+)/)[1]);
+                const numB = parseInt(b.match(/slide(\d+)/)[1]);
+                return numA - numB;
+            });
             job.progress = 40;
             updateUI();
-
             const allLinks = await extractPPTXHyperlinks(zip, slideFiles);
-
             for (let i = 0; i < slideFiles.length; i++) {
                 job.progress = 40 + (40 * ((i + 1) / slideFiles.length));
                 updateUI();
-
                 const slideXml = await zip.files[slideFiles[i]].async('text');
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(slideXml, 'text/xml');
-                
                 markdown += `## Slide ${i + 1}\n\n`;
-                
                 const textElements = xmlDoc.getElementsByTagName('a:t');
-                const texts = Array.from(textElements)
-                    .map(el => el.textContent.trim())
-                    .filter(text => text.length > 0);
-                
+                const texts = Array.from(textElements).map(el => el.textContent.trim()).filter(text => text.length > 0);
                 if (texts.length > 0) {
                     texts.forEach(text => {
                         markdown += `- ${text}\n`;
@@ -1214,10 +1047,8 @@
                 } else {
                     markdown += '*[No text content on this slide]*';
                 }
-                
                 markdown += '\n\n';
             }
-
             allLinks.forEach(link => {
                 if (link.text && link.text.length > 2) {
                     const escapedText = link.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -1225,16 +1056,11 @@
                     markdown = markdown.replace(regex, `[${link.text}](${link.url})`);
                 }
             });
-
             const linkMetadata = {
                 linksFound: allLinks.length,
                 linksPreserved: allLinks.length,
-                linkTypes: {
-                    external: allLinks.length,
-                    internal: 0
-                }
+                linkTypes: { external: allLinks.length, internal: 0 }
             };
-
             return { markdown, linkMetadata };
         }
 
@@ -1243,17 +1069,10 @@
             document.getElementById('processing').textContent = jobs.filter(j => j.status === 'processing').length;
             document.getElementById('completed').textContent = jobs.filter(j => j.status === 'completed').length;
             document.getElementById('failed').textContent = jobs.filter(j => j.status === 'error').length;
-            
-            const totalLinksPreserved = jobs.reduce((sum, job) => {
-                return sum + (job.linkMetadata?.linksPreserved || 0);
-            }, 0);
+            const totalLinksPreserved = jobs.reduce((sum, job) => sum + (job.linkMetadata?.linksPreserved || 0), 0);
             document.getElementById('totalLinks').textContent = totalLinksPreserved;
-
-            const totalHeadersFooters = jobs.reduce((sum, job) => {
-                return sum + (job.advancedMetadata?.headersFootersRemoved || 0);
-            }, 0);
-            document.getElementById('totalHeadersFooters').textContent = totalHeadersFooters;
-
+            const totalHeadersRemoved = jobs.reduce((sum, job) => sum + (job.advancedMetadata?.headersFootersRemoved || 0), 0);
+            document.getElementById('totalHeadersRemoved').textContent = totalHeadersRemoved;
             if (jobs.length === 0) {
                 emptyState.style.display = 'block';
                 jobList.innerHTML = '';
@@ -1269,11 +1088,9 @@
                 completed: { icon: '✔', class: 'status-completed', label: 'Completed' },
                 error: { icon: '✖', class: 'status-error', label: 'Failed' }
             };
-
             const config = statusConfig[job.status];
             const fileSize = (job.file.size / 1024).toFixed(1) + ' KB';
             const time = job.createdAt.toLocaleTimeString();
-
             let qualityHTML = '';
             if (job.qualityMetrics) {
                 const m = job.qualityMetrics;
@@ -1282,7 +1099,6 @@
                     if (score >= 70) return 'good';
                     return 'warning';
                 };
-
                 qualityHTML = `
                     <div class="quality-metrics">
                         <div class="metric">
@@ -1308,7 +1124,6 @@
                     </div>
                 `;
             }
-
             return `
                 <div class="job-item">
                     <div class="job-header">
@@ -1321,34 +1136,17 @@
                         </div>
                         <span class="status-badge ${config.class}">${config.label}</span>
                     </div>
-
                     <div class="progress-bar">
-                        <div class="progress-fill ${job.status === 'completed' ? 'completed' : ''}" 
-                             style="width: ${job.progress}%"></div>
+                        <div class="progress-fill ${job.status === 'completed' ? 'completed' : ''}" style="width: ${job.progress}%"></div>
                     </div>
-
                     ${qualityHTML}
-
-                    ${job.error ? `
-                        <div class="error-message">
-                            <strong>Error:</strong> ${job.error}
-                        </div>
-                    ` : ''}
-
+                    ${job.error ? `<div class="error-message"><strong>Error:</strong> ${job.error}</div>` : ''}
                     <div class="job-actions">
                         ${job.status === 'completed' ? `
-                            <button class="btn btn-success" onclick="downloadMarkdown('${job.id}')">
-                                ⬇ Download Markdown
-                            </button>
-                            <button class="btn btn-primary" onclick="viewMarkdown('${job.id}')">
-                                👁 Preview
-                            </button>
+                            <button class="btn btn-success" onclick="downloadMarkdown('${job.id}')">⬇ Download Markdown</button>
+                            <button class="btn btn-primary" onclick="viewMarkdown('${job.id}')">👁 Preview</button>
                         ` : ''}
-                        ${job.status !== 'processing' ? `
-                            <button class="btn btn-danger" onclick="deleteJob('${job.id}')">
-                                🗑 Delete
-                            </button>
-                        ` : ''}
+                        ${job.status !== 'processing' ? `<button class="btn btn-danger" onclick="deleteJob('${job.id}')">🗑 Delete</button>` : ''}
                     </div>
                 </div>
             `;
@@ -1357,7 +1155,6 @@
         function downloadMarkdown(jobId) {
             const job = jobs.find(j => j.id == jobId);
             if (!job || !job.result) return;
-
             const blob = new Blob([job.result], { type: 'text/markdown' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1372,85 +1169,29 @@
         function viewMarkdown(jobId) {
             const job = jobs.find(j => j.id == jobId);
             if (!job || !job.result) return;
-
             const previewWindow = window.open('', '_blank');
             const metricsHTML = job.qualityMetrics ? `
                 <div style="background: #1e293b; border: 1px solid #fb923c; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-                    <h2 style="color: #fb923c; margin-bottom: 10px;">Quality Metrics (v2.3.0 Advanced)</h2>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px;">
-                        <div>
-                            <div style="font-size: 0.9rem; color: #94a3b8;">Text Quality</div>
-                            <div style="font-size: 1.8rem; font-weight: bold; color: #22c55e;">${job.qualityMetrics.cleanScore}%</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.9rem; color: #94a3b8;">Structure</div>
-                            <div style="font-size: 1.8rem; font-weight: bold; color: #38bdf8;">${job.qualityMetrics.structureScore}%</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.9rem; color: #94a3b8;">Links</div>
-                            <div style="font-size: 1.8rem; font-weight: bold; color: #a855f7;">${job.qualityMetrics.linksPreserved}</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.9rem; color: #94a3b8;">H/F Removed</div>
-                            <div style="font-size: 1.8rem; font-weight: bold; color: #fb923c;">${job.qualityMetrics.headersFootersRemoved || 0}</div>
-                        </div>
-                        <div>
-                            <div style="font-size: 0.9rem; color: #94a3b8;">Overall</div>
-                            <div style="font-size: 1.8rem; font-weight: bold; color: #22c55e;">${job.qualityMetrics.overallScore}%</div>
-                        </div>
+                    <h2 style="color: #fb923c; margin-bottom: 10px;">Quality Metrics (v2.3.0)</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px;">
+                        <div><div style="font-size: 0.9rem; color: #94a3b8;">Text Quality</div><div style="font-size: 1.8rem; font-weight: bold; color: #22c55e;">${job.qualityMetrics.cleanScore}%</div></div>
+                        <div><div style="font-size: 0.9rem; color: #94a3b8;">Structure</div><div style="font-size: 1.8rem; font-weight: bold; color: #38bdf8;">${job.qualityMetrics.structureScore}%</div></div>
+                        <div><div style="font-size: 0.9rem; color: #94a3b8;">External Links</div><div style="font-size: 1.8rem; font-weight: bold; color: #a855f7;">${job.qualityMetrics.linksPreserved}</div></div>
+                        <div><div style="font-size: 0.9rem; color: #94a3b8;">H/F Removed</div><div style="font-size: 1.8rem; font-weight: bold; color: #fb923c;">${job.qualityMetrics.headersFootersRemoved || 0}</div></div>
+                        <div><div style="font-size: 0.9rem; color: #94a3b8;">Overall</div><div style="font-size: 1.8rem; font-weight: bold; color: #22c55e;">${job.qualityMetrics.overallScore}%</div></div>
                     </div>
                     <div style="margin-top: 15px; font-size: 0.9rem; color: #cbd5e1;">
-                        ✓ ${job.qualityMetrics.issuesFixed} text artifacts fixed
-                        ${job.linkMetadata ? ` • 🌐 ${job.linkMetadata.linksPreserved} links preserved` : ''}
+                        ✓ Fixed ${job.qualityMetrics.issuesFixed} text artifacts
+                        ${job.linkMetadata ? ` • 🌐 ${job.linkMetadata.linksPreserved} external links preserved` : ''}
                         ${job.advancedMetadata?.headersFootersRemoved ? ` • 🧹 ${job.advancedMetadata.headersFootersRemoved} headers/footers removed` : ''}
-                        ${job.advancedMetadata?.columnsDetected > 1 ? ` • 📰 ${job.advancedMetadata.columnsDetected}-column layout detected` : ''}
                     </div>
                 </div>
             ` : '';
-
             previewWindow.document.write(`
                 <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>${job.filename} - v2.3.0 Advanced Preview</title>
-                    <style>
-                        body {
-                            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                            max-width: 900px;
-                            margin: 40px auto;
-                            padding: 20px;
-                            background: #0f172a;
-                            color: #f1f5f9;
-                            line-height: 1.6;
-                        }
-                        pre {
-                            background: #1e293b;
-                            padding: 20px;
-                            border-radius: 8px;
-                            overflow-x: auto;
-                            white-space: pre-wrap;
-                            word-wrap: break-word;
-                            border: 1px solid #475569;
-                        }
-                        h1 { color: #38bdf8; margin-bottom: 20px; }
-                        h2 { color: #38bdf8; margin-top: 2em; }
-                        a {
-                            color: #a855f7;
-                            text-decoration: none;
-                            border-bottom: 1px dashed #a855f7;
-                        }
-                        a:hover {
-                            color: #c084fc;
-                            border-bottom-style: solid;
-                        }
-                    </style>
-                </head>
-                <body>
-                    <h1>📄 ${job.filename}</h1>
-                    ${metricsHTML}
-                    <pre>${job.result.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
-                </body>
-                </html>
+                <html><head><title>${job.filename} - Advanced Preview (v2.3.0)</title>
+                <style>body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;max-width:900px;margin:40px auto;padding:20px;background:#0f172a;color:#f1f5f9;line-height:1.6}pre{background:#1e293b;padding:20px;border-radius:8px;overflow-x:auto;white-space:pre-wrap;word-wrap:break-word;border:1px solid #475569}h1{color:#38bdf8;margin-bottom:20px}h2{color:#38bdf8;margin-top:2em}a{color:#a855f7;text-decoration:none;border-bottom:1px dashed #a855f7}a:hover{color:#c084fc;border-bottom-style:solid}</style>
+                </head><body><h1>📄 ${job.filename}</h1>${metricsHTML}<pre>${job.result.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre></body></html>
             `);
         }
 
