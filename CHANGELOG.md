@@ -5,6 +5,101 @@ All notable changes to the MarkItDown Desktop Converter will be documented in th
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.2.1] - 2026-02-16
+
+### 🧹 Bugfix Release: Clean External Link Preservation
+
+This patch release fixes the internal link noise issue reported in v2.2.0, providing cleaner markdown output.
+
+### 🐛 Fixed
+
+**Internal Link Artifacts Removed**
+- **Problem:** v2.2.0 created noise with internal PDF links like `[the](#page-7)`, `[and](#page-5)`
+- **Root Cause:** Link matching was too aggressive, matching common words (articles, conjunctions) to internal page anchors
+- **Solution:** Disabled internal PDF link preservation completely
+- **Result:** Clean markdown output with external links only
+
+### ✨ Changes
+
+**Link Preservation Behavior:**
+- ✅ **External links preserved:** HTTP/HTTPS URLs from PDFs and PPTX files
+- ❌ **Internal links skipped:** No more `#page-X` anchor links
+- 🎯 **Focused approach:** Only meaningful external hyperlinks are converted
+
+**Updated Functions:**
+```javascript
+// v2.2.1: matchLinksToText() now filters out internal links
+if (link.type === 'internal') {
+    return; // Skip this link
+}
+```
+
+**Link Metadata Changes:**
+- `linksFound` now counts external links only
+- `linkTypes.internal` always returns 0
+- `linkTypes.external` counts all preserved links
+
+### 📊 Impact
+
+**Before (v2.2.0):**
+```markdown
+This study examines [the](#page-7) relationship between [and](#page-5) factors.
+Visit our [website](https://example.com) for more information.
+```
+
+**After (v2.2.1):**
+```markdown
+This study examines the relationship between and factors.
+Visit our [website](https://example.com) for more information.
+```
+
+### 📁 Files Changed
+
+```
+web/
+└── index_v2.2.1.html    # NEW - Clean external link preservation
+```
+
+### 🔄 Migration from v2.2.0
+
+**Breaking Changes:** None
+
+**Behavior Changes:**
+- Internal PDF links (`#page-X`) are no longer preserved
+- Only external URLs (starting with `http://` or `https://`) are converted to markdown links
+
+**Recommendation:**
+- Use v2.2.1 for all new conversions
+- v2.2.0 remains available if internal links are needed (with manual cleanup required)
+
+### 🎯 Use Cases
+
+**Best for:**
+- ✅ Academic papers with web references
+- ✅ Technical documentation with external resources
+- ✅ Presentations with clickable URLs
+- ✅ Clean markdown without link noise
+- ✅ Content ready for LLM/RAG pipelines
+
+**Not suitable for:**
+- ❌ Documents requiring internal cross-references
+- ❌ PDFs with important table of contents links
+- ❌ Documents with critical page anchor navigation
+
+### 🙏 Credits
+
+**Bug Report:**
+- Reported by tester feedback on v2.2.0
+- Issue: Internal link artifacts reducing readability
+- Assessment: "Minor cosmetic issue, not structural corruption"
+
+**Fix Decision:**
+- Chose simplest solution: disable internal links completely
+- Prioritized clean output over comprehensive link preservation
+- Can be revisited in future with smart filtering if needed
+
+---
+
 ## [2.2.0] - 2026-02-16
 
 ### 🔗 Phase 2: Link Preservation
@@ -180,6 +275,7 @@ See [page 5](#page-5)
 - Duplicate text matches will create multiple links
 - Special characters in URLs are preserved
 - Very long URLs may impact readability
+- **Internal link noise:** Common words may match internal links (fixed in v2.2.1)
 
 ### 🔄 Migration from v2.1
 
@@ -621,6 +717,7 @@ This release was developed based on real-world testing feedback and quality asse
 - Modern dark theme UI
 - Standalone executable
 
+[2.2.1]: https://github.com/Wei-power3/markitdown-desktop-converter/releases/tag/v2.2.1
 [2.2.0]: https://github.com/Wei-power3/markitdown-desktop-converter/releases/tag/v2.2.0
 [2.1.0]: https://github.com/Wei-power3/markitdown-desktop-converter/releases/tag/v2.1.0
 [2.0.0]: https://github.com/Wei-power3/markitdown-desktop-converter/releases/tag/v2.0.0
