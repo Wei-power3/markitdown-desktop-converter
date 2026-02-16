@@ -26,6 +26,8 @@ class DocumentConverter:
     - Text cleaning (fixes ligatures, spacing, encoding)
     - Structured table extraction
     - Dual PowerPoint conversion
+    - Word document support
+    - Excel spreadsheet support
     """
     
     def __init__(self):
@@ -51,6 +53,10 @@ class DocumentConverter:
                 return self._convert_pdf(file_path)
             elif extension in ['.pptx', '.ppt']:
                 return self._convert_powerpoint(file_path)
+            elif extension in ['.docx', '.doc']:
+                return self._convert_word(file_path)
+            elif extension in ['.xlsx', '.xls']:
+                return self._convert_excel(file_path)
             else:
                 return "", f"Unsupported file type: {extension}"
         
@@ -146,6 +152,71 @@ class DocumentConverter:
         
         final_content = "".join(results)
         return final_content, None
+    
+    def _convert_word(self, file_path: Path) -> Tuple[str, None]:
+        """
+        Convert Word document (.docx, .doc) to Markdown.
+        
+        MarkItDown natively supports Word documents:
+        - Extracts text content
+        - Preserves basic structure
+        - Handles formatting
+        
+        Text cleaning is applied for quality.
+        """
+        logger.info(f"Converting Word document: {file_path.name}")
+        
+        try:
+            # MarkItDown handles Word natively
+            result = self.md.convert(str(file_path))
+            content = result.text_content
+            
+            # Apply text cleaning for quality
+            cleaned_content = self.text_cleaner.clean(content)
+            
+            # Log cleaning statistics
+            report = self.text_cleaner.get_cleaning_report(content, cleaned_content)
+            logger.info(f"Word doc cleaned: {report['encoding_fixes']} encoding fixes, "
+                       f"{report['hyphen_fixes']} hyphen fixes")
+            
+            return cleaned_content, None
+            
+        except Exception as e:
+            logger.error(f"Word conversion failed: {str(e)}")
+            return "", f"Word conversion error: {str(e)}"
+    
+    def _convert_excel(self, file_path: Path) -> Tuple[str, None]:
+        """
+        Convert Excel spreadsheet (.xlsx, .xls) to Markdown.
+        
+        MarkItDown natively supports Excel:
+        - Converts sheets to markdown tables
+        - Preserves cell data
+        - Handles multiple sheets
+        
+        Text cleaning is applied for quality.
+        """
+        logger.info(f"Converting Excel spreadsheet: {file_path.name}")
+        
+        try:
+            # MarkItDown handles Excel natively
+            # It converts each sheet to a markdown table
+            result = self.md.convert(str(file_path))
+            content = result.text_content
+            
+            # Apply text cleaning for quality
+            # (handles any text artifacts in cell values)
+            cleaned_content = self.text_cleaner.clean(content)
+            
+            # Log info
+            num_lines = len(cleaned_content.split('\n'))
+            logger.info(f"Excel converted: {num_lines} lines of markdown")
+            
+            return cleaned_content, None
+            
+        except Exception as e:
+            logger.error(f"Excel conversion failed: {str(e)}")
+            return "", f"Excel conversion error: {str(e)}"
     
     def _pptx_to_pdf(self, pptx_path: Path) -> bytes:
         """

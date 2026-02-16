@@ -1,551 +1,358 @@
 """
-Main application entry point
-MarkItDown Desktop Converter - Windows GUI Application with Batch Processing Queue
+MarkItDown Desktop Converter - Main GUI Application
+Version: 2.2.1 (Production)
+
+Enhanced with:
+- AI structure detection
+- Advanced text cleaning
+- Batch processing queue
+- Quality metrics
+- Link preservation
+- Word and Excel support
 """
+
 import customtkinter as ctk
-try:
-    from tkinterdnd2 import DND_FILES, TkinterDnD
-    DND_AVAILABLE = True
-except ImportError:
-    DND_AVAILABLE = False
-    print("Warning: tkinterdnd2 not available. Drag-and-drop disabled.")
-from CTkMessagebox import CTkMessagebox
+from tkinterdnd2 import TkinterDnD, DND_FILES
 from pathlib import Path
 import threading
-from typing import List
-from datetime import datetime
-import sys
-
-# Add src directory to path for imports
-sys.path.insert(0, str(Path(__file__).parent))
-
-from config import (
-    APP_NAME,
-    APP_VERSION,
-    WINDOW_WIDTH,
-    WINDOW_HEIGHT,
-    THEME,
-    APPEARANCE_MODE,
-    SUPPORTED_EXTENSIONS
-)
-from file_manager import FileManager
+from typing import List, Optional
+import subprocess
+import platform
 from converter import DocumentConverter
+from file_manager import FileManager
+from config import ORIGINALS_DIR, PROCESSED_DIR
+import logging
+
+# Setup logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+# CustomTkinter settings
+ctk.set_appearance_mode("dark")
+ctk.set_default_color_theme("blue")
+
+# Supported file extensions
+SUPPORTED_EXTENSIONS = [".pdf", ".pptx", ".ppt", ".docx", ".doc", ".xlsx", ".xls"]
 
 
 class QueueItem:
     """Represents a file in the processing queue"""
+    
     def __init__(self, file_path: Path):
         self.file_path = file_path
-        self.status = "Queued"  # Queued, Processing, Complete, Error
+        self.status = "queued"  # queued, processing, complete, error
         self.progress = 0.0
-        self.message = ""
-        self.start_time = None
-        self.end_time = None
+        self.markdown_content = ""
+        self.error_message = None
+        self.quality_metrics = {}
 
 
 class MarkItDownApp:
-    """Main application class with batch processing queue"""
+    """Main application window"""
     
     def __init__(self):
-        # Initialize TkinterDnD for drag-and-drop
-        if DND_AVAILABLE:
-            self.root = TkinterDnD.Tk()
-        else:
-            self.root = ctk.CTk()
+        # Create root using TkinterDnD for drag-and-drop
+        self.root = TkinterDnD.Tk()
+        self.root.title("MarkItDown Desktop Converter v2.2.1")
+        self.root.geometry("900x700")
         
-        self.root.title(f"{APP_NAME} v{APP_VERSION}")
-        self.root.geometry(f"{WINDOW_WIDTH}x{WINDOW_HEIGHT}")
-        
-        # Set theme
-        ctk.set_appearance_mode(APPEARANCE_MODE)
-        ctk.set_default_color_theme(THEME)
-        
-        # Initialize managers
-        self.file_manager = FileManager()
+        # Initialize components
         self.converter = DocumentConverter()
-        
-        # Processing queue
-        self.queue: List[QueueItem] = []
-        self.processing = False
-        self.queue_widgets = {}  # Map queue items to UI widgets
+        self.file_manager = FileManager()
+        self.processing_queue: List[QueueItem] = []
+        self.is_processing = False
         
         # Build UI
         self.setup_ui()
         
+        logger.info("MarkItDown Desktop Converter v2.2.1 initialized")
+    
     def setup_ui(self):
-        """Create the user interface with batch queue"""
-        
-        # Main container with grid layout
-        self.root.grid_rowconfigure(0, weight=1)
-        self.root.grid_columnconfigure(0, weight=1)
-        
-        main_container = ctk.CTkFrame(self.root)
-        main_container.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
-        main_container.grid_rowconfigure(1, weight=1)
-        main_container.grid_columnconfigure(0, weight=1)
-        
-        # ===== TOP SECTION: Title and Drop Zone =====
-        top_frame = ctk.CTkFrame(main_container, fg_color="transparent")
-        top_frame.grid(row=0, column=0, sticky="ew", pady=(0, 10))
+        """Setup the user interface"""
         
         # Title
-        title_label = ctk.CTkLabel(
-            top_frame,
-            text="MarkItDown Desktop Converter",
-            font=("Arial", 26, "bold")
+        title = ctk.CTkLabel(
+            self.root, 
+            text="MarkItDown Desktop Converter v2.2.1",
+            font=("Arial", 24, "bold")
         )
-        title_label.pack(pady=(10, 5))
+        title.pack(pady=20)
         
-        # Subtitle
-        subtitle_label = ctk.CTkLabel(
-            top_frame,
-            text="Drag & Drop PDF or PowerPoint files to convert to Markdown",
-            font=("Arial", 13)
+        subtitle = ctk.CTkLabel(
+            self.root,
+            text="Clean Text Extraction for Embeddings | Quality-First Approach",
+            font=("Arial", 12)
         )
-        subtitle_label.pack(pady=(0, 10))
+        subtitle.pack()
         
         # Drop zone
-        self.drop_frame = ctk.CTkFrame(
-            top_frame,
-            height=150,
-            border_width=3,
-            border_color="#3B8ED0"
-        )
-        self.drop_frame.pack(fill="x", padx=20, pady=5)
+        self.drop_frame = ctk.CTkFrame(self.root, height=150)
+        self.drop_frame.pack(pady=20, padx=40, fill="x")
         self.drop_frame.pack_propagate(False)
         
-        # Drop zone content
-        drop_content = ctk.CTkFrame(self.drop_frame, fg_color="transparent")
-        drop_content.place(relx=0.5, rely=0.5, anchor="center")
-        
-        drop_icon = ctk.CTkLabel(
-            drop_content,
-            text="📁",
-            font=("Arial", 48)
+        drop_label = ctk.CTkLabel(
+            self.drop_frame,
+            text="📁 Drop files here\nSupported: PDF, PPTX, DOCX, XLSX",
+            font=("Arial", 14)
         )
-        drop_icon.pack()
+        drop_label.pack(expand=True)
         
-        self.drop_label = ctk.CTkLabel(
-            drop_content,
-            text="Drop files here or click Browse",
-            font=("Arial", 16)
-        )
-        self.drop_label.pack(pady=5)
-        
-        supported_text = ctk.CTkLabel(
-            drop_content,
-            text="Supported: PDF, PPTX, PPT",
-            font=("Arial", 11),
-            text_color="gray"
-        )
-        supported_text.pack()
-        
-        # Enable drag and drop
-        if DND_AVAILABLE:
-            self.drop_frame.drop_target_register(DND_FILES)
-            self.drop_frame.dnd_bind('<<Drop>>', self.on_drop)
+        # Enable drag-and-drop
+        self.drop_frame.drop_target_register(DND_FILES)
+        self.drop_frame.dnd_bind('<<Drop>>', self.on_drop)
         
         # Browse button
         browse_btn = ctk.CTkButton(
-            drop_content,
-            text="Browse Files",
+            self.root,
+            text="📂 Browse Files",
             command=self.browse_files,
-            width=140,
-            height=35
+            width=200,
+            height=40
         )
         browse_btn.pack(pady=10)
         
-        # ===== MIDDLE SECTION: Processing Queue =====
-        queue_frame = ctk.CTkFrame(main_container)
-        queue_frame.grid(row=1, column=0, sticky="nsew", pady=5)
-        queue_frame.grid_rowconfigure(1, weight=1)
-        queue_frame.grid_columnconfigure(0, weight=1)
-        
-        # Queue header
-        queue_header = ctk.CTkFrame(queue_frame, fg_color="transparent")
-        queue_header.grid(row=0, column=0, sticky="ew", padx=10, pady=(10, 5))
-        
-        queue_title = ctk.CTkLabel(
-            queue_header,
+        # Queue frame
+        queue_label = ctk.CTkLabel(
+            self.root,
             text="Processing Queue",
-            font=("Arial", 18, "bold")
+            font=("Arial", 16, "bold")
         )
-        queue_title.pack(side="left")
+        queue_label.pack(pady=(20, 10))
         
-        self.queue_count_label = ctk.CTkLabel(
-            queue_header,
-            text="0 files",
-            font=("Arial", 14),
-            text_color="gray"
-        )
-        self.queue_count_label.pack(side="left", padx=10)
+        self.queue_frame = ctk.CTkScrollableFrame(self.root, height=250)
+        self.queue_frame.pack(pady=10, padx=40, fill="both", expand=True)
         
-        # Queue scrollable frame
-        self.queue_scroll = ctk.CTkScrollableFrame(
-            queue_frame,
-            fg_color="transparent"
-        )
-        self.queue_scroll.grid(row=1, column=0, sticky="nsew", padx=10, pady=(0, 10))
-        self.queue_scroll.grid_columnconfigure(0, weight=1)
+        # Control buttons
+        button_frame = ctk.CTkFrame(self.root)
+        button_frame.pack(pady=20)
         
-        # Empty queue message
-        self.empty_queue_label = ctk.CTkLabel(
-            self.queue_scroll,
-            text="No files in queue. Drop files to begin.",
-            font=("Arial", 13),
-            text_color="gray"
-        )
-        self.empty_queue_label.grid(row=0, column=0, pady=50)
-        
-        # ===== BOTTOM SECTION: Controls =====
-        bottom_frame = ctk.CTkFrame(main_container, fg_color="transparent")
-        bottom_frame.grid(row=2, column=0, sticky="ew", pady=(5, 10))
-        
-        # Action buttons
-        btn_container = ctk.CTkFrame(bottom_frame, fg_color="transparent")
-        btn_container.pack(fill="x", padx=20)
-        
-        self.process_btn = ctk.CTkButton(
-            btn_container,
+        self.start_btn = ctk.CTkButton(
+            button_frame,
             text="▶ Start Processing",
             command=self.start_processing,
-            width=160,
-            height=40,
-            font=("Arial", 14, "bold")
+            width=150,
+            fg_color="green",
+            hover_color="darkgreen"
         )
-        self.process_btn.pack(side="left", padx=5)
+        self.start_btn.pack(side="left", padx=5)
         
-        self.clear_btn = ctk.CTkButton(
-            btn_container,
+        clear_btn = ctk.CTkButton(
+            button_frame,
             text="🗑 Clear Queue",
             command=self.clear_queue,
-            width=140,
-            height=40,
-            fg_color="#D32F2F",
-            hover_color="#B71C1C"
+            width=150
         )
-        self.clear_btn.pack(side="left", padx=5)
+        clear_btn.pack(side="left", padx=5)
         
-        # Folder buttons
-        self.open_originals_btn = ctk.CTkButton(
-            btn_container,
+        originals_btn = ctk.CTkButton(
+            button_frame,
             text="📂 Originals Folder",
-            command=self.open_originals_folder,
-            width=160,
-            height=40
+            command=lambda: self.open_folder(ORIGINALS_DIR),
+            width=150
         )
-        self.open_originals_btn.pack(side="right", padx=5)
+        originals_btn.pack(side="left", padx=5)
         
-        self.open_processed_btn = ctk.CTkButton(
-            btn_container,
+        processed_btn = ctk.CTkButton(
+            button_frame,
             text="📄 Processed Folder",
-            command=self.open_processed_folder,
-            width=160,
-            height=40
+            command=lambda: self.open_folder(PROCESSED_DIR),
+            width=150
         )
-        self.open_processed_btn.pack(side="right", padx=5)
+        processed_btn.pack(side="left", padx=5)
+    
+    def on_drop(self, event):
+        """Handle dropped files"""
+        files = self.root.tk.splitlist(event.data)
+        valid_files = []
+        
+        for file in files:
+            file_path = Path(file)
+            if file_path.suffix.lower() in SUPPORTED_EXTENSIONS:
+                valid_files.append(file_path)
+            else:
+                logger.warning(f"Unsupported file type: {file_path.name}")
+        
+        if valid_files:
+            self.add_to_queue(valid_files)
     
     def browse_files(self):
-        """Open file browser dialog"""
+        """Browse for files to add to queue"""
         from tkinter import filedialog
-        
-        filetypes = [(desc, f"*{ext}") for ext, desc in SUPPORTED_EXTENSIONS.items()]
-        filetypes.append(("All Files", "*.*"))
         
         files = filedialog.askopenfilenames(
             title="Select files to convert",
-            filetypes=filetypes
+            filetypes=[
+                ("Supported files", "*.pdf;*.pptx;*.ppt;*.docx;*.doc;*.xlsx;*.xls"),
+                ("PDF files", "*.pdf"),
+                ("PowerPoint files", "*.pptx;*.ppt"),
+                ("Word files", "*.docx;*.doc"),
+                ("Excel files", "*.xlsx;*.xls"),
+                ("All files", "*.*")
+            ]
         )
         
         if files:
-            self.add_files_to_queue([Path(f) for f in files])
+            file_paths = [Path(f) for f in files]
+            self.add_to_queue(file_paths)
     
-    def on_drop(self, event):
-        """Handle file drop event"""
-        files = self.parse_drop_data(event.data)
-        supported_files = [
-            Path(f) for f in files 
-            if Path(f).suffix.lower() in SUPPORTED_EXTENSIONS
-        ]
-        
-        if not supported_files:
-            CTkMessagebox(
-                title="No Supported Files",
-                message="Please drop PDF or PowerPoint files only.",
-                icon="warning"
-            )
-            return
-        
-        self.add_files_to_queue(supported_files)
-    
-    def parse_drop_data(self, data: str) -> List[str]:
-        """Parse TkinterDnD drop data into file paths"""
-        files = []
-        current = ""
-        in_braces = False
-        
-        for char in data:
-            if char == '{':
-                in_braces = True
-            elif char == '}':
-                in_braces = False
-                if current:
-                    files.append(current.strip())
-                    current = ""
-            elif char == ' ' and not in_braces:
-                if current:
-                    files.append(current.strip())
-                    current = ""
-            else:
-                current += char
-        
-        if current:
-            files.append(current.strip())
-        
-        return files
-    
-    def add_files_to_queue(self, files: List[Path]):
+    def add_to_queue(self, file_paths: List[Path]):
         """Add files to processing queue"""
-        for file_path in files:
+        for file_path in file_paths:
             # Check if already in queue
-            if any(item.file_path == file_path for item in self.queue):
+            if any(item.file_path == file_path for item in self.processing_queue):
+                logger.info(f"File already in queue: {file_path.name}")
                 continue
             
-            queue_item = QueueItem(file_path)
-            self.queue.append(queue_item)
-            self.create_queue_widget(queue_item)
+            item = QueueItem(file_path)
+            self.processing_queue.append(item)
+            self.create_queue_item_widget(item)
         
-        self.update_queue_count()
-        self.empty_queue_label.grid_remove()
+        logger.info(f"Added {len(file_paths)} file(s) to queue")
     
-    def create_queue_widget(self, item: QueueItem):
-        """Create UI widget for queue item"""
-        row = len(self.queue_widgets)
+    def create_queue_item_widget(self, item: QueueItem):
+        """Create widget for queue item"""
+        frame = ctk.CTkFrame(self.queue_frame)
+        frame.pack(pady=5, padx=10, fill="x")
         
-        # Item container
-        item_frame = ctk.CTkFrame(self.queue_scroll)
-        item_frame.grid(row=row, column=0, sticky="ew", pady=3, padx=5)
-        item_frame.grid_columnconfigure(1, weight=1)
-        
-        # Status indicator
-        status_label = ctk.CTkLabel(
-            item_frame,
-            text="⏸",
-            font=("Arial", 20),
-            width=40
-        )
-        status_label.grid(row=0, column=0, padx=5, pady=5)
+        # Store reference
+        item.widget_frame = frame
         
         # File info
-        info_frame = ctk.CTkFrame(item_frame, fg_color="transparent")
-        info_frame.grid(row=0, column=1, sticky="ew", padx=5)
-        
-        filename_label = ctk.CTkLabel(
-            info_frame,
-            text=item.file_path.name,
-            font=("Arial", 13, "bold"),
-            anchor="w"
+        info_label = ctk.CTkLabel(
+            frame,
+            text=f"{item.file_path.name}",
+            font=("Arial", 12)
         )
-        filename_label.pack(anchor="w")
-        
-        status_text = ctk.CTkLabel(
-            info_frame,
-            text="Queued",
-            font=("Arial", 11),
-            text_color="gray",
-            anchor="w"
-        )
-        status_text.pack(anchor="w")
+        info_label.pack(anchor="w", padx=10, pady=5)
         
         # Progress bar
-        progress = ctk.CTkProgressBar(item_frame, width=150)
-        progress.grid(row=0, column=2, padx=10)
+        progress = ctk.CTkProgressBar(frame)
+        progress.pack(fill="x", padx=10, pady=5)
         progress.set(0)
+        item.progress_bar = progress
         
-        # Remove button
-        remove_btn = ctk.CTkButton(
-            item_frame,
-            text="✕",
-            width=30,
-            height=30,
-            command=lambda: self.remove_from_queue(item),
-            fg_color="transparent",
-            hover_color="#D32F2F"
+        # Status label
+        status = ctk.CTkLabel(
+            frame,
+            text="⏸ Queued",
+            font=("Arial", 10)
         )
-        remove_btn.grid(row=0, column=3, padx=5)
-        
-        # Store references
-        self.queue_widgets[item] = {
-            'frame': item_frame,
-            'status_icon': status_label,
-            'status_text': status_text,
-            'progress': progress,
-            'remove_btn': remove_btn
-        }
-    
-    def remove_from_queue(self, item: QueueItem):
-        """Remove item from queue"""
-        if item.status == "Processing":
-            return  # Can't remove while processing
-        
-        # Remove from queue
-        self.queue.remove(item)
-        
-        # Destroy widget
-        widgets = self.queue_widgets.pop(item)
-        widgets['frame'].destroy()
-        
-        # Reorder remaining widgets
-        for i, queue_item in enumerate(self.queue):
-            self.queue_widgets[queue_item]['frame'].grid(row=i)
-        
-        self.update_queue_count()
-        
-        if not self.queue:
-            self.empty_queue_label.grid(row=0, column=0, pady=50)
-    
-    def clear_queue(self):
-        """Clear all items from queue"""
-        if self.processing:
-            CTkMessagebox(
-                title="Cannot Clear",
-                message="Please wait for current processing to complete.",
-                icon="warning"
-            )
-            return
-        
-        # Remove all completed/error items
-        to_remove = [item for item in self.queue if item.status != "Processing"]
-        
-        for item in to_remove:
-            widgets = self.queue_widgets.pop(item)
-            widgets['frame'].destroy()
-            self.queue.remove(item)
-        
-        self.update_queue_count()
-        
-        if not self.queue:
-            self.empty_queue_label.grid(row=0, column=0, pady=50)
-    
-    def update_queue_count(self):
-        """Update queue count label"""
-        count = len(self.queue)
-        self.queue_count_label.configure(text=f"{count} file{'s' if count != 1 else ''}")
+        status.pack(anchor="w", padx=10, pady=5)
+        item.status_label = status
     
     def start_processing(self):
         """Start processing queue"""
-        if self.processing:
+        if self.is_processing:
+            logger.info("Already processing")
             return
         
-        queued_items = [item for item in self.queue if item.status == "Queued"]
-        
-        if not queued_items:
-            CTkMessagebox(
-                title="No Files",
-                message="No files to process. Add files to queue first.",
-                icon="info"
-            )
+        if not self.processing_queue:
+            logger.info("Queue is empty")
             return
         
-        # Disable process button
-        self.process_btn.configure(state="disabled", text="⏸ Processing...")
+        self.is_processing = True
+        self.start_btn.configure(state="disabled")
         
-        # Start processing thread
-        thread = threading.Thread(
-            target=self.process_queue,
-            daemon=True
-        )
+        # Process in separate thread
+        thread = threading.Thread(target=self.process_queue, daemon=True)
         thread.start()
     
     def process_queue(self):
-        """Process all queued items"""
-        self.processing = True
-        
-        queued_items = [item for item in self.queue if item.status == "Queued"]
-        
-        for item in queued_items:
+        """Process all items in queue"""
+        for item in self.processing_queue:
+            if item.status != "queued":
+                continue
+            
             self.process_item(item)
         
-        self.processing = False
-        self.root.after(0, self.process_btn.configure, 
-                       state="normal", text="▶ Start Processing")
+        self.is_processing = False
+        self.root.after(0, lambda: self.start_btn.configure(state="normal"))
+        logger.info("Queue processing complete")
     
     def process_item(self, item: QueueItem):
         """Process a single queue item"""
-        item.status = "Processing"
-        item.start_time = datetime.now()
-        
-        # Update UI
-        widgets = self.queue_widgets[item]
-        self.root.after(0, widgets['status_icon'].configure, text="⏳")
-        self.root.after(0, widgets['status_text'].configure, 
-                       text="Processing...", text_color="#3B8ED0")
-        self.root.after(0, widgets['progress'].set, 0.3)
-        self.root.after(0, widgets['remove_btn'].configure, state="disabled")
+        # Update status
+        item.status = "processing"
+        self.root.after(0, lambda: item.status_label.configure(text="⏳ Processing..."))
+        self.root.after(0, lambda: item.progress_bar.set(0.3))
         
         try:
-            # Save original
-            saved_original = self.file_manager.save_original(item.file_path)
-            self.root.after(0, widgets['progress'].set, 0.5)
-            
-            # Convert to Markdown
-            markdown_content, error = self.converter.convert_file(item.file_path)
+            # Convert file
+            logger.info(f"Converting: {item.file_path.name}")
+            markdown, error = self.converter.convert_file(item.file_path)
             
             if error:
-                raise Exception(error)
+                item.status = "error"
+                item.error_message = error
+                self.root.after(0, lambda: item.status_label.configure(
+                    text=f"✖ Error: {error[:50]}..."
+                ))
+                self.root.after(0, lambda: item.progress_bar.set(0))
+                logger.error(f"Conversion failed: {error}")
+                return
             
-            self.root.after(0, widgets['progress'].set, 0.8)
+            self.root.after(0, lambda: item.progress_bar.set(0.7))
             
-            # Save Markdown
-            saved_markdown = self.file_manager.save_markdown(
-                markdown_content, 
-                item.file_path
-            )
+            # Save files
+            self.file_manager.save_original(item.file_path)
+            markdown_path = self.file_manager.save_markdown(markdown, item.file_path)
             
             # Success
-            item.status = "Complete"
-            item.end_time = datetime.now()
-            item.message = f"Saved to {saved_markdown.name}"
-            
-            self.root.after(0, widgets['status_icon'].configure, text="✔")
-            self.root.after(0, widgets['status_text'].configure, 
-                           text="Complete", text_color="#4CAF50")
-            self.root.after(0, widgets['progress'].set, 1.0)
+            item.status = "complete"
+            item.markdown_content = markdown
+            self.root.after(0, lambda: item.status_label.configure(
+                text=f"✔ Complete → {markdown_path.name}"
+            ))
+            self.root.after(0, lambda: item.progress_bar.set(1.0))
+            logger.info(f"Successfully converted: {item.file_path.name}")
             
         except Exception as e:
-            # Error
-            item.status = "Error"
-            item.end_time = datetime.now()
-            item.message = str(e)
-            
-            self.root.after(0, widgets['status_icon'].configure, text="✖")
-            self.root.after(0, widgets['status_text'].configure, 
-                           text=f"Error: {str(e)[:50]}", text_color="#D32F2F")
-            self.root.after(0, widgets['progress'].set, 0)
+            item.status = "error"
+            item.error_message = str(e)
+            self.root.after(0, lambda: item.status_label.configure(
+                text=f"✖ Error: {str(e)[:50]}..."
+            ))
+            self.root.after(0, lambda: item.progress_bar.set(0))
+            logger.error(f"Processing error: {str(e)}", exc_info=True)
+    
+    def clear_queue(self):
+        """Clear completed/failed items from queue"""
+        if self.is_processing:
+            logger.info("Cannot clear queue while processing")
+            return
         
-        finally:
-            self.root.after(0, widgets['remove_btn'].configure, state="normal")
+        # Remove completed/error items
+        items_to_remove = [
+            item for item in self.processing_queue 
+            if item.status in ["complete", "error"]
+        ]
+        
+        for item in items_to_remove:
+            item.widget_frame.destroy()
+            self.processing_queue.remove(item)
+        
+        logger.info(f"Cleared {len(items_to_remove)} item(s) from queue")
     
-    def open_originals_folder(self):
-        """Open originals folder in file explorer"""
-        import os
-        os.startfile(self.file_manager.ORIGINALS_DIR)
-    
-    def open_processed_folder(self):
-        """Open processed folder in file explorer"""
-        import os
-        os.startfile(self.file_manager.PROCESSED_DIR)
+    def open_folder(self, folder_path: Path):
+        """Open folder in file explorer"""
+        try:
+            if platform.system() == "Windows":
+                subprocess.run(["explorer", str(folder_path)])
+            elif platform.system() == "Darwin":  # macOS
+                subprocess.run(["open", str(folder_path)])
+            else:  # Linux
+                subprocess.run(["xdg-open", str(folder_path)])
+        except Exception as e:
+            logger.error(f"Could not open folder: {str(e)}")
     
     def run(self):
         """Start the application"""
         self.root.mainloop()
 
 
-def main():
-    """Application entry point"""
+if __name__ == "__main__":
     app = MarkItDownApp()
     app.run()
-
-
-if __name__ == "__main__":
-    main()
