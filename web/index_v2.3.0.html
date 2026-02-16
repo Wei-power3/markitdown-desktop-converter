@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarkItDown v2.3.0 - Phase 3: Advanced PDF Features</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-elevated: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --accent-blue: #38bdf8;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --accent-yellow: #fbbf24;
+            --accent-purple: #a855f7;
+            --accent-orange: #fb923c;
+            --border: #475569;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: var(--accent-orange);
+            color: var(--bg-primary);
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-left: 10px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .features {
+            display: flex;
+            gap: 20px;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            flex-wrap: wrap;
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .new-badge {
+            background: var(--accent-orange);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-left: 5px;
+        }
+
+        .quality-banner {
+            background: linear-gradient(135deg, rgba(251, 146, 60, 0.1), rgba(168, 85, 247, 0.1));
+            border: 1px solid var(--accent-orange);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .quality-banner h3 {
+            color: var(--accent-orange);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .quality-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .quality-item {
+            display: flex;
+            align-items: start;
+            gap: 10px;
+        }
+
+        .quality-icon {
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .dropzone {
+            background: var(--bg-secondary);
+            border: 3px dashed var(--border);
+            border-radius: 12px;
+            padding: 60px 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        .dropzone:hover {
+            border-color: var(--accent-blue);
+            background: rgba(56, 189, 248, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .dropzone.drag-over {
+            border-color: var(--accent-blue);
+            background: rgba(56, 189, 248, 0.1);
+            transform: scale(1.02);
+        }
+
+        .dropzone-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .dropzone-text {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .dropzone-hint {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .supported-formats {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .format-badge {
+            background: var(--bg-elevated);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .queue-section {
+            margin-top: 30px;
+        }
+
+        .queue-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .queue-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .job-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: all 0.2s ease;
+        }
+
+        .job-item:hover {
+            border-color: var(--accent-blue);
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .job-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .job-filename {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            word-break: break-word;
+        }
+
+        .job-meta {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .status-processing {
+            background: rgba(56, 189, 248, 0.2);
+            color: var(--accent-blue);
+        }
+
+        .status-completed {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--accent-green);
+        }
+
+        .status-error {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--accent-red);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-elevated);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-blue);
+            transition: width 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .progress-fill.completed {
+            background: var(--accent-green);
+        }
+
+        .quality-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+            padding: 15px;
+            background: var(--bg-elevated);
+            border-radius: 8px;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .metric-value.excellent {
+            color: var(--accent-green);
+        }
+
+        .metric-value.good {
+            color: var(--accent-blue);
+        }
+
+        .metric-value.warning {
+            color: var(--accent-yellow);
+        }
+
+        .metric-value.link-indicator {
+            color: var(--accent-purple);
+        }
+
+        .metric-value.advanced-indicator {
+            color: var(--accent-orange);
+        }
+
+        .job-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--accent-blue);
+            color: var(--bg-primary);
+        }
+
+        .btn-primary:hover {
+            background: #0ea5e9;
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: var(--accent-green);
+            color: var(--bg-primary);
+        }
+
+        .btn-success:hover {
+            background: #16a34a;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background: transparent;
+            color: var(--accent-red);
+            border: 1px solid var(--accent-red);
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .spinner {
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .features {
+                font-size: 0.8rem;
+            }
+
+            .dropzone {
+                padding: 40px 20px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .quality-metrics {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>
+                📄 MarkItDown Converter
+                <span class="version-badge">v2.3.0</span>
+            </h1>
+            <p class="subtitle">PDF & PowerPoint to Markdown with advanced layout detection</p>
+            <div class="features">
+                <span class="feature">✓ No Upload Required</span>
+                <span class="feature">✓ Complete Privacy</span>
+                <span class="feature">✓ Batch Processing</span>
+                <span class="feature">✓ Multi-Column Detection <span class="new-badge">NEW</span></span>
+                <span class="feature">✓ Header/Footer Removal <span class="new-badge">NEW</span></span>
+            </div>
+        </header>
+
+        <div class="quality-banner">
+            <h3>🚀 NEW in v2.3.0: Phase 3 - Advanced PDF Features</h3>
+            <div class="quality-features">
+                <div class="quality-item">
+                    <span class="quality-icon">📰</span>
+                    <div>
+                        <strong>Multi-Column Layout Detection <span class="new-badge">NEW</span></strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Correctly reads 2-column academic papers left-to-right, top-to-bottom</div>
+                    </div>
+                </div>
+                <div class="quality-item">
+                    <span class="quality-icon">🧹</span>
+                    <div>
+                        <strong>Header/Footer Removal <span class="new-badge">NEW</span></strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Removes page numbers, journal names, DOIs, and repetitive content</div>
+                    </div>
+                </div>
+                <div class="quality-item">
+                    <span class="quality-icon">✨</span>
+                    <div>
+                        <strong>Enhanced Text Cleaning (v2.2.2)</strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Fixes spaced ligatures and merged words</div>
+                    </div>
+                </div>
+                <div class="quality-item">
+                    <span class="quality-icon">🌐</span>
+                    <div>
+                        <strong>External Link Preservation</strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Preserves external URLs from PDFs and PPTX</div>
+                    </div>
+                </div>
+                <div class="quality-item">
+                    <span class="quality-icon">📐</span>
+                    <div>
+                        <strong>Font-Based Header Detection</strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Auto-detects H1, H2, H3 headers by font size</div>
+                    </div>
+                </div>
+                <div class="quality-item">
+                    <span class="quality-icon">📝</span>
+                    <div>
+                        <strong>Smart List & Bold/Italic</strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Preserves document formatting and structure</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="dropzone" class="dropzone">
+            <div class="dropzone-icon">📁</div>
+            <div class="dropzone-text">Drag & Drop files here</div>
+            <div class="dropzone-hint">or click to browse</div>
+            <div class="supported-formats">
+                <span class="format-badge">PDF</span>
+                <span class="format-badge">PPTX</span>
+                <span class="format-badge">PPT</span>
+            </div>
+            <input type="file" id="fileInput" accept=".pdf,.pptx,.ppt" multiple>
+        </div>
+
+        <div class="queue-section">
+            <div class="queue-header">
+                <h2 class="queue-title">Conversion Queue</h2>
+            </div>
+
+            <div class="stats" id="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalFiles">0</div>
+                    <div class="stat-label">Total Files</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="processing">0</div>
+                    <div class="stat-label">Processing</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="completed">0</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="failed">0</div>
+                    <div class="stat-label">Failed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalLinks">0</div>
+                    <div class="stat-label">Links Preserved</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalHeadersRemoved">0</div>
+                    <div class="stat-label">H/F Removed</div>
+                </div>
+            </div>
+
+            <div id="jobList"></div>
+
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">📭</div>
+                <p>No files yet. Drop some files above to get started!</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        const jobs = [];
+
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('fileInput');
+        const jobList = document.getElementById('jobList');
+        const emptyState = document.getElementById('emptyState');
+
+        dropzone.addEventListener('click', () => fileInput.click());
+        
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.classList.add('drag-over');
+        });
+
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.classList.remove('drag-over');
+        });
+
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('drag-over');
+            const files = Array.from(e.dataTransfer.files);
+            handleFiles(files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const files = Array.from(e.target.files);
+            handleFiles(files);
+            fileInput.value = '';
+        });
+
+        function handleFiles(files) {
+            files.forEach(file => {
+                const extension = file.name.split('.').pop().toLowerCase();
+                if (['pdf', 'pptx', 'ppt'].includes(extension)) {
+                    addJob(file);
+                } else {
+                    alert(`Unsupported file type: ${file.name}`);
+                }
+            });
+        }
+
+        function addJob(file) {
+            const job = {
+                id: Date.now() + Math.random(),
+                filename: file.name,
+                file: file,
+                status: 'processing',
+                progress: 0,
+                result: null,
+                error: null,
+                createdAt: new Date(),
+                qualityMetrics: null,
+                linkMetadata: {
+                    linksFound: 0,
+                    linksPreserved: 0,
+                    linkTypes: { external: 0, internal: 0 }
+                },
+                advancedMetadata: {
+                    headersFootersRemoved: 0,
+                    columnsDetected: 0
+                }
+            };
+
+            jobs.unshift(job);
+            updateUI();
+            processFile(job);
+        }
+
+        // v2.2.2: Enhanced text cleaning
+        function cleanText(text) {
+            let cleaned = text;
+
+            // v2.2.2: Fix spaced ligature artifacts
+            cleaned = cleaned.replace(/(\w+)\s+fi\s+(\w+)/g, '$1fi$2');
+            cleaned = cleaned.replace(/(\w+)\s+fl\s+(\w+)/g, '$1fl$2');
+            
+            // v2.2.2: Fix merged words with missing spaces
+            cleaned = cleaned.replace(/([a-z])(on|to|in|at|of|as|by|or|an|is|be|we)a([A-Z])/g, '$1 $2 a $3');
+            cleaned = cleaned.replace(/([a-z])(on|to|in|at|of|as|by|or|an|is|be|we)the([A-Z])/g, '$1 $2 the $3');
+            
+            cleaned = cleaned.replace(/(\w+)(ona|toa|ina|ata|ofa|asa|bya)([a-z]{4,})/g, (match, before, middle, after) => {
+                const prep = middle.slice(0, -1);
+                return `${before} ${prep} a ${after}`;
+            });
+            
+            // Fix standard ligature characters
+            const ligatureMap = {
+                'ﬁ': 'fi', 'ﬂ': 'fl', 'ﬀ': 'ff', 'ﬃ': 'ffi', 'ﬄ': 'ffl',
+                'ﬆ': 'st', 'ﬅ': 'ft'
+            };
+            Object.entries(ligatureMap).forEach(([lig, rep]) => {
+                cleaned = cleaned.replace(new RegExp(lig, 'g'), rep);
+            });
+
+            // Fix hyphenation breaks
+            cleaned = cleaned.replace(/(\w+)-\s+(\w+)/g, '$1$2');
+            
+            // Fix spacing artifacts
+            cleaned = cleaned.replace(/([a-z])\s+([a-z])\s+([a-z])/g, (match, a, b, c) => {
+                if (match.toLowerCase() !== match) return match;
+                return a + b + c;
+            });
+
+            // Normalize whitespace
+            cleaned = cleaned.replace(/\s+/g, ' ').trim();
+
+            // Fix encoding issues
+            cleaned = cleaned.replace(/â€™/g, "'")
+                           .replace(/â€œ/g, '"')
+                           .replace(/â€/g, '"')
+                           .replace(/â€"/g, '—')
+                           .replace(/Â/g, '');
+
+            return cleaned;
+        }
+
+        function calculateQualityMetrics(text, linkMetadata, advancedMetadata) {
+            const totalChars = text.length;
+            
+            // Count artifacts
+            const ligatureArtifacts = (text.match(/ﬁ|ﬂ|ﬀ|ﬃ|ﬄ/g) || []).length;
+            const spacedLigatures = (text.match(/(\w+)\s+fi\s+(\w+)|(\w+)\s+fl\s+(\w+)/g) || []).length;
+            const hyphenationIssues = (text.match(/\w+-\s+\w+/g) || []).length;
+            const spacingIssues = (text.match(/[a-z]\s[a-z]\s[a-z]/g) || []).length;
+            const encodingIssues = (text.match(/â€|Â(?!\w)/g) || []).length;
+            
+            const totalIssues = ligatureArtifacts + spacedLigatures + hyphenationIssues + spacingIssues + encodingIssues;
+            const cleanScore = Math.max(0, 100 - (totalIssues / totalChars * 1000));
+
+            // Structure analysis
+            const hasHeaders = /^#+ /m.test(text);
+            const hasTables = /\|.*\|/m.test(text);
+            const hasLists = /^[-*+] /m.test(text);
+            const hasBoldItalic = /\*\*.*\*\*|\*.*\*/m.test(text);
+            
+            const headerCount = (text.match(/^#+ /gm) || []).length;
+            const listCount = (text.match(/^[-*+] /gm) || []).length;
+            const linkCount = (text.match(/\[.*?\]\(http.*?\)/g) || []).length;
+            
+            // v2.3.0: Improved structure scoring with advanced features
+            let structureScore = 0;
+            if (headerCount > 0) structureScore += 25;
+            if (headerCount >= 3) structureScore += 10;
+            if (hasTables) structureScore += 15;
+            if (listCount > 0) structureScore += 15;
+            if (listCount >= 5) structureScore += 10;
+            if (hasBoldItalic) structureScore += 10;
+            if (linkCount > 0) structureScore += 15;
+            
+            // v2.3.0: Bonus for advanced features
+            if (advancedMetadata.headersFootersRemoved > 0) structureScore += 5;
+            if (advancedMetadata.columnsDetected > 1) structureScore += 10;
+            
+            structureScore = Math.min(100, structureScore);
+
+            // Overall quality
+            const overallScore = Math.round((cleanScore * 0.5) + (structureScore * 0.5));
+
+            return {
+                cleanScore: Math.round(cleanScore),
+                structureScore: Math.round(structureScore),
+                overallScore: overallScore,
+                issuesFixed: totalIssues,
+                linksPreserved: linkMetadata.linksPreserved,
+                linkPreservationRate: linkMetadata.linksFound > 0 
+                    ? Math.round((linkMetadata.linksPreserved / linkMetadata.linksFound) * 100) 
+                    : 0,
+                headersFootersRemoved: advancedMetadata.headersFootersRemoved,
+                columnsDetected: advancedMetadata.columnsDetected
+            };
+        }
+
+        async function processFile(job) {
+            try {
+                job.progress = 10;
+                updateUI();
+
+                const extension = job.filename.split('.').pop().toLowerCase();
+                let markdown;
+                let linkMetadata = { linksFound: 0, linksPreserved: 0, linkTypes: { external: 0, internal: 0 } };
+                let advancedMetadata = { headersFootersRemoved: 0, columnsDetected: 0 };
+
+                if (extension === 'pdf') {
+                    const result = await convertPDF(job);
+                    markdown = result.markdown;
+                    linkMetadata = result.linkMetadata;
+                    advancedMetadata = result.advancedMetadata;
+                } else if (extension === 'pptx' || extension === 'ppt') {
+                    const result = await convertPPTX(job);
+                    markdown = result.markdown;
+                    linkMetadata = result.linkMetadata;
+                }
+
+                job.linkMetadata = linkMetadata;
+                job.advancedMetadata = advancedMetadata;
+
+                // Apply v2.2.2 text cleaning
+                job.progress = 85;
+                updateUI();
+                const cleanedMarkdown = cleanText(markdown);
+
+                // Calculate quality metrics
+                job.progress = 95;
+                updateUI();
+                job.qualityMetrics = calculateQualityMetrics(cleanedMarkdown, linkMetadata, advancedMetadata);
+
+                job.progress = 100;
+                job.status = 'completed';
+                job.result = cleanedMarkdown;
+                updateUI();
+
+            } catch (error) {
+                console.error('Conversion error:', error);
+                job.status = 'error';
+                job.error = error.message || 'Conversion failed';
+                updateUI();
+            }
+        }
+
+        // v2.3.0: Step 1 - Detect and remove headers/footers
+        function detectHeadersFooters(allPageItems, numPages) {
+            const textFrequency = new Map();
+            
+            // Group text by content across pages
+            allPageItems.forEach(item => {
+                const text = item.text.trim();
+                if (text.length < 3) return; // Skip very short text
+                
+                if (!textFrequency.has(text)) {
+                    textFrequency.set(text, {
+                        count: 0,
+                        pages: new Set(),
+                        positions: []
+                    });
+                }
+                
+                const entry = textFrequency.get(text);
+                entry.count++;
+                entry.pages.add(item.pageNum);
+                entry.positions.push({ y: item.y, pageNum: item.pageNum });
+            });
+            
+            // Identify headers/footers (appear on >50% of pages)
+            const threshold = Math.max(2, Math.floor(numPages * 0.5));
+            const headersFooters = new Set();
+            
+            textFrequency.forEach((data, text) => {
+                if (data.pages.size >= threshold) {
+                    // Additional heuristics for headers/footers
+                    const isPageNumber = /^\d+$/.test(text) || /^page\s+\d+$/i.test(text);
+                    const isDOI = /doi:\s*10\.\d+/i.test(text);
+                    const isJournalName = text.length > 10 && text.split(' ').length > 2;
+                    const isShortRepetitive = text.length < 50;
+                    
+                    if (isPageNumber || isDOI || (isJournalName && isShortRepetitive)) {
+                        headersFooters.add(text);
+                    }
+                }
+            });
+            
+            return headersFooters;
+        }
+
+        // v2.3.0: Step 2 - Detect multi-column layout
+        function detectColumnLayout(pageItems) {
+            if (pageItems.length === 0) return { columns: 1, divider: null };
+            
+            // Analyze X-coordinates to find columns
+            const xPositions = pageItems.map(item => item.x).sort((a, b) => a - b);
+            const minX = Math.min(...xPositions);
+            const maxX = Math.max(...xPositions);
+            const pageWidth = maxX - minX;
+            
+            // Look for gap in the middle (typical 2-column layout)
+            const middleThird = {
+                start: minX + pageWidth * 0.35,
+                end: minX + pageWidth * 0.65
+            };
+            
+            const itemsInMiddle = pageItems.filter(item => 
+                item.x >= middleThird.start && item.x <= middleThird.end
+            );
+            
+            // If middle third has <10% of items, likely 2-column
+            const middleRatio = itemsInMiddle.length / pageItems.length;
+            
+            if (middleRatio < 0.1 && pageItems.length > 20) {
+                // Found column gap, estimate divider
+                const divider = minX + (pageWidth / 2);
+                return { columns: 2, divider: divider };
+            }
+            
+            return { columns: 1, divider: null };
+        }
+
+        // v2.3.0: Sort text items by column, then Y position
+        function sortByColumns(pageItems, layout) {
+            if (layout.columns === 1) {
+                // Single column: sort by Y position only
+                return pageItems.sort((a, b) => b.y - a.y);
+            }
+            
+            // Two columns: assign column, then sort
+            const itemsWithColumn = pageItems.map(item => ({
+                ...item,
+                column: item.x < layout.divider ? 0 : 1
+            }));
+            
+            // Sort by column first, then by Y within column
+            return itemsWithColumn.sort((a, b) => {
+                if (a.column !== b.column) return a.column - b.column;
+                return b.y - a.y; // Higher Y = top of page
+            });
+        }
+
+        async function extractPDFLinks(page, pageNum) {
+            const annotations = await page.getAnnotations();
+            const links = [];
+            
+            annotations.forEach(annotation => {
+                if (annotation.subtype === 'Link') {
+                    const link = {
+                        url: annotation.url || null,
+                        dest: annotation.dest || null,
+                        rect: annotation.rect,
+                        page: pageNum,
+                        type: annotation.url ? 'external' : 'internal'
+                    };
+                    
+                    if (link.url || link.dest) {
+                        links.push(link);
+                    }
+                }
+            });
+            
+            return links;
+        }
+
+        function matchLinksToText(links, textItems) {
+            const matchedLinks = [];
+            
+            links.forEach(link => {
+                if (link.type === 'internal') return;
+                
+                const [x1, y1, x2, y2] = link.rect;
+                
+                const nearbyText = textItems.filter(item => {
+                    const tolerance = 5;
+                    return item.x >= (x1 - tolerance) && 
+                           item.x <= (x2 + tolerance) && 
+                           item.y >= (y1 - tolerance) && 
+                           item.y <= (y2 + tolerance);
+                });
+                
+                const linkText = nearbyText.map(item => item.text).join(' ').trim();
+                
+                if (link.url) {
+                    matchedLinks.push({
+                        text: linkText || new URL(link.url).hostname,
+                        url: link.url,
+                        type: link.type
+                    });
+                }
+            });
+            
+            return matchedLinks;
+        }
+
+        async function convertPDF(job) {
+            job.progress = 20;
+            updateUI();
+
+            const arrayBuffer = await job.file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+            
+            let markdown = `# ${job.filename}\n\n`;
+            markdown += `Converted from PDF • ${pdf.numPages} pages • v2.3.0 with advanced layout detection\n\n---\n\n`;
+
+            let allLinks = [];
+            const allItems = [];
+            
+            // First pass: collect all text items from all pages
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const textContent = await page.getTextContent();
+                textContent.items.forEach(item => {
+                    allItems.push({
+                        text: item.str,
+                        fontSize: item.height,
+                        fontName: item.fontName || '',
+                        y: item.transform[5],
+                        x: item.transform[4],
+                        pageNum: i
+                    });
+                });
+            }
+
+            // v2.3.0: Detect headers/footers
+            const headersFooters = detectHeadersFooters(allItems, pdf.numPages);
+            
+            const fontSizes = allItems.map(item => item.fontSize).filter(size => size > 0);
+            const avgFontSize = fontSizes.reduce((a, b) => a + b, 0) / fontSizes.length;
+
+            const ACADEMIC_KEYWORDS = [
+                'Abstract', 'Introduction', 'Background', 'Literature Review',
+                'Methods', 'Methodology', 'Materials and Methods',
+                'Results', 'Findings', 'Discussion', 'Analysis',
+                'Conclusion', 'Conclusions', 'References', 'Bibliography',
+                'Acknowledgments', 'Appendix'
+            ];
+
+            let totalColumnsDetected = 0;
+
+            // Second pass: process pages with header/footer removal and column detection
+            for (let i = 1; i <= pdf.numPages; i++) {
+                job.progress = 20 + (60 * (i / pdf.numPages));
+                updateUI();
+
+                const page = await pdf.getPage(i);
+                const textContent = await page.getTextContent();
+                
+                const pageLinks = await extractPDFLinks(page, i);
+                allLinks.push(...pageLinks);
+                
+                markdown += `## Page ${i}\n\n`;
+                
+                // Collect page items
+                const pageItems = textContent.items.map(item => ({
+                    text: item.str,
+                    fontSize: item.height,
+                    fontName: item.fontName || '',
+                    y: item.transform[5],
+                    x: item.transform[4]
+                }));
+                
+                // v2.3.0: Filter out headers/footers
+                const filteredItems = pageItems.filter(item => {
+                    const text = item.text.trim();
+                    return !headersFooters.has(text);
+                });
+                
+                // v2.3.0: Detect column layout for this page
+                const layout = detectColumnLayout(filteredItems);
+                if (layout.columns === 2) totalColumnsDetected++;
+                
+                // v2.3.0: Sort items by column and position
+                const sortedItems = sortByColumns(filteredItems, layout);
+                
+                let lastY = -1;
+                let currentLine = [];
+                
+                sortedItems.forEach((item, idx) => {
+                    const fontSize = item.fontSize;
+                    const fontName = item.fontName || '';
+                    const text = item.text.trim();
+                    
+                    if (!text) return;
+                    
+                    if (lastY !== -1 && Math.abs(item.y - lastY) > 5) {
+                        if (currentLine.length > 0) {
+                            const lineText = currentLine.map(i => i.text).join(' ');
+                            markdown += processLine(lineText, currentLine[0].fontSize, currentLine[0].fontName, avgFontSize, ACADEMIC_KEYWORDS);
+                        }
+                        currentLine = [];
+                    }
+                    
+                    currentLine.push({ text, fontSize, fontName });
+                    lastY = item.y;
+                });
+                
+                if (currentLine.length > 0) {
+                    const lineText = currentLine.map(i => i.text).join(' ');
+                    markdown += processLine(lineText, currentLine[0].fontSize, currentLine[0].fontName, avgFontSize, ACADEMIC_KEYWORDS);
+                }
+                
+                markdown += '\n';
+            }
+
+            const matchedLinks = matchLinksToText(allLinks, allItems);
+            
+            matchedLinks.forEach(link => {
+                if (link.text && link.text.length > 2) {
+                    const escapedText = link.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    const regex = new RegExp(`\\b${escapedText}\\b`, 'g');
+                    markdown = markdown.replace(regex, `[${link.text}](${link.url})`);
+                }
+            });
+
+            const linkMetadata = {
+                linksFound: allLinks.filter(l => l.type === 'external').length,
+                linksPreserved: matchedLinks.length,
+                linkTypes: {
+                    external: matchedLinks.length,
+                    internal: 0
+                }
+            };
+
+            const advancedMetadata = {
+                headersFootersRemoved: headersFooters.size,
+                columnsDetected: totalColumnsDetected > 0 ? 2 : 1
+            };
+
+            return { markdown, linkMetadata, advancedMetadata };
+        }
+
+        function processLine(text, fontSize, fontName, avgFontSize, keywords) {
+            if (!text.trim()) return '';
+            
+            let headerLevel = 0;
+            if (fontSize >= avgFontSize * 1.8) headerLevel = 1;
+            else if (fontSize >= avgFontSize * 1.5) headerLevel = 2;
+            else if (fontSize >= avgFontSize * 1.2) headerLevel = 3;
+            
+            const isAcademicSection = keywords.some(keyword => 
+                text.trim().toLowerCase() === keyword.toLowerCase() ||
+                text.trim().toLowerCase().startsWith(keyword.toLowerCase() + ':')
+            );
+            
+            if (isAcademicSection && headerLevel === 0) {
+                headerLevel = 2;
+            }
+            
+            const isBulletList = /^[\s]*[•\-–■□○●◾◽▪▫][\s]/.test(text);
+            const isNumberedList = /^[\s]*[\d]+[.)][\s]/.test(text);
+            
+            const isBold = fontName.toLowerCase().includes('bold') || fontName.includes('-B');
+            const isItalic = fontName.toLowerCase().includes('italic') || fontName.includes('-I');
+            
+            let output = '';
+            
+            if (headerLevel > 0) {
+                output = '#'.repeat(headerLevel) + ' ' + text + '\n\n';
+            } else if (isBulletList) {
+                output = '- ' + text.replace(/^[\s]*[•\-–■□○●◾◽▪▫][\s]*/, '') + '\n';
+            } else if (isNumberedList) {
+                output = text + '\n';
+            } else {
+                let formattedText = text;
+                if (isBold && isItalic) {
+                    formattedText = `***${text}***`;
+                } else if (isBold) {
+                    formattedText = `**${text}**`;
+                } else if (isItalic) {
+                    formattedText = `*${text}*`;
+                }
+                output = formattedText + ' ';
+            }
+            
+            return output;
+        }
+
+        async function extractPPTXHyperlinks(zip, slideFiles) {
+            const allLinks = [];
+            
+            const relsPath = 'ppt/_rels/presentation.xml.rels';
+            let relationships = {};
+            
+            if (zip.files[relsPath]) {
+                const relsXml = await zip.files[relsPath].async('text');
+                const parser = new DOMParser();
+                const relsDoc = parser.parseFromString(relsXml, 'text/xml');
+                const rels = relsDoc.getElementsByTagName('Relationship');
+                
+                Array.from(rels).forEach(rel => {
+                    const id = rel.getAttribute('Id');
+                    const target = rel.getAttribute('Target');
+                    const type = rel.getAttribute('Type');
+                    
+                    if (type && type.includes('hyperlink')) {
+                        relationships[id] = target;
+                    }
+                });
+            }
+            
+            for (let i = 0; i < slideFiles.length; i++) {
+                const slideXml = await zip.files[slideFiles[i]].async('text');
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(slideXml, 'text/xml');
+                
+                const hyperlinks = xmlDoc.getElementsByTagName('a:hlinkClick');
+                
+                Array.from(hyperlinks).forEach(link => {
+                    const rId = link.getAttribute('r:id');
+                    const tooltip = link.getAttribute('tooltip');
+                    
+                    const parent = link.parentElement;
+                    const textElements = parent.getElementsByTagName('a:t');
+                    const linkText = Array.from(textElements).map(t => t.textContent).join(' ').trim();
+                    
+                    if (rId && relationships[rId]) {
+                        allLinks.push({
+                            text: linkText || tooltip || 'link',
+                            url: relationships[rId],
+                            slide: i + 1,
+                            type: 'external'
+                        });
+                    }
+                });
+            }
+            
+            return allLinks;
+        }
+
+        async function convertPPTX(job) {
+            job.progress = 20;
+            updateUI();
+
+            const arrayBuffer = await job.file.arrayBuffer();
+            const zip = await JSZip.loadAsync(arrayBuffer);
+            
+            let markdown = `# ${job.filename}\n\n`;
+            markdown += `Converted from PowerPoint • v2.3.0\n\n---\n\n`;
+
+            const slideFiles = Object.keys(zip.files)
+                .filter(name => name.startsWith('ppt/slides/slide') && name.endsWith('.xml'))
+                .sort((a, b) => {
+                    const numA = parseInt(a.match(/slide(\d+)/)[1]);
+                    const numB = parseInt(b.match(/slide(\d+)/)[1]);
+                    return numA - numB;
+                });
+
+            job.progress = 40;
+            updateUI();
+
+            const allLinks = await extractPPTXHyperlinks(zip, slideFiles);
+
+            for (let i = 0; i < slideFiles.length; i++) {
+                job.progress = 40 + (40 * ((i + 1) / slideFiles.length));
+                updateUI();
+
+                const slideXml = await zip.files[slideFiles[i]].async('text');
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(slideXml, 'text/xml');
+                
+                markdown += `## Slide ${i + 1}\n\n`;
+                
+                const textElements = xmlDoc.getElementsByTagName('a:t');
+                const texts = Array.from(textElements)
+                    .map(el => el.textContent.trim())
+                    .filter(text => text.length > 0);
+                
+                if (texts.length > 0) {
+                    texts.forEach(text => {
+                        markdown += `- ${text}\n`;
+                    });
+                } else {
+                    markdown += '*[No text content on this slide]*';
+                }
+                
+                markdown += '\n\n';
+            }
+
+            allLinks.forEach(link => {
+                if (link.text && link.text.length > 2) {
+                    const escapedText = link.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                    const regex = new RegExp(`(?<!\\[)\\b${escapedText}\\b(?!\\])`, 'g');
+                    markdown = markdown.replace(regex, `[${link.text}](${link.url})`);
+                }
+            });
+
+            const linkMetadata = {
+                linksFound: allLinks.length,
+                linksPreserved: allLinks.length,
+                linkTypes: {
+                    external: allLinks.length,
+                    internal: 0
+                }
+            };
+
+            return { markdown, linkMetadata };
+        }
+
+        function updateUI() {
+            document.getElementById('totalFiles').textContent = jobs.length;
+            document.getElementById('processing').textContent = jobs.filter(j => j.status === 'processing').length;
+            document.getElementById('completed').textContent = jobs.filter(j => j.status === 'completed').length;
+            document.getElementById('failed').textContent = jobs.filter(j => j.status === 'error').length;
+            
+            const totalLinksPreserved = jobs.reduce((sum, job) => {
+                return sum + (job.linkMetadata?.linksPreserved || 0);
+            }, 0);
+            document.getElementById('totalLinks').textContent = totalLinksPreserved;
+
+            const totalHeadersRemoved = jobs.reduce((sum, job) => {
+                return sum + (job.advancedMetadata?.headersFootersRemoved || 0);
+            }, 0);
+            document.getElementById('totalHeadersRemoved').textContent = totalHeadersRemoved;
+
+            if (jobs.length === 0) {
+                emptyState.style.display = 'block';
+                jobList.innerHTML = '';
+            } else {
+                emptyState.style.display = 'none';
+                jobList.innerHTML = jobs.map(job => renderJob(job)).join('');
+            }
+        }
+
+        function renderJob(job) {
+            const statusConfig = {
+                processing: { icon: '⏳', class: 'status-processing', label: 'Processing' },
+                completed: { icon: '✔', class: 'status-completed', label: 'Completed' },
+                error: { icon: '✖', class: 'status-error', label: 'Failed' }
+            };
+
+            const config = statusConfig[job.status];
+            const fileSize = (job.file.size / 1024).toFixed(1) + ' KB';
+            const time = job.createdAt.toLocaleTimeString();
+
+            let qualityHTML = '';
+            if (job.qualityMetrics) {
+                const m = job.qualityMetrics;
+                const getScoreClass = (score) => {
+                    if (score >= 90) return 'excellent';
+                    if (score >= 70) return 'good';
+                    return 'warning';
+                };
+
+                qualityHTML = `
+                    <div class="quality-metrics">
+                        <div class="metric">
+                            <div class="metric-label">Text Quality</div>
+                            <div class="metric-value ${getScoreClass(m.cleanScore)}">${m.cleanScore}%</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Structure</div>
+                            <div class="metric-value ${getScoreClass(m.structureScore)}">${m.structureScore}%</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Links</div>
+                            <div class="metric-value link-indicator">${m.linksPreserved}</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">H/F Removed</div>
+                            <div class="metric-value advanced-indicator">${m.headersFootersRemoved || 0}</div>
+                        </div>
+                        <div class="metric">
+                            <div class="metric-label">Overall</div>
+                            <div class="metric-value ${getScoreClass(m.overallScore)}">${m.overallScore}%</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="job-item">
+                    <div class="job-header">
+                        <div class="job-info">
+                            <div class="job-filename">
+                                <span>${config.icon}</span>
+                                <span>${job.filename}</span>
+                            </div>
+                            <div class="job-meta">${fileSize} • ${time}</div>
+                        </div>
+                        <span class="status-badge ${config.class}">${config.label}</span>
+                    </div>
+
+                    <div class="progress-bar">
+                        <div class="progress-fill ${job.status === 'completed' ? 'completed' : ''}" 
+                             style="width: ${job.progress}%"></div>
+                    </div>
+
+                    ${qualityHTML}
+
+                    ${job.error ? `
+                        <div class="error-message">
+                            <strong>Error:</strong> ${job.error}
+                        </div>
+                    ` : ''}
+
+                    <div class="job-actions">
+                        ${job.status === 'completed' ? `
+                            <button class="btn btn-success" onclick="downloadMarkdown('${job.id}')">
+                                ⬇ Download Markdown
+                            </button>
+                            <button class="btn btn-primary" onclick="viewMarkdown('${job.id}')">
+                                👁 Preview
+                            </button>
+                        ` : ''}
+                        ${job.status !== 'processing' ? `
+                            <button class="btn btn-danger" onclick="deleteJob('${job.id}')">
+                                🗑 Delete
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function downloadMarkdown(jobId) {
+            const job = jobs.find(j => j.id == jobId);
+            if (!job || !job.result) return;
+
+            const blob = new Blob([job.result], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = job.filename.replace(/\.[^.]+$/, '') + '_v2.3.0_advanced.md';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function viewMarkdown(jobId) {
+            const job = jobs.find(j => j.id == jobId);
+            if (!job || !job.result) return;
+
+            const previewWindow = window.open('', '_blank');
+            const metricsHTML = job.qualityMetrics ? `
+                <div style="background: #1e293b; border: 1px solid #fb923c; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                    <h2 style="color: #fb923c; margin-bottom: 10px;">Quality Metrics (v2.3.0)</h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px;">
+                        <div>
+                            <div style="font-size: 0.9rem; color: #94a3b8;">Text Quality</div>
+                            <div style="font-size: 1.8rem; font-weight: bold; color: #22c55e;">${job.qualityMetrics.cleanScore}%</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.9rem; color: #94a3b8;">Structure</div>
+                            <div style="font-size: 1.8rem; font-weight: bold; color: #38bdf8;">${job.qualityMetrics.structureScore}%</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.9rem; color: #94a3b8;">External Links</div>
+                            <div style="font-size: 1.8rem; font-weight: bold; color: #a855f7;">${job.qualityMetrics.linksPreserved}</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.9rem; color: #94a3b8;">H/F Removed</div>
+                            <div style="font-size: 1.8rem; font-weight: bold; color: #fb923c;">${job.qualityMetrics.headersFootersRemoved || 0}</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.9rem; color: #94a3b8;">Overall</div>
+                            <div style="font-size: 1.8rem; font-weight: bold; color: #22c55e;">${job.qualityMetrics.overallScore}%</div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 15px; font-size: 0.9rem; color: #cbd5e1;">
+                        ✓ Fixed ${job.qualityMetrics.issuesFixed} text artifacts
+                        ${job.linkMetadata ? ` • 🌐 ${job.linkMetadata.linksPreserved} external links preserved` : ''}
+                        ${job.advancedMetadata?.headersFootersRemoved ? ` • 🧹 ${job.advancedMetadata.headersFootersRemoved} headers/footers removed` : ''}
+                        ${job.advancedMetadata?.columnsDetected === 2 ? ' • 📰 Multi-column layout detected' : ''}
+                    </div>
+                </div>
+            ` : '';
+
+            previewWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>${job.filename} - Advanced Preview (v2.3.0)</title>
+                    <style>
+                        body {
+                            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                            max-width: 900px;
+                            margin: 40px auto;
+                            padding: 20px;
+                            background: #0f172a;
+                            color: #f1f5f9;
+                            line-height: 1.6;
+                        }
+                        pre {
+                            background: #1e293b;
+                            padding: 20px;
+                            border-radius: 8px;
+                            overflow-x: auto;
+                            white-space: pre-wrap;
+                            word-wrap: break-word;
+                            border: 1px solid #475569;
+                        }
+                        h1 { color: #38bdf8; margin-bottom: 20px; }
+                        h2 { color: #38bdf8; margin-top: 2em; }
+                        a {
+                            color: #a855f7;
+                            text-decoration: none;
+                            border-bottom: 1px dashed #a855f7;
+                        }
+                        a:hover {
+                            color: #c084fc;
+                            border-bottom-style: solid;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>📄 ${job.filename}</h1>
+                    ${metricsHTML}
+                    <pre>${job.result.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>
+                </body>
+                </html>
+            `);
+        }
+
+        function deleteJob(jobId) {
+            const index = jobs.findIndex(j => j.id == jobId);
+            if (index !== -1) {
+                jobs.splice(index, 1);
+                updateUI();
+            }
+        }
+
+        updateUI();
+    </script>
+</body>
+</html>
