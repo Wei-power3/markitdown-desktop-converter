@@ -309,7 +309,7 @@
 
         .quality-metrics {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(5, 1fr);
             gap: 10px;
             margin-top: 10px;
             padding: 15px;
@@ -496,7 +496,7 @@
                     <span class="quality-icon">✨</span>
                     <div>
                         <strong>Enhanced Text Cleaning (v2.2.2)</strong>
-                        <div style="font-size: 0.85rem; color: var(--text-muted);">Fixes spaced ligatures and merged words</div>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Fixes spaced ligatures and merged words from journal PDFs</div>
                     </div>
                 </div>
                 <div class="quality-item">
@@ -510,7 +510,7 @@
                     <span class="quality-icon">📐</span>
                     <div>
                         <strong>Font-Based Header Detection</strong>
-                        <div style="font-size: 0.85rem; color: var(--text-muted);">Auto-detects H1, H2, H3 headers by font size</div>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Auto-detects H1, H2, H3 headers by analyzing font sizes</div>
                     </div>
                 </div>
                 <div class="quality-item">
@@ -562,7 +562,7 @@
                     <div class="stat-label">Links Preserved</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="totalHeadersRemoved">0</div>
+                    <div class="stat-value" id="totalHeadersFooters">0</div>
                     <div class="stat-label">H/F Removed</div>
                 </div>
             </div>
@@ -721,7 +721,7 @@
             const listCount = (text.match(/^[-*+] /gm) || []).length;
             const linkCount = (text.match(/\[.*?\]\(http.*?\)/g) || []).length;
             
-            // v2.3.0: Improved structure scoring with advanced features
+            // v2.3.0: Improved structure scoring
             let structureScore = 0;
             if (headerCount > 0) structureScore += 25;
             if (headerCount >= 3) structureScore += 10;
@@ -737,7 +737,6 @@
             
             structureScore = Math.min(100, structureScore);
 
-            // Overall quality
             const overallScore = Math.round((cleanScore * 0.5) + (structureScore * 0.5));
 
             return {
@@ -801,14 +800,13 @@
             }
         }
 
-        // v2.3.0: Step 1 - Detect and remove headers/footers
+        // v2.3.0 STEP 1: Detect headers/footers
         function detectHeadersFooters(allPageItems, numPages) {
             const textFrequency = new Map();
             
-            // Group text by content across pages
             allPageItems.forEach(item => {
                 const text = item.text.trim();
-                if (text.length < 3) return; // Skip very short text
+                if (text.length < 3) return;
                 
                 if (!textFrequency.has(text)) {
                     textFrequency.set(text, {
@@ -824,19 +822,16 @@
                 entry.positions.push({ y: item.y, pageNum: item.pageNum });
             });
             
-            // Identify headers/footers (appear on >50% of pages)
             const threshold = Math.max(2, Math.floor(numPages * 0.5));
             const headersFooters = new Set();
             
             textFrequency.forEach((data, text) => {
                 if (data.pages.size >= threshold) {
-                    // Additional heuristics for headers/footers
                     const isPageNumber = /^\d+$/.test(text) || /^page\s+\d+$/i.test(text);
                     const isDOI = /doi:\s*10\.\d+/i.test(text);
-                    const isJournalName = text.length > 10 && text.split(' ').length > 2;
                     const isShortRepetitive = text.length < 50;
                     
-                    if (isPageNumber || isDOI || (isJournalName && isShortRepetitive)) {
+                    if (isPageNumber || isDOI || isShortRepetitive) {
                         headersFooters.add(text);
                     }
                 }
@@ -845,17 +840,15 @@
             return headersFooters;
         }
 
-        // v2.3.0: Step 2 - Detect multi-column layout
+        // v2.3.0 STEP 2: Detect multi-column layout
         function detectColumnLayout(pageItems) {
             if (pageItems.length === 0) return { columns: 1, divider: null };
             
-            // Analyze X-coordinates to find columns
-            const xPositions = pageItems.map(item => item.x).sort((a, b) => a - b);
+            const xPositions = pageItems.map(item => item.x);
             const minX = Math.min(...xPositions);
             const maxX = Math.max(...xPositions);
             const pageWidth = maxX - minX;
             
-            // Look for gap in the middle (typical 2-column layout)
             const middleThird = {
                 start: minX + pageWidth * 0.35,
                 end: minX + pageWidth * 0.65
@@ -865,11 +858,9 @@
                 item.x >= middleThird.start && item.x <= middleThird.end
             );
             
-            // If middle third has <10% of items, likely 2-column
             const middleRatio = itemsInMiddle.length / pageItems.length;
             
             if (middleRatio < 0.1 && pageItems.length > 20) {
-                // Found column gap, estimate divider
                 const divider = minX + (pageWidth / 2);
                 return { columns: 2, divider: divider };
             }
@@ -877,23 +868,20 @@
             return { columns: 1, divider: null };
         }
 
-        // v2.3.0: Sort text items by column, then Y position
+        // v2.3.0 STEP 2: Sort by columns
         function sortByColumns(pageItems, layout) {
             if (layout.columns === 1) {
-                // Single column: sort by Y position only
                 return pageItems.sort((a, b) => b.y - a.y);
             }
             
-            // Two columns: assign column, then sort
             const itemsWithColumn = pageItems.map(item => ({
                 ...item,
                 column: item.x < layout.divider ? 0 : 1
             }));
             
-            // Sort by column first, then by Y within column
             return itemsWithColumn.sort((a, b) => {
                 if (a.column !== b.column) return a.column - b.column;
-                return b.y - a.y; // Higher Y = top of page
+                return b.y - a.y;
             });
         }
 
@@ -963,7 +951,7 @@
             let allLinks = [];
             const allItems = [];
             
-            // First pass: collect all text items from all pages
+            // First pass: collect all items
             for (let i = 1; i <= pdf.numPages; i++) {
                 const page = await pdf.getPage(i);
                 const textContent = await page.getTextContent();
@@ -993,9 +981,9 @@
                 'Acknowledgments', 'Appendix'
             ];
 
-            let totalColumnsDetected = 0;
+            let totalColumns = 0;
 
-            // Second pass: process pages with header/footer removal and column detection
+            // Second pass: process with advanced features
             for (let i = 1; i <= pdf.numPages; i++) {
                 job.progress = 20 + (60 * (i / pdf.numPages));
                 updateUI();
@@ -1008,7 +996,6 @@
                 
                 markdown += `## Page ${i}\n\n`;
                 
-                // Collect page items
                 const pageItems = textContent.items.map(item => ({
                     text: item.str,
                     fontSize: item.height,
@@ -1017,27 +1004,24 @@
                     x: item.transform[4]
                 }));
                 
-                // v2.3.0: Filter out headers/footers
+                // v2.3.0: Filter headers/footers
                 const filteredItems = pageItems.filter(item => {
                     const text = item.text.trim();
                     return !headersFooters.has(text);
                 });
                 
-                // v2.3.0: Detect column layout for this page
+                // v2.3.0: Detect columns
                 const layout = detectColumnLayout(filteredItems);
-                if (layout.columns === 2) totalColumnsDetected++;
+                totalColumns = Math.max(totalColumns, layout.columns);
                 
-                // v2.3.0: Sort items by column and position
+                // v2.3.0: Sort by columns
                 const sortedItems = sortByColumns(filteredItems, layout);
                 
                 let lastY = -1;
                 let currentLine = [];
                 
-                sortedItems.forEach((item, idx) => {
-                    const fontSize = item.fontSize;
-                    const fontName = item.fontName || '';
+                sortedItems.forEach((item) => {
                     const text = item.text.trim();
-                    
                     if (!text) return;
                     
                     if (lastY !== -1 && Math.abs(item.y - lastY) > 5) {
@@ -1048,7 +1032,7 @@
                         currentLine = [];
                     }
                     
-                    currentLine.push({ text, fontSize, fontName });
+                    currentLine.push({ text, fontSize: item.fontSize, fontName: item.fontName });
                     lastY = item.y;
                 });
                 
@@ -1081,7 +1065,7 @@
 
             const advancedMetadata = {
                 headersFootersRemoved: headersFooters.size,
-                columnsDetected: totalColumnsDetected > 0 ? 2 : 1
+                columnsDetected: totalColumns
             };
 
             return { markdown, linkMetadata, advancedMetadata };
@@ -1265,10 +1249,10 @@
             }, 0);
             document.getElementById('totalLinks').textContent = totalLinksPreserved;
 
-            const totalHeadersRemoved = jobs.reduce((sum, job) => {
+            const totalHeadersFooters = jobs.reduce((sum, job) => {
                 return sum + (job.advancedMetadata?.headersFootersRemoved || 0);
             }, 0);
-            document.getElementById('totalHeadersRemoved').textContent = totalHeadersRemoved;
+            document.getElementById('totalHeadersFooters').textContent = totalHeadersFooters;
 
             if (jobs.length === 0) {
                 emptyState.style.display = 'block';
@@ -1392,7 +1376,7 @@
             const previewWindow = window.open('', '_blank');
             const metricsHTML = job.qualityMetrics ? `
                 <div style="background: #1e293b; border: 1px solid #fb923c; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
-                    <h2 style="color: #fb923c; margin-bottom: 10px;">Quality Metrics (v2.3.0)</h2>
+                    <h2 style="color: #fb923c; margin-bottom: 10px;">Quality Metrics (v2.3.0 Advanced)</h2>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px;">
                         <div>
                             <div style="font-size: 0.9rem; color: #94a3b8;">Text Quality</div>
@@ -1403,7 +1387,7 @@
                             <div style="font-size: 1.8rem; font-weight: bold; color: #38bdf8;">${job.qualityMetrics.structureScore}%</div>
                         </div>
                         <div>
-                            <div style="font-size: 0.9rem; color: #94a3b8;">External Links</div>
+                            <div style="font-size: 0.9rem; color: #94a3b8;">Links</div>
                             <div style="font-size: 1.8rem; font-weight: bold; color: #a855f7;">${job.qualityMetrics.linksPreserved}</div>
                         </div>
                         <div>
@@ -1416,10 +1400,10 @@
                         </div>
                     </div>
                     <div style="margin-top: 15px; font-size: 0.9rem; color: #cbd5e1;">
-                        ✓ Fixed ${job.qualityMetrics.issuesFixed} text artifacts
-                        ${job.linkMetadata ? ` • 🌐 ${job.linkMetadata.linksPreserved} external links preserved` : ''}
+                        ✓ ${job.qualityMetrics.issuesFixed} text artifacts fixed
+                        ${job.linkMetadata ? ` • 🌐 ${job.linkMetadata.linksPreserved} links preserved` : ''}
                         ${job.advancedMetadata?.headersFootersRemoved ? ` • 🧹 ${job.advancedMetadata.headersFootersRemoved} headers/footers removed` : ''}
-                        ${job.advancedMetadata?.columnsDetected === 2 ? ' • 📰 Multi-column layout detected' : ''}
+                        ${job.advancedMetadata?.columnsDetected > 1 ? ` • 📰 ${job.advancedMetadata.columnsDetected}-column layout detected` : ''}
                     </div>
                 </div>
             ` : '';
@@ -1428,7 +1412,7 @@
                 <!DOCTYPE html>
                 <html>
                 <head>
-                    <title>${job.filename} - Advanced Preview (v2.3.0)</title>
+                    <title>${job.filename} - v2.3.0 Advanced Preview</title>
                     <style>
                         body {
                             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
