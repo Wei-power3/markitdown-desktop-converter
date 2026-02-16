@@ -1,0 +1,162 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main, develop, feature/automated-testing ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  test:
+    name: Test on Python ${{ matrix.python-version }} / ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ["3.10", "3.11", "3.12"]
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        lfs: true  # Enable Git LFS for large files
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        cache: 'pip'
+    
+    - name: Install system dependencies (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ghostscript python3-tk poppler-utils
+    
+    - name: Install system dependencies (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        brew install ghostscript tcl-tk poppler
+    
+    - name: Install system dependencies (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        choco install ghostscript --yes
+      shell: powershell
+    
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip setuptools wheel
+        pip install -r requirements.txt
+        pip install -r requirements-test.txt
+    
+    - name: Verify installation
+      run: |
+        python --version
+        pip list
+        python -c "import markitdown; print('MarkItDown OK')"
+    
+    - name: Run unit tests with coverage
+      run: |
+        pytest tests/unit/ -v -m "not slow" --cov=src --cov-report=xml --cov-report=term-missing
+      continue-on-error: false
+    
+    - name: Run integration tests
+      run: |
+        pytest tests/integration/ -v -m "not slow" --cov=src --cov-append --cov-report=xml
+      continue-on-error: false
+    
+    - name: Run CRITICAL regression tests
+      run: |
+        pytest tests/regression/ -v --cov=src --cov-append --cov-report=xml --cov-report=html
+      continue-on-error: false
+    
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-${{ matrix.os }}-py${{ matrix.python-version }}
+        fail_ci_if_error: false
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      continue-on-error: true
+    
+    - name: Generate coverage report
+      run: |
+        coverage report --show-missing
+    
+    - name: Check coverage threshold (70%)
+      run: |
+        coverage report --fail-under=70
+      continue-on-error: false
+    
+    - name: Upload coverage HTML report (artifacts)
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: coverage-report-${{ matrix.os }}-py${{ matrix.python-version }}
+        path: htmlcov/
+        retention-days: 30
+
+  quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        cache: 'pip'
+    
+    - name: Install dependencies
+      run: |
+        pip install black flake8 mypy
+    
+    - name: Check code formatting (Black)
+      run: |
+        black --check src/ tests/ || echo "::warning::Code formatting issues found. Run 'black src/ tests/' to fix."
+      continue-on-error: true
+    
+    - name: Lint with flake8
+      run: |
+        flake8 src/ tests/ --max-line-length=100 --extend-ignore=E203,W503 --statistics
+      continue-on-error: true
+    
+    - name: Type checking (mypy)
+      run: |
+        mypy src/ --ignore-missing-imports --no-strict-optional
+      continue-on-error: true
+
+  regression-baseline:
+    name: Verify Regression Baseline
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        lfs: true
+    
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ghostscript poppler-utils
+        pip install -r requirements.txt
+    
+    - name: Check if baseline exists
+      run: |
+        if [ ! -f tests/regression/baseline_scores_v2.2.1.json ]; then
+          echo "::warning::Regression baseline not found. Run 'python tests/regression/generate_baseline.py' to create."
+        else
+          echo "Baseline found - regression tests will run"
+        fi
+      shell: bash

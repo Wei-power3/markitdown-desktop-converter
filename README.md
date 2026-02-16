@@ -4,6 +4,8 @@
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Windows-lightgrey)](https://www.microsoft.com/windows)
 [![Version](https://img.shields.io/badge/version-2.2.1-brightgreen)](https://github.com/Wei-power3/markitdown-desktop-converter/releases)
+[![Tests](https://github.com/Wei-power3/markitdown-desktop-converter/actions/workflows/test.yml/badge.svg)](https://github.com/Wei-power3/markitdown-desktop-converter/actions/workflows/test.yml)
+[![Coverage](https://img.shields.io/badge/coverage-70%25%2B-brightgreen)](https://github.com/Wei-power3/markitdown-desktop-converter/tree/main/tests)
 
 A Windows desktop application for converting PDF and PowerPoint files to **clean, high-quality** Markdown optimized for embeddings, RAG pipelines, and NLP tasks.
 
@@ -22,6 +24,53 @@ After extensive testing, **v2.2.1 provides the cleanest text output** for embedd
 ✅ **Production-tested** - Reliable and consistent  
 
 **See [web/VERSION_NOTES.md](web/VERSION_NOTES.md) for detailed comparison between v2.2.1 and experimental v2.3.2**
+
+---
+
+## 🧪 Automated Testing
+
+This project uses comprehensive automated testing to ensure quality and prevent regressions.
+
+### Test Suite Overview
+
+- **40+ Unit Tests** - Text cleaning, ligature fixing, medical term preservation
+- **20+ Integration Tests** - Full conversion workflows with real documents
+- **15+ Regression Tests** - CRITICAL quality prevention (prevents v2.3.2-style issues)
+- **70%+ Code Coverage** - Comprehensive test coverage
+- **Multi-Platform CI/CD** - Automated testing on Windows, macOS, Linux
+
+### Quick Testing
+
+```bash
+# Install test dependencies
+pip install -r requirements-test.txt
+
+# Run all tests
+pytest
+
+# Run with coverage
+pytest --cov=src --cov-report=html
+```
+
+### Quality Assurance
+
+✅ **Prevents Known Issues:**
+- Ligature artifacts ("arti fi cial")
+- Internal link pollution ([the](#page-7))
+- Hyphenation artifacts ("non- invasive")
+- Table header duplication
+- Word-splitting regressions
+
+✅ **CI/CD Pipeline:**
+- Automated testing on every commit
+- 9 test environments (3 OS × 3 Python versions)
+- Quality gates enforced
+- Coverage reporting to Codecov
+
+**For detailed testing information, see:**
+- [TESTING.md](TESTING.md) - Comprehensive testing guide
+- [CONTRIBUTING.md](CONTRIBUTING.md) - Contributing with tests
+- [Tests Directory](tests/) - All test code
 
 ---
 
@@ -201,6 +250,11 @@ markitdown-desktop-converter/
 │   ├── link_extractor.py  # Link preservation
 │   ├── table_extractor.py  # Table extraction engine
 │   └── converter.py     # Enhanced converter logic
+├── tests/               # Automated test suite
+│   ├── unit/            # Unit tests (40+ tests)
+│   ├── integration/     # Integration tests (20+ tests)
+│   ├── regression/      # Regression tests (15+ tests)
+│   └── fixtures/        # Test documents
 └── MarkItDownConverter.exe  # Standalone executable
 ```
 
@@ -433,6 +487,7 @@ dist/MarkItDownConverter.exe
 - **PDF Generation**: ReportLab
 - **PowerPoint Processing**: python-pptx
 - **Packaging**: PyInstaller
+- **Testing**: pytest, pytest-cov, pytest-mock
 
 ### Web Version
 - **PDF Processing**: [PDF.js](https://mozilla.github.io/pdf.js/) by Mozilla
@@ -507,6 +562,9 @@ dist/MarkItDownConverter.exe
 - [x] Selective link preservation
 - [x] Quality metrics
 - [x] Production-tested stability
+- [x] **Comprehensive automated testing**
+- [x] **Multi-platform CI/CD**
+- [x] **70%+ test coverage**
 
 ### v2.4 (Future) - Hybrid Approach
 - [ ] Start from v2.2.1 clean base
@@ -530,11 +588,17 @@ Contributions welcome! Please:
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+3. **Write tests** for new functionality (see [TESTING.md](TESTING.md))
+4. Ensure all tests pass (`pytest`)
+5. Verify coverage (`pytest --cov=src --cov-fail-under=70`)
+6. Commit your changes (`git commit -m 'Add amazing feature'`)
+7. Push to branch (`git push origin feature/amazing-feature`)
+8. Open a Pull Request
 
-See [CHANGELOG.md](CHANGELOG.md) for version history.
+See:
+- [CONTRIBUTING.md](CONTRIBUTING.md) - Contribution guidelines
+- [TESTING.md](TESTING.md) - Testing guide
+- [CHANGELOG.md](CHANGELOG.md) - Version history
 
 ---
 
@@ -561,7 +625,10 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file.
 
 For issues, questions, or feature requests:
 - Open an issue: [GitHub Issues](https://github.com/Wei-power3/markitdown-desktop-converter/issues)
-- Check documentation: [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md)
+- Check documentation:
+  - [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md) - Building from source
+  - [TESTING.md](TESTING.md) - Running and writing tests
+  - [CONTRIBUTING.md](CONTRIBUTING.md) - Contributing guide
 - View changelog: [CHANGELOG.md](CHANGELOG.md)
 - Web version docs: [web/README.md](web/README.md)
 - Version comparison: [web/VERSION_NOTES.md](web/VERSION_NOTES.md)
@@ -572,4 +639,4 @@ For issues, questions, or feature requests:
 
 **Version 2.2.1** - Production: Clean Text Extraction for Embeddings
 
-[Report Bug](https://github.com/Wei-power3/markitdown-desktop-converter/issues) · [Request Feature](https://github.com/Wei-power3/markitdown-desktop-converter/issues) · [View Changelog](CHANGELOG.md) · [Try Web Version](web/index.html) · [Version Comparison](web/VERSION_NOTES.md)
+[Report Bug](https://github.com/Wei-power3/markitdown-desktop-converter/issues) · [Request Feature](https://github.com/Wei-power3/markitdown-desktop-converter/issues) · [View Changelog](CHANGELOG.md) · [Try Web Version](web/index.html) · [Version Comparison](web/VERSION_NOTES.md) · [Run Tests](TESTING.md)
