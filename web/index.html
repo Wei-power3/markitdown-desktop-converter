@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MarkItDown v2.2.1 - Link Preservation (Fixed)</title>
+    <title>MarkItDown v2.4.0 - Word & Excel Support</title>
     <style>
         :root {
             --bg-primary: #0f172a;
@@ -180,6 +180,16 @@
             border-radius: 6px;
             font-size: 0.85rem;
             font-weight: 500;
+        }
+
+        .format-badge.new {
+            background: var(--accent-purple);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
 
         .queue-section {
@@ -458,61 +468,60 @@
         <header>
             <h1>
                 📄 MarkItDown Converter
-                <span class="version-badge">v2.2.1</span>
+                <span class="version-badge">v2.4.0</span>
             </h1>
-            <p class="subtitle">PDF & PowerPoint to Markdown with AI structure detection and external link preservation</p>
+            <p class="subtitle">PDF, PowerPoint, Word & Excel to Markdown - All in your browser!</p>
             <div class="features">
                 <span class="feature">✓ No Upload Required</span>
                 <span class="feature">✓ Complete Privacy</span>
                 <span class="feature">✓ Batch Processing</span>
-                <span class="feature">✓ Text Cleaning</span>
-                <span class="feature">✓ External Link Preservation <span class="new-badge">FIXED</span></span>
+                <span class="feature">✓ Word & Excel <span class="new-badge">NEW</span></span>
             </div>
         </header>
 
         <div class="quality-banner">
-            <h3>🔧 FIXED in v2.2.1: Clean External Link Preservation</h3>
+            <h3>🎉 NEW in v2.4.0: Word & Excel Support!</h3>
             <div class="quality-features">
+                <div class="quality-item">
+                    <span class="quality-icon">📄</span>
+                    <div>
+                        <strong>Word Documents <span class="new-badge">NEW</span></strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Convert .docx and .doc files to clean markdown</div>
+                    </div>
+                </div>
+                <div class="quality-item">
+                    <span class="quality-icon">📊</span>
+                    <div>
+                        <strong>Excel Spreadsheets <span class="new-badge">NEW</span></strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Convert .xlsx and .xls to markdown tables</div>
+                    </div>
+                </div>
                 <div class="quality-item">
                     <span class="quality-icon">🌐</span>
                     <div>
-                        <strong>External Links Only <span class="new-badge">FIXED</span></strong>
-                        <div style="font-size: 0.85rem; color: var(--text-muted);">Preserves external URLs only, removes internal link noise</div>
+                        <strong>External Links</strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Preserves external URLs from all formats</div>
                     </div>
                 </div>
                 <div class="quality-item">
                     <span class="quality-icon">🧹</span>
                     <div>
-                        <strong>No More Artifacts</strong>
-                        <div style="font-size: 0.85rem; color: var(--text-muted);">Eliminates [the](#page-7) and [and](#page-5) noise</div>
-                    </div>
-                </div>
-                <div class="quality-item">
-                    <span class="quality-icon">📎</span>
-                    <div>
-                        <strong>PPTX Hyperlink Parsing</strong>
-                        <div style="font-size: 0.85rem; color: var(--text-muted);">Preserves hyperlinks from PowerPoint slides</div>
-                    </div>
-                </div>
-                <div class="quality-item">
-                    <span class="quality-icon">🎯</span>
-                    <div>
-                        <strong>Smart Link Matching</strong>
-                        <div style="font-size: 0.85rem; color: var(--text-muted);">Matches URLs to surrounding text context</div>
+                        <strong>Text Cleaning</strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">Fixes ligatures, hyphens, and encoding artifacts</div>
                     </div>
                 </div>
                 <div class="quality-item">
                     <span class="quality-icon">📐</span>
                     <div>
-                        <strong>Font Size Analysis</strong>
-                        <div style="font-size: 0.85rem; color: var(--text-muted);">Detects headers by analyzing font sizes (H1, H2, H3)</div>
+                        <strong>Structure Detection</strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">AI-powered header and list detection</div>
                     </div>
                 </div>
                 <div class="quality-item">
-                    <span class="quality-icon">🔧</span>
+                    <span class="quality-icon">🔒</span>
                     <div>
-                        <strong>Intelligent Text Cleaning</strong>
-                        <div style="font-size: 0.85rem; color: var(--text-muted);">Fixes ligatures, hyphens, and encoding artifacts</div>
+                        <strong>100% Private</strong>
+                        <div style="font-size: 0.85rem; color: var(--text-muted);">All processing happens in your browser</div>
                     </div>
                 </div>
             </div>
@@ -525,9 +534,10 @@
             <div class="supported-formats">
                 <span class="format-badge">PDF</span>
                 <span class="format-badge">PPTX</span>
-                <span class="format-badge">PPT</span>
+                <span class="format-badge new">DOCX</span>
+                <span class="format-badge new">XLSX</span>
             </div>
-            <input type="file" id="fileInput" accept=".pdf,.pptx,.ppt" multiple>
+            <input type="file" id="fileInput" accept=".pdf,.pptx,.ppt,.docx,.doc,.xlsx,.xls" multiple>
         </div>
 
         <div class="queue-section">
@@ -567,8 +577,12 @@
         </div>
     </div>
 
+    <!-- External libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
@@ -606,7 +620,7 @@
         function handleFiles(files) {
             files.forEach(file => {
                 const extension = file.name.split('.').pop().toLowerCase();
-                if (['pdf', 'pptx', 'ppt'].includes(extension)) {
+                if (['pdf', 'pptx', 'ppt', 'docx', 'doc', 'xlsx', 'xls'].includes(extension)) {
                     addJob(file);
                 } else {
                     alert(`Unsupported file type: ${file.name}`);
@@ -637,7 +651,7 @@
             processFile(job);
         }
 
-        // Text cleaning functions (v2.0 feature)
+        // Text cleaning functions
         function cleanText(text) {
             let cleaned = text;
 
@@ -684,20 +698,16 @@
             const totalIssues = ligatureArtifacts + hyphenationIssues + spacingIssues + encodingIssues;
             const cleanScore = Math.max(0, 100 - (totalIssues / totalChars * 1000));
 
-            // v2.1.0: Enhanced structure analysis
+            // Structure analysis
             const hasHeaders = /^#+ /m.test(text);
             const hasTables = /\|.*\|/m.test(text);
             const hasLists = /^[-*+] /m.test(text);
             const hasBoldItalic = /\*\*.*\*\*|\*.*\*/m.test(text);
             
-            // Count detected structures
             const headerCount = (text.match(/^#+ /gm) || []).length;
             const listCount = (text.match(/^[-*+] /gm) || []).length;
-            
-            // v2.2.1: Count external links only
             const linkCount = (text.match(/\[.*?\]\(http.*?\)/g) || []).length;
             
-            // Improved scoring with v2.1.0 + v2.2.1 features
             let structureScore = 0;
             if (headerCount > 0) structureScore += 25;
             if (headerCount >= 3) structureScore += 10;
@@ -705,11 +715,10 @@
             if (listCount > 0) structureScore += 15;
             if (listCount >= 5) structureScore += 10;
             if (hasBoldItalic) structureScore += 10;
-            if (linkCount > 0) structureScore += 15; // Bonus for preserved external links
+            if (linkCount > 0) structureScore += 15;
             
             structureScore = Math.min(100, structureScore);
 
-            // Overall quality
             const overallScore = Math.round((cleanScore * 0.5) + (structureScore * 0.5));
 
             return {
@@ -741,11 +750,19 @@
                     const result = await convertPPTX(job);
                     markdown = result.markdown;
                     linkMetadata = result.linkMetadata;
+                } else if (extension === 'docx' || extension === 'doc') {
+                    const result = await convertWord(job);
+                    markdown = result.markdown;
+                    linkMetadata = result.linkMetadata;
+                } else if (extension === 'xlsx' || extension === 'xls') {
+                    const result = await convertExcel(job);
+                    markdown = result.markdown;
+                    linkMetadata = result.linkMetadata;
                 }
 
                 job.linkMetadata = linkMetadata;
 
-                // Apply v2.0 text cleaning
+                // Apply text cleaning
                 job.progress = 85;
                 updateUI();
                 const cleanedMarkdown = cleanText(markdown);
@@ -768,7 +785,115 @@
             }
         }
 
-        // v2.2.0: Extract PDF links
+        // NEW: Word document conversion
+        async function convertWord(job) {
+            job.progress = 20;
+            updateUI();
+
+            const arrayBuffer = await job.file.arrayBuffer();
+            
+            job.progress = 40;
+            updateUI();
+
+            try {
+                // Use mammoth.js to convert .docx to markdown
+                const result = await mammoth.convertToMarkdown({ arrayBuffer: arrayBuffer });
+                
+                let markdown = `# ${job.filename}\n\n`;
+                markdown += `Converted from Word • v2.4.0\n\n---\n\n`;
+                markdown += result.value;
+
+                job.progress = 80;
+                updateUI();
+
+                // Extract links from the markdown
+                const links = markdown.match(/\[.*?\]\(http.*?\)/g) || [];
+                
+                const linkMetadata = {
+                    linksFound: links.length,
+                    linksPreserved: links.length,
+                    linkTypes: {
+                        external: links.length,
+                        internal: 0
+                    }
+                };
+
+                return { markdown, linkMetadata };
+            } catch (error) {
+                throw new Error(`Word conversion failed: ${error.message}`);
+            }
+        }
+
+        // NEW: Excel spreadsheet conversion
+        async function convertExcel(job) {
+            job.progress = 20;
+            updateUI();
+
+            const arrayBuffer = await job.file.arrayBuffer();
+            
+            job.progress = 40;
+            updateUI();
+
+            try {
+                // Use SheetJS to parse Excel file
+                const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+                
+                let markdown = `# ${job.filename}\n\n`;
+                markdown += `Converted from Excel • v2.4.0 • ${workbook.SheetNames.length} sheet(s)\n\n---\n\n`;
+
+                // Convert each sheet to markdown
+                workbook.SheetNames.forEach((sheetName, index) => {
+                    job.progress = 40 + (40 * ((index + 1) / workbook.SheetNames.length));
+                    updateUI();
+
+                    const sheet = workbook.Sheets[sheetName];
+                    
+                    markdown += `## Sheet: ${sheetName}\n\n`;
+                    
+                    // Convert sheet to array of arrays
+                    const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+                    
+                    if (data.length === 0) {
+                        markdown += '*[Empty sheet]*\n\n';
+                        return;
+                    }
+                    
+                    // Create markdown table
+                    const headers = data[0];
+                    const rows = data.slice(1);
+                    
+                    // Table header
+                    markdown += '| ' + headers.map(h => h || ' ').join(' | ') + ' |\n';
+                    markdown += '|' + headers.map(() => '---').join('|') + '|\n';
+                    
+                    // Table rows
+                    rows.forEach(row => {
+                        if (row.length > 0) {
+                            // Pad row to match header length
+                            while (row.length < headers.length) row.push('');
+                            markdown += '| ' + row.map(cell => cell || ' ').join(' | ') + ' |\n';
+                        }
+                    });
+                    
+                    markdown += '\n\n';
+                });
+
+                const linkMetadata = {
+                    linksFound: 0,
+                    linksPreserved: 0,
+                    linkTypes: {
+                        external: 0,
+                        internal: 0
+                    }
+                };
+
+                return { markdown, linkMetadata };
+            } catch (error) {
+                throw new Error(`Excel conversion failed: ${error.message}`);
+            }
+        }
+
+        // Extract PDF links
         async function extractPDFLinks(page, pageNum) {
             const annotations = await page.getAnnotations();
             const links = [];
@@ -778,7 +903,7 @@
                     const link = {
                         url: annotation.url || null,
                         dest: annotation.dest || null,
-                        rect: annotation.rect, // [x1, y1, x2, y2]
+                        rect: annotation.rect,
                         page: pageNum,
                         type: annotation.url ? 'external' : 'internal'
                     };
@@ -792,19 +917,17 @@
             return links;
         }
 
-        // v2.2.1: Match links to text - EXTERNAL LINKS ONLY (fixed)
+        // Match links to text (external only)
         function matchLinksToText(links, textItems) {
             const matchedLinks = [];
             
             links.forEach(link => {
-                // v2.2.1 FIX: Skip internal links completely
                 if (link.type === 'internal') {
-                    return; // Skip this link
+                    return;
                 }
                 
                 const [x1, y1, x2, y2] = link.rect;
                 
-                // Find text items within or near the link rectangle
                 const nearbyText = textItems.filter(item => {
                     const tolerance = 5;
                     return item.x >= (x1 - tolerance) && 
@@ -815,7 +938,6 @@
                 
                 const linkText = nearbyText.map(item => item.text).join(' ').trim();
                 
-                // Only preserve external links
                 if (link.url) {
                     matchedLinks.push({
                         text: linkText || new URL(link.url).hostname,
@@ -836,12 +958,11 @@
             const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
             
             let markdown = `# ${job.filename}\n\n`;
-            markdown += `Converted from PDF • ${pdf.numPages} pages • v2.2.1 with external link preservation\n\n---\n\n`;
+            markdown += `Converted from PDF • ${pdf.numPages} pages • v2.4.0\n\n---\n\n`;
 
             let allLinks = [];
             const allItems = [];
             
-            // Collect all text items for font size analysis
             for (let i = 1; i <= pdf.numPages; i++) {
                 const page = await pdf.getPage(i);
                 const textContent = await page.getTextContent();
@@ -855,11 +976,9 @@
                 })));
             }
 
-            // Calculate average font size
             const fontSizes = allItems.map(item => item.fontSize).filter(size => size > 0);
             const avgFontSize = fontSizes.reduce((a, b) => a + b, 0) / fontSizes.length;
 
-            // Academic keywords for section detection
             const ACADEMIC_KEYWORDS = [
                 'Abstract', 'Introduction', 'Background', 'Literature Review',
                 'Methods', 'Methodology', 'Materials and Methods',
@@ -875,7 +994,6 @@
                 const page = await pdf.getPage(i);
                 const textContent = await page.getTextContent();
                 
-                // v2.2.1: Extract links from this page
                 const pageLinks = await extractPDFLinks(page, i);
                 allLinks.push(...pageLinks);
                 
@@ -898,7 +1016,6 @@
                     
                     if (!text) return;
                     
-                    // Detect line breaks
                     if (lastY !== -1 && Math.abs(item.transform[5] - lastY) > 5) {
                         if (currentLine.length > 0) {
                             const lineText = currentLine.map(i => i.text).join(' ');
@@ -911,7 +1028,6 @@
                     lastY = item.transform[5];
                 });
                 
-                // Process last line
                 if (currentLine.length > 0) {
                     const lineText = currentLine.map(i => i.text).join(' ');
                     markdown += processLine(lineText, currentLine[0].fontSize, currentLine[0].fontName, avgFontSize, ACADEMIC_KEYWORDS);
@@ -920,13 +1036,10 @@
                 markdown += '\n';
             }
 
-            // v2.2.1: Process and insert EXTERNAL links only
             const matchedLinks = matchLinksToText(allLinks, allItems);
             
-            // Replace text with markdown links
             matchedLinks.forEach(link => {
                 if (link.text && link.text.length > 2) {
-                    // Escape special regex characters
                     const escapedText = link.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                     const regex = new RegExp(`\\b${escapedText}\\b`, 'g');
                     markdown = markdown.replace(regex, `[${link.text}](${link.url})`);
@@ -934,28 +1047,25 @@
             });
 
             const linkMetadata = {
-                linksFound: allLinks.filter(l => l.type === 'external').length, // Only count external
+                linksFound: allLinks.filter(l => l.type === 'external').length,
                 linksPreserved: matchedLinks.length,
                 linkTypes: {
                     external: matchedLinks.length,
-                    internal: 0 // No internal links preserved in v2.2.1
+                    internal: 0
                 }
             };
 
             return { markdown, linkMetadata };
         }
 
-        // v2.1.0: Process line with structure detection
         function processLine(text, fontSize, fontName, avgFontSize, keywords) {
             if (!text.trim()) return '';
             
-            // Detect header level by font size
             let headerLevel = 0;
             if (fontSize >= avgFontSize * 1.8) headerLevel = 1;
             else if (fontSize >= avgFontSize * 1.5) headerLevel = 2;
             else if (fontSize >= avgFontSize * 1.2) headerLevel = 3;
             
-            // Academic keyword detection
             const isAcademicSection = keywords.some(keyword => 
                 text.trim().toLowerCase() === keyword.toLowerCase() ||
                 text.trim().toLowerCase().startsWith(keyword.toLowerCase() + ':')
@@ -965,11 +1075,9 @@
                 headerLevel = 2;
             }
             
-            // List detection
             const isBulletList = /^[\s]*[•\-–■□○●◾◽▪▫][\s]/.test(text);
             const isNumberedList = /^[\s]*[\d]+[.)][\s]/.test(text);
             
-            // Bold/italic detection from font name
             const isBold = fontName.toLowerCase().includes('bold') || fontName.includes('-B');
             const isItalic = fontName.toLowerCase().includes('italic') || fontName.includes('-I');
             
@@ -996,11 +1104,9 @@
             return output;
         }
 
-        // v2.2.0: Extract PPTX hyperlinks (unchanged - already only external)
         async function extractPPTXHyperlinks(zip, slideFiles) {
             const allLinks = [];
             
-            // Load relationships file to map rIds to URLs
             const relsPath = 'ppt/_rels/presentation.xml.rels';
             let relationships = {};
             
@@ -1021,20 +1127,17 @@
                 });
             }
             
-            // Extract hyperlinks from each slide
             for (let i = 0; i < slideFiles.length; i++) {
                 const slideXml = await zip.files[slideFiles[i]].async('text');
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(slideXml, 'text/xml');
                 
-                // Find all hyperlink elements
                 const hyperlinks = xmlDoc.getElementsByTagName('a:hlinkClick');
                 
                 Array.from(hyperlinks).forEach(link => {
                     const rId = link.getAttribute('r:id');
                     const tooltip = link.getAttribute('tooltip');
                     
-                    // Get the text associated with this hyperlink
                     const parent = link.parentElement;
                     const textElements = parent.getElementsByTagName('a:t');
                     const linkText = Array.from(textElements).map(t => t.textContent).join(' ').trim();
@@ -1061,7 +1164,7 @@
             const zip = await JSZip.loadAsync(arrayBuffer);
             
             let markdown = `# ${job.filename}\n\n`;
-            markdown += `Converted from PowerPoint • v2.2.1 with external link preservation\n\n---\n\n`;
+            markdown += `Converted from PowerPoint • v2.4.0\n\n---\n\n`;
 
             const slideFiles = Object.keys(zip.files)
                 .filter(name => name.startsWith('ppt/slides/slide') && name.endsWith('.xml'))
@@ -1074,7 +1177,6 @@
             job.progress = 40;
             updateUI();
 
-            // v2.2.1: Extract all hyperlinks (already external only)
             const allLinks = await extractPPTXHyperlinks(zip, slideFiles);
 
             for (let i = 0; i < slideFiles.length; i++) {
@@ -1103,7 +1205,6 @@
                 markdown += '\n\n';
             }
 
-            // v2.2.1: Insert hyperlinks
             allLinks.forEach(link => {
                 if (link.text && link.text.length > 2) {
                     const escapedText = link.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -1119,7 +1220,7 @@
                     external: allLinks.length,
                     internal: 0
                 }
-            };
+            }
 
             return { markdown, linkMetadata };
         }
@@ -1130,7 +1231,6 @@
             document.getElementById('completed').textContent = jobs.filter(j => j.status === 'completed').length;
             document.getElementById('failed').textContent = jobs.filter(j => j.status === 'error').length;
             
-            // v2.2.1: Total external links preserved
             const totalLinksPreserved = jobs.reduce((sum, job) => {
                 return sum + (job.linkMetadata?.linksPreserved || 0);
             }, 0);
@@ -1240,7 +1340,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = job.filename.replace(/\.[^.]+$/, '') + '_v2.2.1_clean.md';
+            a.download = job.filename.replace(/\.[^.]+$/, '') + '_v2.4.0_clean.md';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
@@ -1284,7 +1384,7 @@
                 <!DOCTYPE html>
                 <html>
                 <head>
-                    <title>${job.filename} - Enhanced Preview</title>
+                    <title>${job.filename} - Preview (v2.4.0)</title>
                     <style>
                         body {
                             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
