@@ -3,69 +3,55 @@
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)](https://www.microsoft.com/windows)
-[![Version](https://img.shields.io/badge/version-2.4.3-orange)](https://github.com/Wei-power3/markitdown-desktop-converter/releases)
+[![Version](https://img.shields.io/badge/version-2.4.4-orange)](https://github.com/Wei-power3/markitdown-desktop-converter/releases)
 [![Tests](https://img.shields.io/badge/tests-45%2B%20Excel%20tests-success)](tests/)
 
 A cross-platform desktop application for converting **PDF, PowerPoint, Word, and Excel** files to **clean, high-quality** Markdown optimized for embeddings, RAG pipelines, and NLP tasks.
 
-## 🎉 Current Version: v2.4.3 - Enhanced PPTX & Excel!
+## 🎉 Current Version: v2.4.4 - UI Update with Copy Button!
 
-**NEW:** Advanced PPTX features with images, charts, and speaker notes extraction! Plus enhanced Excel multi-sheet processing!
+**NEW:** Enhanced user interface with Copy button, toast notifications, and simplified stats display! All 4 formats fully supported!
 
-### ✨ What's New in v2.4.3?
+### ✨ What's New in v2.4.4?
 
-🖼️ **PPTX Image Extraction**
-- Extract images from PowerPoint presentations
-- Preserve alt text from slide XML
-- Base64 embedding option for self-contained markdown
-- Support for all image formats (PNG, JPEG, GIF, etc.)
+📋 **Copy Button**
+- One-click copy to clipboard
+- Toast notification confirmation
+- Seamless workflow integration
+- All 4 action buttons: Download | Preview | Copy | Delete
 
-📊 **PPTX Chart Extraction**
-- Convert PowerPoint charts to markdown tables
-- Support for 8+ chart types (bar, line, pie, area, scatter, radar, etc.)
-- Extract series data and category labels
-- Preserve chart metadata and structure
+📊 **Simplified Stats**
+- Clean single-line statistics display
+- "X of Y files converted, Z pages processed"
+- Less clutter, more focus on content
+- Per-job detailed metrics retained
 
-📝 **PPTX Speaker Notes**
-- Extract speaker notes from each slide
-- Per-slide caching for performance
-- Search and filter notes
-- Clean markdown formatting
+✨ **Complete Format Support**
+- PDF text extraction (PDF.js)
+- DOCX full conversion (Mammoth.js)
+- PPTX with images/charts/notes (v2.4.3 features)
+- XLSX multi-sheet with formulas (v2.4.3 features)
 
-📈 **Enhanced Excel Processing**
-- Multi-sheet processing with sheet name headers
-- Formula preservation (displayed as markdown code)
-- Merged cell detection and reporting
-- Enhanced statistics (sheets, formulas, merged cells)
-- Better empty cell handling
-- Document summary generation
-
-🎛️ **Configurable Options**
-- Toggle image extraction on/off
-- Toggle chart extraction on/off
-- Toggle speaker notes inclusion
-- Choose base64 embedding or links
-- Control metadata output
-
-📊 **Comprehensive Statistics**
-- Track images, charts, notes extracted
-- Monitor processing time
-- Quality metrics per file
-- Real-time progress indicators
+🎨 **Polished User Experience**
+- Modern dark theme maintained
+- Responsive button layout
+- Toast notifications (slide-in/out animations)
+- All previous features preserved
 
 ---
 
 ## 🌐 Web Version (Recommended)
 
-**NEW v2.4.3:** Browser-based converter with enhanced PPTX & Excel features:
-- 📂 **[Download web/index_v2.4.3.html](web/index_v2.4.3.html)** - Latest version with all features!
-- 🖼️ **PPTX Images** - Extract images with alt text **NEW!**
-- 📊 **PPTX Charts** - Convert to markdown tables **NEW!**
-- 📝 **Speaker Notes** - Include presenter notes **NEW!**
-- 📈 **Excel Multi-Sheet** - Enhanced processing with formulas **NEW!**
-- 🔧 **Feature Toggles** - Enable/disable features as needed **NEW!**
-- 📄 **Word Documents** - .docx and .doc support
-- 📑 **PDF Support** - Clean text extraction
+**v2.4.4:** Complete edition with all formats and new UI:
+- 📂 **[Download web/index_v2.4.4.html](web/index_v2.4.4.html)** - Latest version! ⭐
+- 📋 **Copy Button** - One-click copy to clipboard **NEW!**
+- 📊 **Simplified Stats** - Clean single-line display **NEW!**
+- 📄 **PDF Support** - Text extraction from PDFs
+- 📝 **DOCX Support** - Full Word document conversion
+- 🖼️ **PPTX Images** - Extract images with alt text
+- 📈 **PPTX Charts** - Convert to markdown tables
+- 📝 **Speaker Notes** - Include presenter notes
+- 📊 **Excel Multi-Sheet** - Enhanced processing with formulas
 - 🔒 100% client-side processing (no uploads)
 - ✨ AI structure detection + advanced text cleaning
 - 🚀 Run offline after download
@@ -88,16 +74,17 @@ A cross-platform desktop application for converting **PDF, PowerPoint, Word, and
 
 ## ✨ Core Features
 
-### Document Conversion (v2.4.3)
+### Document Conversion (v2.4.4)
 - 📄 **PDF to Markdown** - Clean text extraction with structure detection
-- 📊 **PowerPoint to Markdown** - Full image, chart, and notes extraction **ENHANCED!**
+- 📊 **PowerPoint to Markdown** - Full image, chart, and notes extraction
 - 📝 **Word to Markdown** - Full .docx and .doc support
-- 📈 **Excel to Markdown** - Multi-sheet with formula preservation **ENHANCED!**
+- 📈 **Excel to Markdown** - Multi-sheet with formula preservation
 - 📂 **Drag & Drop Interface** - Simply drop files to convert
 - 📦 **Batch Processing Queue** - Convert multiple files with visual progress tracking
-- ⚙️ **Configurable Options** - Toggle features on/off **NEW!**
+- 📋 **Copy to Clipboard** - One-click copy with notification **NEW!**
+- 📊 **Simplified Stats** - Clean single-line display **NEW!**
 
-### PPTX Enhancements (v2.4.3) 🆕
+### PPTX Enhancements (v2.4.3+)
 - 🖼️ **Image Extraction** - Extract images from media folder with alt text
 - 📊 **Chart Conversion** - Convert charts to structured markdown tables
 - 📝 **Speaker Notes** - Extract presenter notes per slide
@@ -105,7 +92,7 @@ A cross-platform desktop application for converting **PDF, PowerPoint, Word, and
 - 🔐 **Base64 Embedding** - Optional self-contained image embedding
 - 📊 **Statistics Tracking** - Count images, charts, notes extracted
 
-### Excel Enhancements (v2.4.3) 🆕
+### Excel Enhancements (v2.4.3+)
 - 📄 **Multi-Sheet Headers** - Each sheet clearly labeled
 - 🧮 **Formula Preservation** - Formulas shown as `` `=FORMULA()` ``
 - 🔗 **Merged Cell Detection** - Report and handle merged cells
@@ -121,7 +108,9 @@ A cross-platform desktop application for converting **PDF, PowerPoint, Word, and
 - 🔗 **Selective Link Preservation** - External links without pollution
 - 🧹 **Artifact Removal** - Removes encoding issues, hyphenation breaks
 
-### User Experience
+### User Experience (v2.4.4)
+- 📋 **Copy to Clipboard** - Quick copy with toast notification **NEW!**
+- 📊 **Single-Line Stats** - Clean, focused display **NEW!**
 - 🕒 **Automatic Timestamped Naming** - Files organized with date stamps
 - 📁 **Organized Folder Structure** - Separate folders for originals and processed files
 - 🎨 **Modern Dark Theme UI** - Clean, professional interface
@@ -132,29 +121,34 @@ A cross-platform desktop application for converting **PDF, PowerPoint, Word, and
 
 ## 🖼️ Preview
 
-### Main Interface with Feature Toggles (v2.4.3)
+### Main Interface (v2.4.4)
 ```
 ┌──────────────────────────────────────────────────────┐
-│    MarkItDown Converter v2.4.3                       │
-│    Enhanced Excel & PPTX - Images, Charts, Notes     │
+│    MarkItDown Converter v2.4.4                       │
+│    Complete Edition: PDF • DOCX • PPTX • XLSX        │
 ├──────────────────────────────────────────────────────┤
-│  ⚙️ Conversion Options                               │
-│  ☑ Extract Images         ☑ Extract Charts          │
-│  ☑ Speaker Notes          ☑ Embed as Base64         │
-│  ☑ Include Metadata                                  │
+│  🎉 v2.4.4: New Copy Button + Simplified Stats!     │
+│  Now with 4 action buttons: Download, Preview,      │
+│  Copy, Delete. All formats supported!                │
 ├──────────────────────────────────────────────────────┤
 │              📁                                       │
 │         Drop files here                              │
-│    PPTX ✨ • XLSX ✨ • PDF • DOCX                   │
+│    PDF ✨ • DOCX ✨ • PPTX ✨ • XLSX ✨             │
 ├──────────────────────────────────────────────────────┤
-│  Statistics: 12 files • 47 images • 8 charts         │
+│  2 of 3 files converted, 42 pages processed         │
 ├──────────────────────────────────────────────────────┤
-│  ✔ presentation.pptx      [========] Complete      │
+│  ✔ presentation.pptx      [========] Completed      │
 │     → 15 slides • 8 images • 3 charts • 12 notes    │
-│  ✔ financial.xlsx         [========] Complete      │
+│  [⬇ Download] [👁 Preview] [📋 Copy] [🗑 Delete]   │
+│                                                      │
+│  ✔ financial.xlsx         [========] Completed      │
 │     → 4 sheets • 45 formulas • 12 merged cells      │
-│  ⏳ report.docx           [====----] Processing   │
+│  [⬇ Download] [👁 Preview] [📋 Copy] [🗑 Delete]   │
 └──────────────────────────────────────────────────────┘
+
+           ┌─────────────────────────┐
+           │ ✓ Copied to clipboard! │ ← Toast notification
+           └─────────────────────────┘
 ```
 
 ---
@@ -163,15 +157,16 @@ A cross-platform desktop application for converting **PDF, PowerPoint, Word, and
 
 ### Option 1: Web Version (Recommended) ⭐
 
-1. Download [web/index_v2.4.3.html](web/index_v2.4.3.html)
+1. Download [web/index_v2.4.4.html](web/index_v2.4.4.html)
 2. Double-click to open in browser
-3. Configure options (images, charts, notes)
-4. Drag & drop PPTX/Excel/Word/PDF files
+3. Drag & drop PDF/DOCX/PPTX/XLSX files
+4. Click "📋 Copy" to copy markdown to clipboard
 5. All processing happens locally in your browser!
-6. **Best for:** Enhanced PPTX/Excel, all platforms, privacy
+6. **Best for:** All formats, one-click copy, privacy
 
-### Option 2: Previous Stable Version
+### Option 2: Previous Versions
 
+- [web/index_v2.4.3.html](web/index_v2.4.3.html) - PPTX & Excel enhancements
 - [web/index_v2.4.0.html](web/index_v2.4.0.html) - Word & Excel support
 - [web/index_v2.2.1.html](web/index_v2.2.1.html) - PDF & PPTX only
 
@@ -202,48 +197,43 @@ python src/main.py
 
 ## 📚 Usage Guide
 
-### Basic Workflow (v2.4.3)
+### Basic Workflow (v2.4.4)
 
 1. **Launch Application**
-   - Open `web/index_v2.4.3.html` in browser (recommended)
+   - Open `web/index_v2.4.4.html` in browser (recommended)
    - Or double-click `MarkItDownConverter.exe`
    - Or run `python src/main.py`
 
-2. **Configure Options** (Web version)
-   - ☑️ Extract Images - Get images from PPTX with alt text
-   - ☑️ Extract Charts - Convert PPTX charts to markdown tables
-   - ☑️ Speaker Notes - Include presenter notes
-   - ☑️ Embed as Base64 - Self-contained markdown (larger files)
-   - ☑️ Include Metadata - Show conversion statistics
-
-3. **Add Files to Queue**
+2. **Add Files to Queue**
    - **Method A**: Drag and drop files onto the drop zone
    - **Method B**: Click to browse files
    - **Supported**: PDF, PPTX, PPT, DOCX, DOC, XLSX, XLS
 
-4. **Start Processing**
+3. **Start Processing**
    - Processing starts automatically (web version)
    - Watch real-time progress and statistics
-   - See metrics: images, charts, notes, sheets, formulas
+   - See simplified stats: "X of Y files converted"
 
-5. **Download Results**
-   - Click "⬇ Download Markdown" button
-   - Files saved with `_v243.md` suffix
-   - Or click "👁 Preview" to view in browser
+4. **Use Results**
+   - Click "⬇ Download" to save as .md file
+   - Click "👁 Preview" to view in browser
+   - Click "📋 Copy" to copy to clipboard **NEW!**
+   - See toast notification: "✓ Copied to clipboard!"
+   - Click "🗑 Delete" to remove from queue
 
 ### File Naming Convention
 
-**Web Version (v2.4.3):**
+**Web Version (v2.4.4):**
 ```
-research-presentation_v243.md
-financial-report_v243.md
-business-plan_v243.md
+research-presentation_v244.md
+financial-report_v244.md
+business-plan_v244.md
 ```
 
 **Desktop Version:**
 ```
-16-02-2026_research-presentation_v2.4.3_clean.md
-16-02-2026_financial-report_v2.4.3_clean.md
+17-02-2026_research-presentation_v2.4.4_clean.md
+17-02-2026_financial-report_v2.4.4_clean.md
 ```
 
 ### Folder Structure
@@ -251,11 +241,13 @@ business-plan_v243.md
 ```
 markitdown-desktop-converter/
 ├── web/
-│   ├── index_v2.4.3.html    # Latest: Enhanced PPTX & Excel ⭐
-│   ├── index_v2.4.0.html    # Previous: Word & Excel
-│   ├── index_v2.2.1.html    # Legacy: PDF & PPTX only
+│   ├── index_v2.4.4.html    # Latest: Copy button + Simplified stats ⭐
+│   ├── index_v2.4.3.html    # Previous: Enhanced PPTX & Excel
+│   ├── index_v2.4.0.html    # Legacy: Word & Excel
 │   ├── js/
 │   │   ├── converters/
+│   │   │   ├── pdf-converter.js   # PDF text extraction
+│   │   │   ├── docx-converter.js  # Word conversion
 │   │   │   ├── excel-v243.js      # Enhanced Excel converter
 │   │   │   └── pptx-v243.js       # Enhanced PPTX converter
 │   │   ├── modules/
@@ -266,11 +258,9 @@ markitdown-desktop-converter/
 │   │   └── utils/
 │   │       ├── xml-helper.js      # XML parsing
 │   │       └── base64-helper.js   # Base64 encoding
-│   ├── VERSION_NOTES.md     # Version comparison
 │   └── README.md            # Web documentation
 ├── docs/
-│   ├── v2.4.3-progress.md         # Implementation log
-│   └── v2.4.3-implementation-guide.md  # Technical details
+│   └── CHANGELOG.md         # Version history
 ├── tests/
 │   ├── unit/               # 25+ Excel unit tests
 │   ├── integration/        # 10+ integration tests
@@ -283,198 +273,6 @@ markitdown-desktop-converter/
 
 ---
 
-## ⚙️ Features in Detail
-
-### 🖼️ PPTX Image Extraction (NEW in v2.4.3)
-
-**What Gets Extracted:**
-- ✅ All images from `ppt/media/` folder
-- ✅ Alt text from slide XML (`p:cNvPr descr` attribute)
-- ✅ Image metadata (size, format, dimensions)
-- ✅ Slide-to-image mapping
-- ✅ Base64 encoding option
-- ✅ Statistics (total images, images per slide)
-
-**Example:**
-
-**Input (PPTX):**
-```
-Slide 1:
-- Title: Product Overview
-- Image: product-photo.png (Alt text: "Red smartphone with curved display")
-```
-
-**Output (Markdown):**
-```markdown
-## Slide 1
-
-### Product Overview
-
-### Images
-
-![Red smartphone with curved display](data:image/png;base64,iVBOR...)
-*Size: 245.3 KB*
-```
-
-### 📊 PPTX Chart Extraction (NEW in v2.4.3)
-
-**Supported Chart Types:**
-- ✅ Bar charts (horizontal/vertical)
-- ✅ Line charts
-- ✅ Pie charts
-- ✅ Area charts
-- ✅ Scatter plots
-- ✅ Radar charts
-- ✅ Combo charts (mixed types)
-- ✅ Multi-series charts
-
-**What Gets Converted:**
-- ✅ Chart title
-- ✅ Series names and data
-- ✅ Category labels (X-axis)
-- ✅ Values (Y-axis)
-- ✅ Multiple data series
-- ✅ Formatted as markdown tables
-
-**Example:**
-
-**Input (PPTX Chart):**
-```
-Chart: Quarterly Revenue
-Type: Bar Chart
-
-Series: Revenue
-Q1: $500,000
-Q2: $550,000
-Q3: $600,000
-Q4: $650,000
-```
-
-**Output (Markdown):**
-```markdown
-### Chart: Quarterly Revenue
-
-**Type:** Bar Chart
-
-| Category | Revenue |
-|----------|----------|
-| Q1 | 500000 |
-| Q2 | 550000 |
-| Q3 | 600000 |
-| Q4 | 650000 |
-
-*Chart contains 1 series with 4 data points*
-```
-
-### 📝 PPTX Speaker Notes (NEW in v2.4.3)
-
-**What Gets Extracted:**
-- ✅ Speaker notes from each slide
-- ✅ Clean text (no XML artifacts)
-- ✅ Per-slide organization
-- ✅ Search and filter capability
-- ✅ Statistics (slides with notes)
-
-**Example:**
-
-**Input (PPTX with Notes):**
-```
-Slide 1: Introduction
-Notes: "Welcome the audience. Mention the agenda. Allow 2 minutes for questions."
-
-Slide 2: Overview
-Notes: "Emphasize the key benefits. Show demo if time permits."
-```
-
-**Output (Markdown):**
-```markdown
-## Slide 1: Introduction
-
-[slide content]
-
-### 📝 Speaker Notes
-
-Welcome the audience. Mention the agenda. Allow 2 minutes for questions.
-
----
-
-## Slide 2: Overview
-
-[slide content]
-
-### 📝 Speaker Notes
-
-Emphasize the key benefits. Show demo if time permits.
-```
-
-### 📈 Enhanced Excel Processing (v2.4.3)
-
-**Supported Formats:** .xlsx, .xls
-
-**What Gets Converted:**
-- ✅ All sheets in workbook with clear headers
-- ✅ Sheet names preserved
-- ✅ Cell values (numbers, text, dates)
-- ✅ **Formulas preserved** as markdown code (NEW!)
-- ✅ **Merged cells detected** and reported (NEW!)
-- ✅ Empty cells handled gracefully
-- ✅ Multiple data types
-- ✅ **Enhanced statistics** (sheets, formulas, merged cells) (NEW!)
-- ✅ **Document summary** at the beginning (NEW!)
-
-**Example:**
-
-**Input (Excel):**
-```
-Sheet: Financial Summary
-
-| Quarter | Revenue | Expenses | Profit (Formula: =B2-C2) |
-| Q1 2024 | $500,000 | $300,000 | $200,000 |
-| Q2 2024 | $550,000 | $320,000 | $230,000 |
-```
-
-**Output (Markdown):**
-```markdown
-# financial-report.xlsx
-
-Converted with MarkItDown v2.4.3
-
-**Summary:**
-- Total Sheets: 2
-- Formulas: 8
-- Merged Cells: 3
-
----
-
-## Sheet: Financial Summary
-
-| Quarter | Revenue | Expenses | Profit |
-|---------|---------|----------|--------|
-| Q1 2024 | 500000 | 300000 | 200000 `=B2-C2` |
-| Q2 2024 | 550000 | 320000 | 230000 `=B3-C3` |
-
-*Formulas preserved as markdown code*
-```
-
-### ✨ Advanced Text Cleaning (v2.2.1)
-
-Fixes common extraction artifacts for clean embeddings:
-
-**Spaced Ligatures:**
-- Before: `arti fi cial intelligence for identi fi cation`
-- After: `artificial intelligence for identification`
-
-**Merged Words:**
-- Before: `transmitted onascale representamajor improvement`
-- After: `transmitted on a scale represent a major improvement`
-
-**Legacy Artifacts:**
-- Hyphenation breaks: `non- invasive` → `non-invasive`
-- Medical terms: NT-proBNP, β-blockers, HbA1c preserved
-- Special characters: ±, μ, ≥, ≤, → handled correctly
-
----
-
 ## 🎯 Use Cases
 
 ### Ideal For:
@@ -483,23 +281,24 @@ Fixes common extraction artifacts for clean embeddings:
 - ✅ **Semantic search indexing**
 - ✅ **LLM knowledge bases**
 - ✅ **Academic paper processing** (PDF)
-- ✅ **Financial data with formulas** (Excel) **ENHANCED!**
-- ✅ **Presentation analysis** (PPTX with images/charts) **NEW!**
-- ✅ **Training material conversion** (PPTX with notes) **NEW!**
-- ✅ **Business intelligence** (Excel multi-sheet) **ENHANCED!**
+- ✅ **Financial data with formulas** (Excel)
+- ✅ **Presentation analysis** (PPTX with images/charts)
+- ✅ **Training material conversion** (PPTX with notes)
+- ✅ **Business intelligence** (Excel multi-sheet)
 - ✅ **Healthcare documentation** (Word)
 - ✅ **Technical documentation** (All formats)
-- ✅ **Data visualization extraction** (PPTX charts) **NEW!**
+- ✅ **Data visualization extraction** (PPTX charts)
+- ✅ **Quick clipboard workflow** (Copy button) **NEW!**
 
 ### Quality by Use Case:
 
-| Use Case | v2.4.3 Quality | Key Features |
+| Use Case | v2.4.4 Quality | Key Features |
 |----------|----------------|---------------|
 | Embedding Generation | ⭐⭐⭐⭐⭐ | All formats, clean text |
 | RAG Pipeline | ⭐⭐⭐⭐⭐ | Structured output |
-| Presentation Analysis | ⭐⭐⭐⭐⭐ | Images, charts, notes **NEW!** |
-| Financial Data | ⭐⭐⭐⭐⭐ | Formulas, multi-sheet **NEW!** |
-| Training Materials | ⭐⭐⭐⭐⭐ | Speaker notes **NEW!** |
+| Presentation Analysis | ⭐⭐⭐⭐⭐ | Images, charts, notes |
+| Financial Data | ⭐⭐⭐⭐⭐ | Formulas, multi-sheet |
+| Quick Workflow | ⭐⭐⭐⭐⭐ | Copy button **NEW!** |
 | Academic Papers | ⭐⭐⭐⭐⭐ | Structure detection |
 | Healthcare Docs | ⭐⭐⭐⭐⭐ | PDF, Word support |
 | Business Reports | ⭐⭐⭐⭐ | Word, Excel |
@@ -508,14 +307,14 @@ Fixes common extraction artifacts for clean embeddings:
 
 ## 📄 Supported File Formats
 
-| Format | Extension | Quality | v2.4.3 Features |
+| Format | Extension | Quality | v2.4.4 Features |
 |--------|-----------|---------|------------------|
-| PDF | `.pdf` | ⭐⭐⭐⭐⭐ | Full support, clean text |
-| PowerPoint | `.pptx` | ⭐⭐⭐⭐⭐ | **Images, charts, notes** ✨ |
-| PowerPoint Legacy | `.ppt` | ⭐⭐⭐⭐ | Basic support |
-| Word Document | `.docx` | ⭐⭐⭐⭐⭐ | Formatting, hyperlinks |
+| PDF | `.pdf` | ⭐⭐⭐⭐⭐ | Text extraction |
+| Word Document | `.docx` | ⭐⭐⭐⭐⭐ | Full conversion |
 | Word Legacy | `.doc` | ⭐⭐⭐⭐ | Basic support |
-| Excel Spreadsheet | `.xlsx` | ⭐⭐⭐⭐⭐ | **Multi-sheet, formulas** ✨ |
+| PowerPoint | `.pptx` | ⭐⭐⭐⭐⭐ | Images, charts, notes |
+| PowerPoint Legacy | `.ppt` | ⭐⭐⭐⭐ | Basic support |
+| Excel Spreadsheet | `.xlsx` | ⭐⭐⭐⭐⭐ | Multi-sheet, formulas |
 | Excel Legacy | `.xls` | ⭐⭐⭐⭐ | Multi-sheet support |
 
 ---
@@ -548,16 +347,16 @@ pytest tests/ --cov=src --cov-report=html
 
 ## 🧩 Technology Stack
 
-### Web Version (v2.4.3) - Client-Side Only
+### Web Version (v2.4.4) - Client-Side Only
 - **PDF Processing**: [PDF.js](https://mozilla.github.io/pdf.js/) by Mozilla
-- **PowerPoint Processing**: [JSZip](https://stuk.github.io/jszip/)
 - **Word Processing**: [Mammoth.js](https://github.com/mwilliamson/mammoth.js)
+- **PowerPoint Processing**: [JSZip](https://stuk.github.io/jszip/)
 - **Excel Processing**: [SheetJS (XLSX)](https://sheetjs.com/)
-- **Image Extraction**: Custom PPTXImageExtractor module **NEW!**
-- **Chart Extraction**: Custom PPTXChartExtractor module **NEW!**
-- **Notes Extraction**: Custom PPTXNotesExtractor module **NEW!**
-- **XML Parsing**: Custom XMLHelper utility **NEW!**
-- **Base64 Encoding**: Custom Base64Helper utility **NEW!**
+- **Image Extraction**: Custom PPTXImageExtractor module
+- **Chart Extraction**: Custom PPTXChartExtractor module
+- **Notes Extraction**: Custom PPTXNotesExtractor module
+- **XML Parsing**: Custom XMLHelper utility
+- **Base64 Encoding**: Custom Base64Helper utility
 - **Client-Side Only**: Zero server uploads, 100% privacy
 
 ### Desktop Application
@@ -569,57 +368,9 @@ pytest tests/ --cov=src --cov-report=html
 
 ---
 
-## 🐛 Troubleshooting
-
-### PPTX Image Extraction Issues
-
-**Issue**: Images not extracting from PPTX
-
-**Solution**:
-1. Ensure using .pptx format (not .ppt)
-2. Check "Extract Images" option is enabled
-3. Verify images are embedded (not linked externally)
-4. Check console logs (F12) for detailed errors
-5. Try re-saving PPTX in PowerPoint
-
-### PPTX Chart Extraction Issues
-
-**Issue**: Charts not converting
-
-**Solution**:
-1. Ensure using .pptx format
-2. Check "Extract Charts" option is enabled
-3. Charts must be native PowerPoint charts (not images)
-4. Check console logs for unsupported chart types
-5. Try simplifying complex charts
-
-### Excel Formula Issues
-
-**Issue**: Formulas not showing in output
-
-**Solution**:
-1. Formulas are shown as markdown code (`` `=FORMULA()` ``)
-2. Look for backtick-wrapped formulas in cells
-3. Check console logs for parsing errors
-4. Very complex formulas may need simplification
-
-### Web Version Issues
-
-**Issue**: Web version not working
-
-**Solution**:
-1. Ensure JavaScript is enabled
-2. Use modern browser (Chrome 90+, Firefox 88+, Safari 14+)
-3. Check browser console for errors (F12)
-4. Clear browser cache and reload
-5. Try different browser
-6. Ensure files are not too large (>50MB may be slow)
-
----
-
 ## 💻 System Requirements
 
-### Web Version (v2.4.3)
+### Web Version (v2.4.4)
 - **Browser**: Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
 - **RAM**: 2 GB available (4 GB for large PPTX with images)
 - **JavaScript**: Must be enabled
@@ -637,18 +388,17 @@ pytest tests/ --cov=src --cov-report=html
 
 ## 🛣️ Roadmap
 
-### v2.4.3 (Current) - Enhanced PPTX & Excel ✅
-- [x] PPTX image extraction with alt text
-- [x] PPTX chart-to-markdown conversion
-- [x] PPTX speaker notes extraction
-- [x] Excel formula preservation
-- [x] Excel merged cell detection
-- [x] Configurable feature toggles
-- [x] Comprehensive statistics tracking
-- [x] 9 modular JavaScript files
-- [x] Full client-side processing
+### v2.4.4 (Current) - UI Update ✅
+- [x] Copy to clipboard button
+- [x] Toast notification for copy action
+- [x] Simplified single-line stats
+- [x] PDF support (PDF.js)
+- [x] DOCX support (Mammoth.js)
+- [x] All v2.4.3 PPTX features
+- [x] All v2.4.3 Excel features
+- [x] 4-button action layout
 
-### v2.5.0 (Future) - Integration & Testing
+### v2.5.0 (Planned) - Integration & Testing
 - [ ] Integrate v2.4.2 PPTX table/list fixes
 - [ ] Word document automated tests
 - [ ] PPTX automated test suite
@@ -676,7 +426,7 @@ Contributions welcome! Please:
 4. Push to branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-See [docs/v2.4.3-progress.md](docs/v2.4.3-progress.md) for recent implementation details.
+See [CHANGELOG.md](docs/CHANGELOG.md) for recent changes.
 
 ---
 
@@ -705,13 +455,12 @@ For issues, questions, or feature requests:
 - Open an issue: [GitHub Issues](https://github.com/Wei-power3/markitdown-desktop-converter/issues)
 - View documentation: [docs/](docs/)
 - Web version docs: [web/README.md](web/README.md)
-- Test documentation: [tests/README.md](tests/README.md)
-- Implementation guide: [docs/v2.4.3-implementation-guide.md](docs/v2.4.3-implementation-guide.md)
+- Changelog: [docs/CHANGELOG.md](docs/CHANGELOG.md)
 
 ---
 
 **Made with ♥️ by Wei-power3**
 
-**Version 2.4.3** - Enhanced PPTX & Excel with Images, Charts, Notes, and Formulas
+**Version 2.4.4** - Copy Button + Simplified Stats + All Formats
 
-[Report Bug](https://github.com/Wei-power3/markitdown-desktop-converter/issues) · [Request Feature](https://github.com/Wei-power3/markitdown-desktop-converter/issues) · [Try v2.4.3](web/index_v2.4.3.html) · [View Docs](docs/) · [Run Tests](tests/)
+[Report Bug](https://github.com/Wei-power3/markitdown-desktop-converter/issues) · [Request Feature](https://github.com/Wei-power3/markitdown-desktop-converter/issues) · [Try v2.4.4](web/index_v2.4.4.html) · [View Docs](docs/) · [Run Tests](tests/)
