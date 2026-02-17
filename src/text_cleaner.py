@@ -1,20 +1,19 @@
 """
-Text cleaning utilities for fixing PDF extraction artifacts
+Text cleaning utilities for fixing PDF and PPTX extraction artifacts
 """
 import re
-from typing import Dict, Pattern
+from typing import Dict, Pattern, Optional
+from pptx_text_fixer import PPTXTextFixer
 
 
 class MarkdownCleaner:
     """
-    Cleans common PDF extraction artifacts from markdown text.
+    Cleans common document extraction artifacts from markdown text.
     
     Handles:
-    - Ligature splitting (e.g., "arti fi cial" -> "artificial")
-    - Hyphenation artifacts
-    - Medical/scientific term formatting
-    - Special character encoding
-    - Spacing issues
+    - PDF: Ligature splitting, hyphenation, medical terms, special characters
+    - PPTX: Run-on words, contractions, word boundary issues
+    - General: Spacing issues, sentence breaks
     """
     
     def __init__(self):
@@ -78,13 +77,18 @@ class MarkdownCleaner:
             for pattern, replacement in patterns_dict.items():
                 compiled = re.compile(pattern, re.IGNORECASE if pattern[0] != '\\b' or pattern[2].islower() else 0)
                 self.all_patterns[compiled] = replacement
+        
+        # PPTX text fixer
+        self.pptx_fixer = PPTXTextFixer()
     
-    def clean(self, text: str) -> str:
+    def clean(self, text: str, source_format: Optional[str] = None) -> str:
         """
         Apply all cleaning rules to the text.
         
         Args:
-            text: Raw markdown text from PDF extraction
+            text: Raw markdown text from document extraction
+            source_format: Optional hint about source ('pptx', 'pdf', etc.)
+                          Enables format-specific cleaning
         
         Returns:
             Cleaned markdown text
@@ -94,7 +98,11 @@ class MarkdownCleaner:
         
         cleaned = text
         
-        # Apply pattern replacements
+        # PPTX-specific fixes (applied first for PPTX sources)
+        if source_format and source_format.lower() in ['pptx', 'ppt']:
+            cleaned = self.pptx_fixer.fix_run_on_words(cleaned)
+        
+        # Apply pattern replacements (ligatures, hyphens, medical terms)
         for pattern, replacement in self.all_patterns.items():
             cleaned = pattern.sub(replacement, cleaned)
         
@@ -162,18 +170,19 @@ class MarkdownCleaner:
         
         return text
     
-    def get_cleaning_report(self, original: str, cleaned: str) -> dict:
+    def get_cleaning_report(self, original: str, cleaned: str, source_format: Optional[str] = None) -> dict:
         """
         Generate a report of cleaning operations performed.
         
         Args:
             original: Original text
             cleaned: Cleaned text
+            source_format: Optional source format for format-specific stats
         
         Returns:
             Dictionary with statistics about cleaning operations
         """
-        return {
+        report = {
             'original_length': len(original),
             'cleaned_length': len(cleaned),
             'characters_changed': len(original) - len(cleaned),
@@ -181,6 +190,17 @@ class MarkdownCleaner:
             'hyphen_fixes': self._count_pattern_matches(original, self.hyphen_patterns),
             'medical_term_fixes': self._count_pattern_matches(original, self.medical_patterns),
         }
+        
+        # Add PPTX-specific statistics
+        if source_format and source_format.lower() in ['pptx', 'ppt']:
+            pptx_stats = self.pptx_fixer.get_repair_stats(original, cleaned)
+            report.update({
+                'pptx_token_delta': pptx_stats['token_delta'],
+                'pptx_contraction_fixes': pptx_stats['contraction_fixes'],
+                'pptx_run_on_fixes': pptx_stats['estimated_run_on_fixes']
+            })
+        
+        return report
     
     def _count_pattern_matches(self, text: str, patterns: dict) -> int:
         """Count how many times patterns match in text"""
