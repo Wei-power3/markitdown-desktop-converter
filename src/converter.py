@@ -24,6 +24,7 @@ class DocumentConverter:
     """
     Enhanced document conversion with:
     - Text cleaning (fixes ligatures, spacing, encoding)
+    - PPTX run-on word repair (fixes "withabusiness" → "with a business")
     - Structured table extraction
     - Dual PowerPoint conversion
     - Word document support
@@ -80,11 +81,11 @@ class DocumentConverter:
         result = self.md.convert(str(file_path))
         base_content = result.text_content
         
-        # Step 2: Clean text
-        cleaned_content = self.text_cleaner.clean(base_content)
+        # Step 2: Clean text (PDF format)
+        cleaned_content = self.text_cleaner.clean(base_content, source_format='pdf')
         
         # Log cleaning statistics
-        report = self.text_cleaner.get_cleaning_report(base_content, cleaned_content)
+        report = self.text_cleaner.get_cleaning_report(base_content, cleaned_content, source_format='pdf')
         logger.info(f"Text cleaning: {report['encoding_fixes']} encoding fixes, "
                    f"{report['hyphen_fixes']} hyphen fixes, "
                    f"{report['medical_term_fixes']} medical term fixes")
@@ -104,9 +105,10 @@ class DocumentConverter:
     
     def _convert_powerpoint(self, file_path: Path) -> Tuple[str, None]:
         """
-        Convert PowerPoint to Markdown.
+        Convert PowerPoint to Markdown with run-on word fixes.
+        
         Implements both direct conversion and PDF pathway.
-        Text cleaning is applied to all outputs.
+        Applies PPTX-specific text cleaning (run-on words, contractions).
         """
         logger.info(f"Converting PowerPoint: {file_path.name}")
         results = []
@@ -117,12 +119,28 @@ class DocumentConverter:
                 result = self.md.convert(str(file_path))
                 direct_content = result.text_content
                 
-                # Clean the content
-                direct_content = self.text_cleaner.clean(direct_content)
+                # Store original for comparison
+                original_content = direct_content
+                
+                # Clean the content with PPTX-specific fixes
+                direct_content = self.text_cleaner.clean(direct_content, source_format='pptx')
+                
+                # Log PPTX-specific statistics
+                report = self.text_cleaner.get_cleaning_report(
+                    original_content, 
+                    direct_content, 
+                    source_format='pptx'
+                )
+                logger.info(
+                    f"PPTX text cleaning: "
+                    f"{report.get('pptx_contraction_fixes', 0)} contraction fixes, "
+                    f"{report.get('pptx_run_on_fixes', 0)} run-on word fixes, "
+                    f"token increase: +{report.get('pptx_token_delta', 0)}"
+                )
                 
                 results.append("# Direct PPTX Conversion\n\n")
                 results.append(direct_content)
-                logger.info("Direct PPTX conversion completed")
+                logger.info("Direct PPTX conversion completed with quality fixes")
             except Exception as e:
                 logger.warning(f"Direct conversion failed: {str(e)}")
                 results.append(f"Direct conversion failed: {str(e)}\n\n")
@@ -137,8 +155,8 @@ class DocumentConverter:
                 result = self.md.convert(str(pdf_path))
                 pdf_pathway_content = result.text_content
                 
-                # Clean the content
-                pdf_pathway_content = self.text_cleaner.clean(pdf_pathway_content)
+                # Clean the content (PPTX-originated, so use pptx format)
+                pdf_pathway_content = self.text_cleaner.clean(pdf_pathway_content, source_format='pptx')
                 
                 results.append("\n\n---\n\n# PDF Pathway Conversion\n\n")
                 results.append(pdf_pathway_content)
@@ -172,10 +190,10 @@ class DocumentConverter:
             content = result.text_content
             
             # Apply text cleaning for quality
-            cleaned_content = self.text_cleaner.clean(content)
+            cleaned_content = self.text_cleaner.clean(content, source_format='docx')
             
             # Log cleaning statistics
-            report = self.text_cleaner.get_cleaning_report(content, cleaned_content)
+            report = self.text_cleaner.get_cleaning_report(content, cleaned_content, source_format='docx')
             logger.info(f"Word doc cleaned: {report['encoding_fixes']} encoding fixes, "
                        f"{report['hyphen_fixes']} hyphen fixes")
             
@@ -206,7 +224,7 @@ class DocumentConverter:
             
             # Apply text cleaning for quality
             # (handles any text artifacts in cell values)
-            cleaned_content = self.text_cleaner.clean(content)
+            cleaned_content = self.text_cleaner.clean(content, source_format='xlsx')
             
             # Log info
             num_lines = len(cleaned_content.split('\n'))
