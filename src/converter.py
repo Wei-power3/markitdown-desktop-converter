@@ -2,7 +2,8 @@
 Document conversion logic using MarkItDown with enhanced quality
 """
 from pathlib import Path
-from typing import Tuple, Optional
+from typing import Tuple, Optional, List, Dict
+import re
 from markitdown import MarkItDown
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
@@ -14,6 +15,7 @@ import logging
 from config import CONVERT_PPTX_TO_PDF, CONVERT_PPTX_DIRECT
 from text_cleaner import MarkdownCleaner
 from table_extractor import TableExtractor
+from pptx_table_extractor import PPTXTableExtractor
 
 # Setup logging
 logging.basicConfig(level=logging.INFO)
@@ -25,6 +27,7 @@ class DocumentConverter:
     Enhanced document conversion with:
     - Text cleaning (fixes ligatures, spacing, encoding)
     - PPTX run-on word repair (fixes "withabusiness" → "with a business")
+    - PPTX table structure preservation (converts tables to proper markdown)
     - Structured table extraction
     - Dual PowerPoint conversion
     - Word document support
@@ -34,7 +37,14 @@ class DocumentConverter:
     def __init__(self):
         self.md = MarkItDown()
         self.text_cleaner = MarkdownCleaner()
-        self.table_extractor = TableExtractor(min_accuracy=0.5)
+        self.table_extractor = TableExtractor(min_accuracy=0.5)  # For PDF tables
+        
+        # PPTX table extractor
+        try:
+            self.pptx_table_extractor = PPTXTableExtractor()
+        except ImportError:
+            self.pptx_table_extractor = None
+            logger.warning("PPTX table extraction disabled (python-pptx not available)")
     
     def convert_file(self, file_path: Path) -> Tuple[str, Optional[str]]:
         """
@@ -105,13 +115,32 @@ class DocumentConverter:
     
     def _convert_powerpoint(self, file_path: Path) -> Tuple[str, None]:
         """
-        Convert PowerPoint to Markdown with run-on word fixes.
+        Convert PowerPoint to Markdown with table structure preservation.
+        
+        Process:
+        1. Extract tables FIRST using python-pptx
+        2. Convert PPTX to markdown using MarkItDown
+        3. Apply PPTX-specific text cleaning (run-on words)
+        4. Inject properly formatted tables back into content
         
         Implements both direct conversion and PDF pathway.
-        Applies PPTX-specific text cleaning (run-on words, contractions).
         """
         logger.info(f"Converting PowerPoint: {file_path.name}")
         results = []
+        
+        # Step 1: Extract tables BEFORE text conversion
+        pptx_tables = []
+        if self.pptx_table_extractor:
+            try:
+                pptx_tables = self.pptx_table_extractor.extract_tables_from_pptx(file_path)
+                if pptx_tables:
+                    report = self.pptx_table_extractor.get_extraction_report(pptx_tables)
+                    logger.info(
+                        f"PPTX table extraction: {report['total_tables']} tables found "
+                        f"on slides {report['slide_numbers']}"
+                    )
+            except Exception as e:
+                logger.warning(f"PPTX table extraction failed: {e}")
         
         # Method 1: Direct PPTX → Markdown
         if CONVERT_PPTX_DIRECT:
@@ -122,8 +151,13 @@ class DocumentConverter:
                 # Store original for comparison
                 original_content = direct_content
                 
-                # Clean the content with PPTX-specific fixes
+                # Step 2: Clean the content with PPTX-specific fixes
                 direct_content = self.text_cleaner.clean(direct_content, source_format='pptx')
+                
+                # Step 3: Inject tables if we have them
+                if pptx_tables:
+                    direct_content = self._inject_pptx_tables(direct_content, pptx_tables)
+                    logger.info(f"Injected {len(pptx_tables)} table(s) into markdown")
                 
                 # Log PPTX-specific statistics
                 report = self.text_cleaner.get_cleaning_report(
@@ -158,6 +192,10 @@ class DocumentConverter:
                 # Clean the content (PPTX-originated, so use pptx format)
                 pdf_pathway_content = self.text_cleaner.clean(pdf_pathway_content, source_format='pptx')
                 
+                # Inject tables
+                if pptx_tables:
+                    pdf_pathway_content = self._inject_pptx_tables(pdf_pathway_content, pptx_tables)
+                
                 results.append("\n\n---\n\n# PDF Pathway Conversion\n\n")
                 results.append(pdf_pathway_content)
                 
@@ -170,6 +208,60 @@ class DocumentConverter:
         
         final_content = "".join(results)
         return final_content, None
+    
+    def _inject_pptx_tables(self, content: str, tables: List[Dict]) -> str:
+        """
+        Inject properly formatted tables into markdown content.
+        
+        Strategy:
+        - Find slide comment markers (e.g., <!-- Slide number: 3 -->)
+        - Insert table after the slide marker
+        - If MarkItDown already created a table, enhance it
+        - If no table exists, add our extracted table
+        
+        Args:
+            content: Markdown content from MarkItDown
+            tables: List of table dicts from PPTXTableExtractor
+        
+        Returns:
+            Enhanced markdown with proper tables
+        """
+        if not tables:
+            return content
+        
+        # Create slide number to tables mapping
+        slide_tables = self.pptx_table_extractor.format_tables_for_injection(tables)
+        
+        # Process content line by line
+        lines = content.split('\n')
+        enhanced_lines = []
+        current_slide = None
+        table_injected = set()  # Track which slides have tables injected
+        
+        for i, line in enumerate(lines):
+            enhanced_lines.append(line)
+            
+            # Detect slide markers: <!-- Slide number: X -->
+            slide_match = re.match(r'<!--\s*Slide number:\s*(\d+)\s*-->', line)
+            if slide_match:
+                current_slide = int(slide_match.group(1))
+                
+                # If this slide has tables and we haven't injected yet
+                if current_slide in slide_tables and current_slide not in table_injected:
+                    # Look ahead to see if MarkItDown already created a table
+                    has_table_ahead = False
+                    for j in range(i+1, min(i+20, len(lines))):
+                        if '|' in lines[j] and '---' in lines[j+1] if j+1 < len(lines) else False:
+                            has_table_ahead = True
+                            break
+                    
+                    # If no table ahead, inject ours
+                    if not has_table_ahead:
+                        enhanced_lines.append(slide_tables[current_slide])
+                        table_injected.add(current_slide)
+                        logger.debug(f"Injected table for slide {current_slide}")
+        
+        return '\n'.join(enhanced_lines)
     
     def _convert_word(self, file_path: Path) -> Tuple[str, None]:
         """
