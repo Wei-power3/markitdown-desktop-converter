@@ -3,57 +3,73 @@
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/downloads/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey)](https://www.microsoft.com/windows)
-[![Version](https://img.shields.io/badge/version-2.4.0-brightgreen)](https://github.com/Wei-power3/markitdown-desktop-converter/releases)
+[![Version](https://img.shields.io/badge/version-2.4.3-orange)](https://github.com/Wei-power3/markitdown-desktop-converter/releases)
 [![Tests](https://img.shields.io/badge/tests-45%2B%20Excel%20tests-success)](tests/)
 
 A cross-platform desktop application for converting **PDF, PowerPoint, Word, and Excel** files to **clean, high-quality** Markdown optimized for embeddings, RAG pipelines, and NLP tasks.
 
-## 🎉 Current Version: v2.4.0 - Word & Excel Support!
+## 🎉 Current Version: v2.4.3 - Enhanced PPTX & Excel!
 
-**NEW:** Full support for Word documents and Excel spreadsheets!
+**NEW:** Advanced PPTX features with images, charts, and speaker notes extraction! Plus enhanced Excel multi-sheet processing!
 
-### What's New in v2.4.0?
+### ✨ What's New in v2.4.3?
 
-✨ **Word Document Support (.docx, .doc)**
-- Convert Word documents to clean markdown
-- Preserve formatting (bold, italic, headers)
-- Extract hyperlinks from documents
-- Multi-page document handling
-- Legacy .doc format support
+🖼️ **PPTX Image Extraction**
+- Extract images from PowerPoint presentations
+- Preserve alt text from slide XML
+- Base64 embedding option for self-contained markdown
+- Support for all image formats (PNG, JPEG, GIF, etc.)
 
-📊 **Excel Spreadsheet Support (.xlsx, .xls)**
-- Convert spreadsheets to markdown tables
-- Multi-sheet handling with sheet names
-- Cell data preservation
-- Formula results displayed
-- Legacy .xls format support
+📊 **PPTX Chart Extraction**
+- Convert PowerPoint charts to markdown tables
+- Support for 8+ chart types (bar, line, pie, area, scatter, radar, etc.)
+- Extract series data and category labels
+- Preserve chart metadata and structure
 
-🧪 **45+ Automated Tests**
-- Comprehensive test suite for Excel conversion
-- Unit tests, integration tests, regression tests
-- Quality assurance for all formats
+📝 **PPTX Speaker Notes**
+- Extract speaker notes from each slide
+- Per-slide caching for performance
+- Search and filter notes
+- Clean markdown formatting
 
-✅ **Everything from v2.2.1**
-- Clean text extraction for embeddings
-- AI structure detection
-- Advanced text cleaning
-- Link preservation
-- Table extraction
+📈 **Enhanced Excel Processing**
+- Multi-sheet processing with sheet name headers
+- Formula preservation (displayed as markdown code)
+- Merged cell detection and reporting
+- Enhanced statistics (sheets, formulas, merged cells)
+- Better empty cell handling
+- Document summary generation
+
+🎛️ **Configurable Options**
+- Toggle image extraction on/off
+- Toggle chart extraction on/off
+- Toggle speaker notes inclusion
+- Choose base64 embedding or links
+- Control metadata output
+
+📊 **Comprehensive Statistics**
+- Track images, charts, notes extracted
+- Monitor processing time
+- Quality metrics per file
+- Real-time progress indicators
 
 ---
 
 ## 🌐 Web Version (Recommended)
 
-**NEW v2.4.0:** Browser-based converter with Word & Excel support:
-- 📂 **[Download web/index_v2.4.0.html](web/index_v2.4.0.html)** - Latest version
+**NEW v2.4.3:** Browser-based converter with enhanced PPTX & Excel features:
+- 📂 **[Download web/index_v2.4.3.html](web/index_v2.4.3.html)** - Latest version with all features!
+- 🖼️ **PPTX Images** - Extract images with alt text **NEW!**
+- 📊 **PPTX Charts** - Convert to markdown tables **NEW!**
+- 📝 **Speaker Notes** - Include presenter notes **NEW!**
+- 📈 **Excel Multi-Sheet** - Enhanced processing with formulas **NEW!**
+- 🔧 **Feature Toggles** - Enable/disable features as needed **NEW!**
 - 📄 **Word Documents** - .docx and .doc support
-- 📊 **Excel Spreadsheets** - .xlsx and .xls support
-- 📑 **PDF & PowerPoint** - Full support as before
+- 📑 **PDF Support** - Clean text extraction
 - 🔒 100% client-side processing (no uploads)
 - ✨ AI structure detection + advanced text cleaning
 - 🚀 Run offline after download
 - 📱 Works on any OS with modern browser
-- 📊 Quality metrics with scoring
 
 **Perfect for:**
 - Clean text extraction for embeddings
@@ -61,8 +77,9 @@ A cross-platform desktop application for converting **PDF, PowerPoint, Word, and
 - Semantic search indexing
 - LLM knowledge base creation
 - Academic paper processing
-- Financial data extraction (Excel)
+- Financial data extraction (Excel with formulas)
 - Healthcare documentation (Word)
+- Presentation analysis (PPTX with images/charts)
 - Sensitive documents (zero data uploads)
 
 [See web/README.md for details](web/README.md)
@@ -71,13 +88,30 @@ A cross-platform desktop application for converting **PDF, PowerPoint, Word, and
 
 ## ✨ Core Features
 
-### Document Conversion (v2.4.0)
+### Document Conversion (v2.4.3)
 - 📄 **PDF to Markdown** - Clean text extraction with structure detection
-- 📊 **PowerPoint to Markdown** - Dual conversion pathways
-- 📝 **Word to Markdown** - Full .docx and .doc support **NEW!**
-- 📈 **Excel to Markdown** - Multi-sheet spreadsheet conversion **NEW!**
+- 📊 **PowerPoint to Markdown** - Full image, chart, and notes extraction **ENHANCED!**
+- 📝 **Word to Markdown** - Full .docx and .doc support
+- 📈 **Excel to Markdown** - Multi-sheet with formula preservation **ENHANCED!**
 - 📂 **Drag & Drop Interface** - Simply drop files to convert
 - 📦 **Batch Processing Queue** - Convert multiple files with visual progress tracking
+- ⚙️ **Configurable Options** - Toggle features on/off **NEW!**
+
+### PPTX Enhancements (v2.4.3) 🆕
+- 🖼️ **Image Extraction** - Extract images from media folder with alt text
+- 📊 **Chart Conversion** - Convert charts to structured markdown tables
+- 📝 **Speaker Notes** - Extract presenter notes per slide
+- 🔲 **Shape Grouping** - Handle grouped shapes with spatial sorting
+- 🔐 **Base64 Embedding** - Optional self-contained image embedding
+- 📊 **Statistics Tracking** - Count images, charts, notes extracted
+
+### Excel Enhancements (v2.4.3) 🆕
+- 📄 **Multi-Sheet Headers** - Each sheet clearly labeled
+- 🧮 **Formula Preservation** - Formulas shown as `` `=FORMULA()` ``
+- 🔗 **Merged Cell Detection** - Report and handle merged cells
+- 📊 **Enhanced Statistics** - Track sheets, formulas, merged cells
+- 🗑️ **Empty Cell Handling** - Better handling of sparse data
+- 📋 **Document Summary** - Overview of entire workbook
 
 ### Text Quality (v2.2.1+)
 - ✨ **Advanced Text Cleaning** - Fixes ligatures, merged words, spacing
@@ -92,32 +126,34 @@ A cross-platform desktop application for converting **PDF, PowerPoint, Word, and
 - 📁 **Organized Folder Structure** - Separate folders for originals and processed files
 - 🎨 **Modern Dark Theme UI** - Clean, professional interface
 - ⚡ **Standalone Executable** - No installation required, just double-click to run
-- 📊 **Quality Metrics** - Text quality, structure score, links preserved
+- 📊 **Quality Metrics** - Text quality, structure score, features extracted
 
 ---
 
 ## 🖼️ Preview
 
-### Main Interface with Batch Queue
+### Main Interface with Feature Toggles (v2.4.3)
 ```
 ┌──────────────────────────────────────────────────────┐
-│    MarkItDown Desktop Converter v2.4.0                │
-│    PDF • PPTX • Word • Excel to Markdown              │
+│    MarkItDown Converter v2.4.3                       │
+│    Enhanced Excel & PPTX - Images, Charts, Notes     │
+├──────────────────────────────────────────────────────┤
+│  ⚙️ Conversion Options                               │
+│  ☑ Extract Images         ☑ Extract Charts          │
+│  ☑ Speaker Notes          ☑ Embed as Base64         │
+│  ☑ Include Metadata                                  │
 ├──────────────────────────────────────────────────────┤
 │              📁                                       │
 │         Drop files here                              │
-│    PDF, PPTX, DOCX, XLSX                             │
+│    PPTX ✨ • XLSX ✨ • PDF • DOCX                   │
 ├──────────────────────────────────────────────────────┤
-│  Processing Queue (4 files)                         │
+│  Statistics: 12 files • 47 images • 8 charts         │
 ├──────────────────────────────────────────────────────┤
-│  ✔ research-paper.pdf     [========] Complete      │
-│     → Text: 95% • Structure: 85% • Overall: 91%     │
-│  ✔ financial-model.xlsx   [========] Complete      │
-│     → 4 sheets • 1,234 rows • 45 columns            │
+│  ✔ presentation.pptx      [========] Complete      │
+│     → 15 slides • 8 images • 3 charts • 12 notes    │
+│  ✔ financial.xlsx         [========] Complete      │
+│     → 4 sheets • 45 formulas • 12 merged cells      │
 │  ⏳ report.docx           [====----] Processing   │
-│  ⏸ presentation.pptx      [--------] Queued       │
-├──────────────────────────────────────────────────────┤
-│ [▶ Start] [Clear] [Originals] [Processed]       │
 └──────────────────────────────────────────────────────┘
 ```
 
@@ -125,19 +161,19 @@ A cross-platform desktop application for converting **PDF, PowerPoint, Word, and
 
 ## 🚀 Quick Start
 
-### Option 1: Web Version (Recommended)
+### Option 1: Web Version (Recommended) ⭐
 
-1. Download [web/index_v2.4.0.html](web/index_v2.4.0.html)
+1. Download [web/index_v2.4.3.html](web/index_v2.4.3.html)
 2. Double-click to open in browser
-3. Drag & drop PDFs, Word docs, Excel files - all processing happens locally!
-4. **Best for:** Clean embeddings, NLP tasks, all platforms
+3. Configure options (images, charts, notes)
+4. Drag & drop PPTX/Excel/Word/PDF files
+5. All processing happens locally in your browser!
+6. **Best for:** Enhanced PPTX/Excel, all platforms, privacy
 
-### Option 2: Download Standalone Executable
+### Option 2: Previous Stable Version
 
-1. Go to [Releases](https://github.com/Wei-power3/markitdown-desktop-converter/releases)
-2. Download `MarkItDownConverter_v2.4.0.exe`
-3. Download and install [Ghostscript](https://ghostscript.com/releases/gsdnld.html) (required for table extraction)
-4. Double-click to run - that's it!
+- [web/index_v2.4.0.html](web/index_v2.4.0.html) - Word & Excel support
+- [web/index_v2.2.1.html](web/index_v2.2.1.html) - PDF & PPTX only
 
 ### Option 3: Run from Source
 
@@ -145,9 +181,6 @@ A cross-platform desktop application for converting **PDF, PowerPoint, Word, and
 # Clone repository
 git clone https://github.com/Wei-power3/markitdown-desktop-converter.git
 cd markitdown-desktop-converter
-
-# Checkout v2.4.0
-git checkout feature/add-word-excel-support
 
 # Create virtual environment
 python -m venv venv
@@ -169,129 +202,225 @@ python src/main.py
 
 ## 📚 Usage Guide
 
-### Basic Workflow
+### Basic Workflow (v2.4.3)
 
 1. **Launch Application**
-   - Double-click `MarkItDownConverter.exe` or run `python src/main.py`
-   - Or use web version: open `web/index_v2.4.0.html` in browser
+   - Open `web/index_v2.4.3.html` in browser (recommended)
+   - Or double-click `MarkItDownConverter.exe`
+   - Or run `python src/main.py`
 
-2. **Add Files to Queue**
+2. **Configure Options** (Web version)
+   - ☑️ Extract Images - Get images from PPTX with alt text
+   - ☑️ Extract Charts - Convert PPTX charts to markdown tables
+   - ☑️ Speaker Notes - Include presenter notes
+   - ☑️ Embed as Base64 - Self-contained markdown (larger files)
+   - ☑️ Include Metadata - Show conversion statistics
+
+3. **Add Files to Queue**
    - **Method A**: Drag and drop files onto the drop zone
-   - **Method B**: Click "Browse Files" button
+   - **Method B**: Click to browse files
    - **Supported**: PDF, PPTX, PPT, DOCX, DOC, XLSX, XLS
 
-3. **Start Processing**
-   - Click "▶ Start Processing" button
-   - Watch real-time progress in the queue
-   - See quality metrics: text quality, structure score, overall
+4. **Start Processing**
+   - Processing starts automatically (web version)
+   - Watch real-time progress and statistics
+   - See metrics: images, charts, notes, sheets, formulas
 
-4. **Access Converted Files**
-   - Click "📂 Originals Folder" to see source files
-   - Click "📄 Processed Folder" to see clean Markdown outputs
-   - Web version: Download directly from browser
+5. **Download Results**
+   - Click "⬇ Download Markdown" button
+   - Files saved with `_v243.md` suffix
+   - Or click "👁 Preview" to view in browser
 
 ### File Naming Convention
 
-**Original Files:**
+**Web Version (v2.4.3):**
 ```
-16-02-2026_research-paper_original.pdf
-16-02-2026_financial-report_original.xlsx
-16-02-2026_document_original.docx
-```
-
-**Markdown Files:**
-```
-16-02-2026_research-paper_v2.4.0_clean.md
-16-02-2026_financial-report_v2.4.0_clean.md
-16-02-2026_document_v2.4.0_clean.md
+research-presentation_v243.md
+financial-report_v243.md
+business-plan_v243.md
 ```
 
-Format: `{day}-{month}-{year}_{filename}_v2.4.0_clean.md`
+**Desktop Version:**
+```
+16-02-2026_research-presentation_v2.4.3_clean.md
+16-02-2026_financial-report_v2.4.3_clean.md
+```
 
 ### Folder Structure
 
 ```
 markitdown-desktop-converter/
 ├── web/
-│   ├── index_v2.4.0.html    # Latest version with Word & Excel
-│   ├── index_v2.2.1.html    # Previous stable version
-│   ├── VERSION_NOTES.md     # Detailed version comparison
-│   └── README.md            # Web version documentation
+│   ├── index_v2.4.3.html    # Latest: Enhanced PPTX & Excel ⭐
+│   ├── index_v2.4.0.html    # Previous: Word & Excel
+│   ├── index_v2.2.1.html    # Legacy: PDF & PPTX only
+│   ├── js/
+│   │   ├── converters/
+│   │   │   ├── excel-v243.js      # Enhanced Excel converter
+│   │   │   └── pptx-v243.js       # Enhanced PPTX converter
+│   │   ├── modules/
+│   │   │   ├── pptx-images.js     # Image extraction
+│   │   │   ├── pptx-charts.js     # Chart extraction
+│   │   │   ├── pptx-notes.js      # Speaker notes
+│   │   │   └── pptx-groups.js     # Shape grouping
+│   │   └── utils/
+│   │       ├── xml-helper.js      # XML parsing
+│   │       └── base64-helper.js   # Base64 encoding
+│   ├── VERSION_NOTES.md     # Version comparison
+│   └── README.md            # Web documentation
+├── docs/
+│   ├── v2.4.3-progress.md         # Implementation log
+│   └── v2.4.3-implementation-guide.md  # Technical details
 ├── tests/
-│   ├── unit/
-│   │   └── test_excel_conversion.py  # 25+ Excel unit tests
-│   ├── integration/
-│   │   └── test_excel_workflow.py    # 10+ Excel integration tests
-│   ├── regression/
-│   │   └── test_excel_regression.py  # 10+ Excel regression tests
-│   └── fixtures/
-│       └── sample_excel/             # Real-world Excel test files
+│   ├── unit/               # 25+ Excel unit tests
+│   ├── integration/        # 10+ integration tests
+│   └── regression/         # 10+ regression tests
 ├── data/
-│   ├── originals/       # Your source files with timestamps
-│   └── processed/       # Clean Markdown optimized for embeddings
-├── src/                 # Application source code
-│   ├── text_cleaner.py  # Text cleaning engine
-│   ├── converter.py     # Enhanced converter with Word/Excel support
-│   └── ...
-└── MarkItDownConverter.exe  # Standalone executable
+│   ├── originals/          # Source files with timestamps
+│   └── processed/          # Clean Markdown outputs
+└── src/                    # Application source code
 ```
 
 ---
 
 ## ⚙️ Features in Detail
 
-### 📝 Word Document Conversion (NEW in v2.4.0)
+### 🖼️ PPTX Image Extraction (NEW in v2.4.3)
 
-**Supported Formats:** .docx, .doc
-
-**What Gets Converted:**
-- ✅ Plain text content
-- ✅ Headers and headings (H1, H2, H3)
-- ✅ Bold and italic formatting
-- ✅ Bulleted and numbered lists
-- ✅ Hyperlinks (preserved as markdown links)
-- ✅ Tables (converted to markdown tables)
-- ✅ Multi-page documents
-- ✅ Text cleaning applied for quality
+**What Gets Extracted:**
+- ✅ All images from `ppt/media/` folder
+- ✅ Alt text from slide XML (`p:cNvPr descr` attribute)
+- ✅ Image metadata (size, format, dimensions)
+- ✅ Slide-to-image mapping
+- ✅ Base64 encoding option
+- ✅ Statistics (total images, images per slide)
 
 **Example:**
 
-**Input (Word):**
+**Input (PPTX):**
 ```
-Heading 1
-This is bold text and this is italic.
-
-• Bullet point 1
-• Bullet point 2
-
-Visit our website for more info.
+Slide 1:
+- Title: Product Overview
+- Image: product-photo.png (Alt text: "Red smartphone with curved display")
 ```
 
 **Output (Markdown):**
 ```markdown
-# Heading 1
+## Slide 1
 
-This is **bold text** and this is *italic*.
+### Product Overview
 
-- Bullet point 1
-- Bullet point 2
+### Images
 
-[Visit our website](https://example.com) for more info.
+![Red smartphone with curved display](data:image/png;base64,iVBOR...)
+*Size: 245.3 KB*
 ```
 
-### 📊 Excel Spreadsheet Conversion (NEW in v2.4.0)
+### 📊 PPTX Chart Extraction (NEW in v2.4.3)
+
+**Supported Chart Types:**
+- ✅ Bar charts (horizontal/vertical)
+- ✅ Line charts
+- ✅ Pie charts
+- ✅ Area charts
+- ✅ Scatter plots
+- ✅ Radar charts
+- ✅ Combo charts (mixed types)
+- ✅ Multi-series charts
+
+**What Gets Converted:**
+- ✅ Chart title
+- ✅ Series names and data
+- ✅ Category labels (X-axis)
+- ✅ Values (Y-axis)
+- ✅ Multiple data series
+- ✅ Formatted as markdown tables
+
+**Example:**
+
+**Input (PPTX Chart):**
+```
+Chart: Quarterly Revenue
+Type: Bar Chart
+
+Series: Revenue
+Q1: $500,000
+Q2: $550,000
+Q3: $600,000
+Q4: $650,000
+```
+
+**Output (Markdown):**
+```markdown
+### Chart: Quarterly Revenue
+
+**Type:** Bar Chart
+
+| Category | Revenue |
+|----------|----------|
+| Q1 | 500000 |
+| Q2 | 550000 |
+| Q3 | 600000 |
+| Q4 | 650000 |
+
+*Chart contains 1 series with 4 data points*
+```
+
+### 📝 PPTX Speaker Notes (NEW in v2.4.3)
+
+**What Gets Extracted:**
+- ✅ Speaker notes from each slide
+- ✅ Clean text (no XML artifacts)
+- ✅ Per-slide organization
+- ✅ Search and filter capability
+- ✅ Statistics (slides with notes)
+
+**Example:**
+
+**Input (PPTX with Notes):**
+```
+Slide 1: Introduction
+Notes: "Welcome the audience. Mention the agenda. Allow 2 minutes for questions."
+
+Slide 2: Overview
+Notes: "Emphasize the key benefits. Show demo if time permits."
+```
+
+**Output (Markdown):**
+```markdown
+## Slide 1: Introduction
+
+[slide content]
+
+### 📝 Speaker Notes
+
+Welcome the audience. Mention the agenda. Allow 2 minutes for questions.
+
+---
+
+## Slide 2: Overview
+
+[slide content]
+
+### 📝 Speaker Notes
+
+Emphasize the key benefits. Show demo if time permits.
+```
+
+### 📈 Enhanced Excel Processing (v2.4.3)
 
 **Supported Formats:** .xlsx, .xls
 
 **What Gets Converted:**
-- ✅ All sheets in workbook
+- ✅ All sheets in workbook with clear headers
 - ✅ Sheet names preserved
 - ✅ Cell values (numbers, text, dates)
-- ✅ Formula results (not formulas themselves)
+- ✅ **Formulas preserved** as markdown code (NEW!)
+- ✅ **Merged cells detected** and reported (NEW!)
 - ✅ Empty cells handled gracefully
 - ✅ Multiple data types
-- ✅ Large datasets (1000+ rows)
-- ✅ Text cleaning applied to cell values
+- ✅ **Enhanced statistics** (sheets, formulas, merged cells) (NEW!)
+- ✅ **Document summary** at the beginning (NEW!)
 
 **Example:**
 
@@ -299,7 +428,7 @@ This is **bold text** and this is *italic*.
 ```
 Sheet: Financial Summary
 
-| Quarter | Revenue | Expenses | Profit |
+| Quarter | Revenue | Expenses | Profit (Formula: =B2-C2) |
 | Q1 2024 | $500,000 | $300,000 | $200,000 |
 | Q2 2024 | $550,000 | $320,000 | $230,000 |
 ```
@@ -308,7 +437,12 @@ Sheet: Financial Summary
 ```markdown
 # financial-report.xlsx
 
-Converted from Excel • v2.4.0 • 2 sheet(s)
+Converted with MarkItDown v2.4.3
+
+**Summary:**
+- Total Sheets: 2
+- Formulas: 8
+- Merged Cells: 3
 
 ---
 
@@ -316,12 +450,10 @@ Converted from Excel • v2.4.0 • 2 sheet(s)
 
 | Quarter | Revenue | Expenses | Profit |
 |---------|---------|----------|--------|
-| Q1 2024 | 500000 | 300000 | 200000 |
-| Q2 2024 | 550000 | 320000 | 230000 |
+| Q1 2024 | 500000 | 300000 | 200000 `=B2-C2` |
+| Q2 2024 | 550000 | 320000 | 230000 `=B3-C3` |
 
-## Sheet: Details
-
-...
+*Formulas preserved as markdown code*
 ```
 
 ### ✨ Advanced Text Cleaning (v2.2.1)
@@ -341,22 +473,6 @@ Fixes common extraction artifacts for clean embeddings:
 - Medical terms: NT-proBNP, β-blockers, HbA1c preserved
 - Special characters: ±, μ, ≥, ≤, → handled correctly
 
-### 📐 AI Structure Detection (v2.1.0)
-
-Automatically analyzes document structure using font size intelligence:
-
-**How It Works:**
-1. **Font Size Analysis**: Scans entire document to calculate average font size
-2. **Relative Sizing**: Determines header levels based on size ratios
-   - Font ≥ 1.8× average = H1 (# Header)
-   - Font ≥ 1.5× average = H2 (## Header)
-   - Font ≥ 1.2× average = H3 (### Header)
-3. **Academic Keywords**: Promotes recognized section names (Abstract, Methods, etc.)
-4. **List Detection**: Identifies bullet/numbered lists by pattern matching
-5. **Style Preservation**: Extracts bold/italic from font names
-
-**Result**: Structure score jumps from 33% to 75% for research papers! 🚀
-
 ---
 
 ## 🎯 Use Cases
@@ -367,188 +483,186 @@ Automatically analyzes document structure using font size intelligence:
 - ✅ **Semantic search indexing**
 - ✅ **LLM knowledge bases**
 - ✅ **Academic paper processing** (PDF)
-- ✅ **Financial data extraction** (Excel) **NEW!**
-- ✅ **Healthcare documentation** (Word) **NEW!**
-- ✅ **Business reports** (Word + Excel) **NEW!**
-- ✅ **Scientific literature review** (PDF)
-- ✅ **Medical documentation** (PDF + Word)
+- ✅ **Financial data with formulas** (Excel) **ENHANCED!**
+- ✅ **Presentation analysis** (PPTX with images/charts) **NEW!**
+- ✅ **Training material conversion** (PPTX with notes) **NEW!**
+- ✅ **Business intelligence** (Excel multi-sheet) **ENHANCED!**
+- ✅ **Healthcare documentation** (Word)
 - ✅ **Technical documentation** (All formats)
-- ✅ **Data analysis preparation** (Excel) **NEW!**
+- ✅ **Data visualization extraction** (PPTX charts) **NEW!**
 
 ### Quality by Use Case:
 
-| Use Case | v2.4.0 Quality | Formats |
-|----------|----------------|----------|
-| Embedding Generation | ⭐⭐⭐⭐⭐ | All formats |
-| RAG Pipeline Ingestion | ⭐⭐⭐⭐⭐ | All formats |
-| Semantic Search Indexing | ⭐⭐⭐⭐⭐ | All formats |
-| LLM Knowledge Base | ⭐⭐⭐⭐⭐ | All formats |
-| Academic Papers | ⭐⭐⭐⭐⭐ | PDF |
-| Financial Data | ⭐⭐⭐⭐⭐ | Excel **NEW!** |
-| Healthcare Docs | ⭐⭐⭐⭐⭐ | PDF, Word **NEW!** |
-| Business Reports | ⭐⭐⭐⭐ | Word, Excel **NEW!** |
-| Technical Documentation | ⭐⭐⭐⭐ | All formats |
+| Use Case | v2.4.3 Quality | Key Features |
+|----------|----------------|---------------|
+| Embedding Generation | ⭐⭐⭐⭐⭐ | All formats, clean text |
+| RAG Pipeline | ⭐⭐⭐⭐⭐ | Structured output |
+| Presentation Analysis | ⭐⭐⭐⭐⭐ | Images, charts, notes **NEW!** |
+| Financial Data | ⭐⭐⭐⭐⭐ | Formulas, multi-sheet **NEW!** |
+| Training Materials | ⭐⭐⭐⭐⭐ | Speaker notes **NEW!** |
+| Academic Papers | ⭐⭐⭐⭐⭐ | Structure detection |
+| Healthcare Docs | ⭐⭐⭐⭐⭐ | PDF, Word support |
+| Business Reports | ⭐⭐⭐⭐ | Word, Excel |
 
 ---
 
 ## 📄 Supported File Formats
 
-| Format | Extension | Quality | Notes |
-|--------|-----------|---------|-------|
-| PDF | `.pdf` | ⭐⭐⭐⭐⭐ | Full support, clean text extraction |
-| PowerPoint | `.pptx` | ⭐⭐⭐⭐ | Link preservation, structure detection |
-| PowerPoint Legacy | `.ppt` | ⭐⭐⭐⭐ | Link preservation, structure detection |
-| **Word Document** | `.docx` | ⭐⭐⭐⭐⭐ | **NEW!** Formatting preservation, hyperlinks |
-| **Word Legacy** | `.doc` | ⭐⭐⭐⭐ | **NEW!** Formatting preservation |
-| **Excel Spreadsheet** | `.xlsx` | ⭐⭐⭐⭐⭐ | **NEW!** Multi-sheet, all data types |
-| **Excel Legacy** | `.xls` | ⭐⭐⭐⭐ | **NEW!** Multi-sheet support |
+| Format | Extension | Quality | v2.4.3 Features |
+|--------|-----------|---------|------------------|
+| PDF | `.pdf` | ⭐⭐⭐⭐⭐ | Full support, clean text |
+| PowerPoint | `.pptx` | ⭐⭐⭐⭐⭐ | **Images, charts, notes** ✨ |
+| PowerPoint Legacy | `.ppt` | ⭐⭐⭐⭐ | Basic support |
+| Word Document | `.docx` | ⭐⭐⭐⭐⭐ | Formatting, hyperlinks |
+| Word Legacy | `.doc` | ⭐⭐⭐⭐ | Basic support |
+| Excel Spreadsheet | `.xlsx` | ⭐⭐⭐⭐⭐ | **Multi-sheet, formulas** ✨ |
+| Excel Legacy | `.xls` | ⭐⭐⭐⭐ | Multi-sheet support |
 
 ---
 
 ## 🧪 Testing & Quality Assurance
 
-### Automated Test Suite (NEW in v2.4.0)
+### Automated Test Suite
 
 **Excel Tests: 45+ tests**
-- ✅ 25+ unit tests (basic conversion, multi-sheet, data types, error handling)
-- ✅ 10+ integration tests (end-to-end workflows, batch processing)
-- ✅ 10+ regression tests (quality baselines, deterministic output)
-
-**Test Coverage:**
-- Unit tests: `tests/unit/test_excel_conversion.py`
-- Integration tests: `tests/integration/test_excel_workflow.py`
-- Regression tests: `tests/regression/test_excel_regression.py`
-- Real-world fixtures: `tests/fixtures/sample_excel/`
+- ✅ 25+ unit tests (conversion, multi-sheet, data types)
+- ✅ 10+ integration tests (end-to-end workflows)
+- ✅ 10+ regression tests (quality baselines)
 
 **Running Tests:**
 ```bash
 # Install test dependencies
 pip install -r requirements-test.txt
 
-# Run all Excel tests
+# Run all tests
+pytest tests/ -v
+
+# Run Excel tests only
 pytest tests/ -k "excel" -v
 
-# Run specific test category
-pytest tests/unit/test_excel_conversion.py -v
-pytest tests/integration/test_excel_workflow.py -v
-pytest tests/regression/test_excel_regression.py -v
-
 # Run with coverage
-pytest tests/ -k "excel" --cov=src --cov-report=html
+pytest tests/ --cov=src --cov-report=html
 ```
 
 ---
 
 ## 🧩 Technology Stack
 
-### Desktop Application
-- **Core Conversion**: [MarkItDown](https://github.com/microsoft/markitdown) by Microsoft
-- **Structure Detection**: Custom font analysis
-- **Text Cleaning**: Custom regex-based engine
-- **Link Extraction**: Custom PDF.js-based extraction
-- **Table Extraction**: [Camelot](https://camelot-py.readthedocs.io/) + [Tabula](https://tabula-py.readthedocs.io/)
-- **GUI Framework**: CustomTkinter
-- **Drag-and-Drop**: TkinterDnD2
-- **PDF Generation**: ReportLab
-- **PowerPoint Processing**: python-pptx
-- **Packaging**: PyInstaller
-
-### Web Version (v2.4.0)
+### Web Version (v2.4.3) - Client-Side Only
 - **PDF Processing**: [PDF.js](https://mozilla.github.io/pdf.js/) by Mozilla
 - **PowerPoint Processing**: [JSZip](https://stuk.github.io/jszip/)
-- **Word Processing**: [Mammoth.js](https://github.com/mwilliamson/mammoth.js) **NEW!**
-- **Excel Processing**: [SheetJS (XLSX)](https://sheetjs.com/) **NEW!**
-- **Structure Detection**: JavaScript port of algorithms
-- **Text Cleaning**: JavaScript port of algorithms
-- **Client-Side Only**: Zero server uploads
+- **Word Processing**: [Mammoth.js](https://github.com/mwilliamson/mammoth.js)
+- **Excel Processing**: [SheetJS (XLSX)](https://sheetjs.com/)
+- **Image Extraction**: Custom PPTXImageExtractor module **NEW!**
+- **Chart Extraction**: Custom PPTXChartExtractor module **NEW!**
+- **Notes Extraction**: Custom PPTXNotesExtractor module **NEW!**
+- **XML Parsing**: Custom XMLHelper utility **NEW!**
+- **Base64 Encoding**: Custom Base64Helper utility **NEW!**
+- **Client-Side Only**: Zero server uploads, 100% privacy
+
+### Desktop Application
+- **Core Conversion**: [MarkItDown](https://github.com/microsoft/markitdown) by Microsoft
+- **GUI Framework**: CustomTkinter
+- **Drag-and-Drop**: TkinterDnD2
+- **Table Extraction**: Camelot + Tabula
+- **Packaging**: PyInstaller
 
 ---
 
 ## 🐛 Troubleshooting
 
-### Word Conversion Issues
+### PPTX Image Extraction Issues
 
-**Issue**: Word document not converting
-
-**Solution**:
-1. Ensure using .docx or .doc format
-2. Check file is not password-protected
-3. Try opening in Word and re-saving
-4. Check console logs for detailed errors
-
-### Excel Conversion Issues
-
-**Issue**: Excel spreadsheet not converting
+**Issue**: Images not extracting from PPTX
 
 **Solution**:
-1. Ensure using .xlsx or .xls format
-2. Check file is not password-protected
-3. Very large files (10MB+) may take longer
-4. Check console logs for detailed errors
+1. Ensure using .pptx format (not .ppt)
+2. Check "Extract Images" option is enabled
+3. Verify images are embedded (not linked externally)
+4. Check console logs (F12) for detailed errors
+5. Try re-saving PPTX in PowerPoint
 
-### Table Extraction Fails (PDF)
+### PPTX Chart Extraction Issues
 
-**Issue**: "Camelot not available" or table extraction errors
+**Issue**: Charts not converting
 
 **Solution**:
-1. Install Ghostscript: https://ghostscript.com/releases/gsdnld.html
-2. Ensure Ghostscript is in system PATH
-3. Restart application after installing
-4. Check console for detailed error messages
+1. Ensure using .pptx format
+2. Check "Extract Charts" option is enabled
+3. Charts must be native PowerPoint charts (not images)
+4. Check console logs for unsupported chart types
+5. Try simplifying complex charts
+
+### Excel Formula Issues
+
+**Issue**: Formulas not showing in output
+
+**Solution**:
+1. Formulas are shown as markdown code (`` `=FORMULA()` ``)
+2. Look for backtick-wrapped formulas in cells
+3. Check console logs for parsing errors
+4. Very complex formulas may need simplification
 
 ### Web Version Issues
 
-**Issue**: Web version not working in browser
+**Issue**: Web version not working
 
 **Solution**:
 1. Ensure JavaScript is enabled
 2. Use modern browser (Chrome 90+, Firefox 88+, Safari 14+)
 3. Check browser console for errors (F12)
-4. Try different browser
-5. Clear browser cache
+4. Clear browser cache and reload
+5. Try different browser
+6. Ensure files are not too large (>50MB may be slow)
 
 ---
 
 ## 💻 System Requirements
+
+### Web Version (v2.4.3)
+- **Browser**: Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
+- **RAM**: 2 GB available (4 GB for large PPTX with images)
+- **JavaScript**: Must be enabled
+- **Storage**: Temp space for file processing
+- **Works**: Windows, macOS, Linux, ChromeOS
 
 ### Desktop Application
 - **OS**: Windows 10/11, macOS 10.14+, Linux (Ubuntu 20.04+)
 - **RAM**: 4 GB minimum, 8 GB recommended
 - **Disk Space**: 500 MB
 - **Python** (for source): 3.10 or higher
-- **Ghostscript**: Required for PDF table extraction ([Download](https://ghostscript.com/))
-
-### Web Version
-- **Browser**: Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
-- **RAM**: 2 GB available
-- **JavaScript**: Must be enabled
-- **Works**: Windows, macOS, Linux, ChromeOS
+- **Ghostscript**: Required for PDF table extraction
 
 ---
 
 ## 🛣️ Roadmap
 
-### v2.4.0 (Current) - Word & Excel Support ✅
-- [x] Word document conversion (.docx, .doc)
-- [x] Excel spreadsheet conversion (.xlsx, .xls)
-- [x] 45+ automated Excel tests
-- [x] Web version with Word & Excel support
-- [x] Clean text extraction for all formats
-- [x] Multi-sheet Excel handling
-- [x] Hyperlink preservation in Word
+### v2.4.3 (Current) - Enhanced PPTX & Excel ✅
+- [x] PPTX image extraction with alt text
+- [x] PPTX chart-to-markdown conversion
+- [x] PPTX speaker notes extraction
+- [x] Excel formula preservation
+- [x] Excel merged cell detection
+- [x] Configurable feature toggles
+- [x] Comprehensive statistics tracking
+- [x] 9 modular JavaScript files
+- [x] Full client-side processing
 
-### v2.5.0 (Future) - Enhanced Testing
-- [ ] Word document automated tests (30+ tests)
-- [ ] PDF regression test suite
-- [ ] PowerPoint automated tests
-- [ ] CI/CD integration with GitHub Actions
-- [ ] Automated quality benchmarking
+### v2.5.0 (Future) - Integration & Testing
+- [ ] Integrate v2.4.2 PPTX table/list fixes
+- [ ] Word document automated tests
+- [ ] PPTX automated test suite
+- [ ] Image preview thumbnails
+- [ ] Chart preview visualization
+- [ ] Export images as separate files (ZIP)
+- [ ] CI/CD with GitHub Actions
 
-### v3.0 (Future) - Visual Intelligence
-- [ ] Figure/image extraction
-- [ ] AI-powered figure descriptions
+### v3.0 (Future) - AI Intelligence
+- [ ] Figure/image description generation (AI)
 - [ ] OCR for scanned documents
 - [ ] Chart data extraction from images
+- [ ] Automatic content summarization
+- [ ] Multi-language support
 
 ---
 
@@ -562,7 +676,7 @@ Contributions welcome! Please:
 4. Push to branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-See [CHANGELOG.md](CHANGELOG.md) for version history.
+See [docs/v2.4.3-progress.md](docs/v2.4.3-progress.md) for recent implementation details.
 
 ---
 
@@ -575,13 +689,12 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file.
 ## 🙏 Acknowledgments
 
 - **Microsoft AutoGen Team** - [MarkItDown](https://github.com/microsoft/markitdown) library
-- **Mammoth Team** - [Mammoth.js](https://github.com/mwilliamson/mammoth.js) for Word conversion
-- **SheetJS Team** - [XLSX](https://sheetjs.com/) for Excel conversion
-- **Camelot Team** - Advanced table extraction
-- **Tabula Team** - PDF table parsing
 - **Mozilla** - PDF.js for web version
+- **Mammoth Team** - Word conversion
+- **SheetJS Team** - Excel conversion
+- **JSZip Team** - PowerPoint ZIP handling
+- **Camelot/Tabula Teams** - Table extraction
 - **CustomTkinter** - Modern UI framework
-- **PyInstaller** - Executable packaging
 - The research/NLP community for quality testing and feedback
 
 ---
@@ -590,15 +703,15 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) file.
 
 For issues, questions, or feature requests:
 - Open an issue: [GitHub Issues](https://github.com/Wei-power3/markitdown-desktop-converter/issues)
-- Check documentation: [BUILD_INSTRUCTIONS.md](BUILD_INSTRUCTIONS.md)
-- View changelog: [CHANGELOG.md](CHANGELOG.md)
+- View documentation: [docs/](docs/)
 - Web version docs: [web/README.md](web/README.md)
 - Test documentation: [tests/README.md](tests/README.md)
+- Implementation guide: [docs/v2.4.3-implementation-guide.md](docs/v2.4.3-implementation-guide.md)
 
 ---
 
 **Made with ♥️ by Wei-power3**
 
-**Version 2.4.0** - Word & Excel Support for Comprehensive Document Conversion
+**Version 2.4.3** - Enhanced PPTX & Excel with Images, Charts, Notes, and Formulas
 
-[Report Bug](https://github.com/Wei-power3/markitdown-desktop-converter/issues) · [Request Feature](https://github.com/Wei-power3/markitdown-desktop-converter/issues) · [View Changelog](CHANGELOG.md) · [Try Web Version](web/index_v2.4.0.html) · [Run Tests](tests/)
+[Report Bug](https://github.com/Wei-power3/markitdown-desktop-converter/issues) · [Request Feature](https://github.com/Wei-power3/markitdown-desktop-converter/issues) · [Try v2.4.3](web/index_v2.4.3.html) · [View Docs](docs/) · [Run Tests](tests/)
