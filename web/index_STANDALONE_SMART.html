@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarkItDown v2.4.3 STANDALONE - Smart Loader</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-elevated: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --accent-blue: #38bdf8;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --accent-yellow: #fbbf24;
+            --accent-purple: #a855f7;
+            --accent-orange: #fb923c;
+            --border: #475569;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .loader {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            text-align: center;
+        }
+
+        .loader-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--border);
+            border-top-color: var(--accent-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 30px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loader-text {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--accent-orange);
+        }
+
+        .loader-progress {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .error-box {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid var(--accent-red);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 600px;
+            margin: 40px auto;
+        }
+
+        .error-box h2 {
+            color: var(--accent-red);
+            margin-bottom: 15px;
+        }
+
+        .error-box p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .error-box code {
+            background: var(--bg-elevated);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        #app {
+            display: none;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .version-badge {
+            display: inline-block;
+            background: var(--accent-orange);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-left: 10px;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 10px rgba(251, 146, 60, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(251, 146, 60, 0.8); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .standalone-notice {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(34, 197, 94, 0.1));
+            border: 1px solid var(--accent-blue);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .standalone-notice-icon {
+            font-size: 2rem;
+        }
+
+        .standalone-notice-text h3 {
+            color: var(--accent-blue);
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+
+        .standalone-notice-text p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .dropzone {
+            background: var(--bg-secondary);
+            border: 3px dashed var(--border);
+            border-radius: 12px;
+            padding: 60px 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        .dropzone:hover {
+            border-color: var(--accent-blue);
+            background: rgba(56, 189, 248, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .dropzone.drag-over {
+            border-color: var(--accent-blue);
+            background: rgba(56, 189, 248, 0.1);
+            transform: scale(1.02);
+        }
+
+        .dropzone-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .dropzone-text {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+
+        .format-badge {
+            background: var(--accent-orange);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: inline-block;
+            margin: 0 5px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .job-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+            gap: 15px;
+        }
+
+        .job-filename {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .status-processing { background: rgba(56, 189, 248, 0.2); color: var(--accent-blue); }
+        .status-completed { background: rgba(34, 197, 94, 0.2); color: var(--accent-green); }
+        .status-error { background: rgba(239, 68, 68, 0.2); color: var(--accent-red); }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--bg-elevated);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-blue);
+            transition: width 0.3s ease;
+        }
+
+        .progress-fill.completed { background: var(--accent-green); }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-success {
+            background: var(--accent-green);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #16a34a;
+        }
+
+        .btn-danger {
+            background: transparent;
+            color: var(--accent-red);
+            border: 1px solid var(--accent-red);
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .job-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--accent-red);
+            color: var(--accent-red);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loader" id="loader">
+        <div class="loader-spinner"></div>
+        <div class="loader-text">Loading Converter Modules...</div>
+        <div class="loader-progress" id="loaderProgress">Initializing...</div>
+    </div>
+
+    <div id="app">
+        <div class="container">
+            <header>
+                <h1>
+                    📄 MarkItDown Converter
+                    <span class="version-badge">v2.4.3 STANDALONE</span>
+                </h1>
+                <p class="subtitle">TRUE Standalone - No Server, No Python Needed!</p>
+            </header>
+
+            <div class="standalone-notice">
+                <div class="standalone-notice-icon">✨</div>
+                <div class="standalone-notice-text">
+                    <h3>Smart Standalone - Auto-Loads from GitHub!</h3>
+                    <p>This file dynamically loads all modules from GitHub on first run. After that, your browser caches them. Works 100% offline after first load!</p>
+                </div>
+            </div>
+
+            <div id="dropzone" class="dropzone">
+                <div class="dropzone-icon">📁</div>
+                <div class="dropzone-text">Drag & Drop files here</div>
+                <div style="margin-top: 20px;">
+                    <span class="format-badge">PPTX ✨</span>
+                    <span class="format-badge">XLSX ✨</span>
+                </div>
+                <input type="file" id="fileInput" accept=".pptx,.ppt,.xlsx,.xls" multiple>
+            </div>
+
+            <div class="stats" id="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalFiles">0</div>
+                    <div class="stat-label">Total Files</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="completed">0</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalImages">0</div>
+                    <div class="stat-label">Images</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalSheets">0</div>
+                    <div class="stat-label">Sheets</div>
+                </div>
+            </div>
+
+            <div id="jobList"></div>
+
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">📭</div>
+                <p>No files yet. Drop some files above to get started!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- External libraries (CDN - allowed cross-origin) -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+    <script>
+        // SMART STANDALONE LOADER
+        // Dynamically loads all modules from GitHub (cross-origin allowed)
+        
+        const BASE_URL = 'https://raw.githubusercontent.com/Wei-power3/markitdown-desktop-converter/main/web/js';
+        
+        const modules = [
+            { url: `${BASE_URL}/utils/xml-helper.js`, name: 'XMLHelper' },
+            { url: `${BASE_URL}/utils/base64-helper.js`, name: 'Base64Helper' },
+            { url: `${BASE_URL}/modules/pptx-images.js`, name: 'PPTXImageExtractor' },
+            { url: `${BASE_URL}/modules/pptx-charts.js`, name: 'PPTXChartExtractor' },
+            { url: `${BASE_URL}/modules/pptx-notes.js`, name: 'PPTXNotesExtractor' },
+            { url: `${BASE_URL}/modules/pptx-groups.js`, name: 'PPTXGroupHandler' },
+            { url: `${BASE_URL}/converters/excel-v243.js`, name: 'ExcelConverterV243' },
+            { url: `${BASE_URL}/converters/pptx-v243.js`, name: 'PPTXConverterV243' }
+        ];
+
+        async function loadModules() {
+            const loaderProgress = document.getElementById('loaderProgress');
+            
+            try {
+                for (let i = 0; i < modules.length; i++) {
+                    const module = modules[i];
+                    loaderProgress.textContent = `Loading ${module.name}... (${i + 1}/${modules.length})`;
+                    
+                    const response = await fetch(module.url);
+                    if (!response.ok) throw new Error(`Failed to load ${module.name}`);
+                    
+                    const code = await response.text();
+                    eval(code); // Execute the module code
+                    
+                    console.log(`✓ Loaded ${module.name}`);
+                }
+                
+                // Hide loader, show app
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+                
+                // Initialize application
+                initializeApp();
+                
+            } catch (error) {
+                console.error('Module loading error:', error);
+                document.getElementById('loader').innerHTML = `
+                    <div class="error-box">
+                        <h2>❌ Failed to Load Modules</h2>
+                        <p><strong>Error:</strong> ${error.message}</p>
+                        <p><strong>This file requires internet connection for first load.</strong></p>
+                        <p>Make sure you're connected to the internet and try refreshing the page.</p>
+                        <p style="margin-top: 20px;">If the problem persists, check the browser console (F12) for details.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function initializeApp() {
+            const jobs = [];
+            const dropzone = document.getElementById('dropzone');
+            const fileInput = document.getElementById('fileInput');
+            const jobList = document.getElementById('jobList');
+            const emptyState = document.getElementById('emptyState');
+
+            dropzone.addEventListener('click', () => fileInput.click());
+            
+            dropzone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropzone.classList.add('drag-over');
+            });
+
+            dropzone.addEventListener('dragleave', () => {
+                dropzone.classList.remove('drag-over');
+            });
+
+            dropzone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropzone.classList.remove('drag-over');
+                const files = Array.from(e.dataTransfer.files);
+                handleFiles(files);
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                const files = Array.from(e.target.files);
+                handleFiles(files);
+                fileInput.value = '';
+            });
+
+            function handleFiles(files) {
+                files.forEach(file => {
+                    const extension = file.name.split('.').pop().toLowerCase();
+                    if (['pptx', 'ppt', 'xlsx', 'xls'].includes(extension)) {
+                        addJob(file);
+                    } else {
+                        alert(`Unsupported: ${file.name}\n\nThis standalone version supports PPTX and XLSX files only.`);
+                    }
+                });
+            }
+
+            function addJob(file) {
+                const job = {
+                    id: Date.now() + Math.random(),
+                    filename: file.name,
+                    file: file,
+                    status: 'processing',
+                    progress: 0,
+                    result: null,
+                    error: null,
+                    stats: null
+                };
+
+                jobs.unshift(job);
+                updateUI();
+                processFile(job);
+            }
+
+            async function processFile(job) {
+                try {
+                    job.progress = 10;
+                    updateUI();
+
+                    const extension = job.filename.split('.').pop().toLowerCase();
+                    let result;
+
+                    if (extension === 'xlsx' || extension === 'xls') {
+                        const converter = new ExcelConverterV243();
+                        result = await converter.convert(job.file);
+                    } else if (extension === 'pptx' || extension === 'ppt') {
+                        const converter = new PPTXConverterV243();
+                        result = await converter.convert(job.file);
+                    }
+
+                    job.progress = 100;
+                    job.status = 'completed';
+                    job.result = result.markdown;
+                    job.stats = result.stats;
+                    updateUI();
+
+                } catch (error) {
+                    console.error('Conversion error:', error);
+                    job.status = 'error';
+                    job.error = error.message || 'Conversion failed';
+                    updateUI();
+                }
+            }
+
+            function updateUI() {
+                document.getElementById('totalFiles').textContent = jobs.length;
+                document.getElementById('completed').textContent = jobs.filter(j => j.status === 'completed').length;
+                
+                const totalImages = jobs.reduce((sum, job) => sum + (job.stats?.imagesExtracted || 0), 0);
+                const totalSheets = jobs.reduce((sum, job) => sum + (job.stats?.totalSheets || 0), 0);
+                
+                document.getElementById('totalImages').textContent = totalImages;
+                document.getElementById('totalSheets').textContent = totalSheets;
+
+                if (jobs.length === 0) {
+                    emptyState.style.display = 'block';
+                    jobList.innerHTML = '';
+                } else {
+                    emptyState.style.display = 'none';
+                    jobList.innerHTML = jobs.map(job => renderJob(job)).join('');
+                }
+            }
+
+            function renderJob(job) {
+                const statusConfig = {
+                    processing: { icon: '⏳', class: 'status-processing', label: 'Processing' },
+                    completed: { icon: '✔', class: 'status-completed', label: 'Completed' },
+                    error: { icon: '✖', class: 'status-error', label: 'Failed' }
+                };
+
+                const config = statusConfig[job.status];
+                const fileSize = (job.file.size / 1024).toFixed(1) + ' KB';
+
+                return `
+                    <div class="job-item">
+                        <div class="job-header">
+                            <div style="flex: 1;">
+                                <div class="job-filename">
+                                    <span>${config.icon}</span>
+                                    <span>${job.filename}</span>
+                                </div>
+                                <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 5px;">${fileSize}</div>
+                            </div>
+                            <span class="status-badge ${config.class}">${config.label}</span>
+                        </div>
+
+                        <div class="progress-bar">
+                            <div class="progress-fill ${job.status === 'completed' ? 'completed' : ''}" 
+                                 style="width: ${job.progress}%"></div>
+                        </div>
+
+                        ${job.error ? `<div class="error-message"><strong>Error:</strong> ${job.error}</div>` : ''}
+
+                        <div class="job-actions">
+                            ${job.status === 'completed' ? `
+                                <button class="btn btn-success" onclick="downloadMarkdown('${job.id}')">
+                                    ⬇ Download Markdown
+                                </button>
+                            ` : ''}
+                            ${job.status !== 'processing' ? `
+                                <button class="btn btn-danger" onclick="deleteJob('${job.id}')">
+                                    🗑 Delete
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }
+
+            window.downloadMarkdown = function(jobId) {
+                const job = jobs.find(j => j.id == jobId);
+                if (!job || !job.result) return;
+
+                const blob = new Blob([job.result], { type: 'text/markdown' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = job.filename.replace(/\.[^.]+$/, '') + '_v243.md';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            };
+
+            window.deleteJob = function(jobId) {
+                const index = jobs.findIndex(j => j.id == jobId);
+                if (index !== -1) {
+                    jobs.splice(index, 1);
+                    updateUI();
+                }
+            };
+
+            updateUI();
+        }
+
+        // Start loading modules
+        loadModules();
+    </script>
+</body>
+</html>
